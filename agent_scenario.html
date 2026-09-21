@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Day at NE1 Estate Agents</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F0E8;
+  --card: #FDFAF5;
+  --border: rgba(60,40,20,0.12);
+  --border-strong: rgba(60,40,20,0.22);
+  --text: #1C1410;
+  --muted: #7A6A58;
+  --faint: #B0A090;
+  --accent: #C84B20;
+  --accent-light: #F5EDE8;
+  --accent-dark: #8C2E10;
+  --success: #2E7A48;
+  --success-bg: #EAF4EE;
+  --warning: #A05010;
+  --warning-bg: #FDF2E8;
+  --danger: #A02828;
+  --danger-bg: #FAF0F0;
+  --info: #1A5A88;
+  --info-bg: #EAF2FA;
+  --energy: #B8860B;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.shell { max-width: 680px; margin: 0 auto; padding: 24px 16px 60px; }
+.screen { display: none; }
+.screen.active { display: block; animation: fade 0.4s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* HEADER */
+.masthead { text-align: center; padding: 30px 0 24px; border-bottom: 0.5px solid var(--border); margin-bottom: 24px; }
+.masthead-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.masthead h1 { font-family: var(--serif); font-size: 40px; line-height: 1.08; }
+.masthead h1 em { font-style: italic; color: var(--accent); }
+.masthead p { margin-top: 12px; color: var(--muted); max-width: 440px; margin-left: auto; margin-right: auto; }
+
+/* CARDS */
+.card { background: var(--card); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; margin-bottom: 14px; }
+.card-title { font-family: var(--serif); font-size: 20px; margin-bottom: 6px; }
+.card-sub { color: var(--muted); font-size: 13px; }
+
+/* PATH PICK */
+.path { cursor: pointer; transition: border-color .2s, transform .12s; border: 0.5px solid var(--border); }
+.path:hover { border-color: var(--accent); transform: translateY(-2px); }
+.path-emoji { font-size: 34px; }
+.path-title { font-family: var(--serif); font-size: 22px; margin: 4px 0; }
+.path-desc { color: var(--muted); font-size: 13px; }
+
+/* METERS */
+.meters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; position: sticky; top: 0; background: var(--bg); padding: 10px 0 4px; z-index: 5; }
+.meter { background: var(--card); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 9px 11px; }
+.meter-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+.meter-val { font-size: 15px; font-weight: 700; font-family: var(--serif); }
+.meter-track { height: 4px; background: var(--border); border-radius: 2px; margin-top: 5px; overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 2px; transition: width .5s ease; }
+.m-trust .meter-fill { background: var(--info); }
+.m-comm  .meter-fill { background: var(--success); }
+.m-rep   .meter-fill { background: var(--accent); }
+
+/* ENERGY BAR */
+.energy-bar { position: sticky; top: 62px; background: var(--bg); z-index: 5; display: flex; align-items: center; gap: 10px; padding: 4px 2px 14px; margin-bottom: 8px; border-bottom: 0.5px solid var(--border); }
+.energy-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--energy); font-weight: 700; }
+.energy-pips { display: flex; gap: 5px; }
+.pip { width: 26px; height: 11px; border-radius: 3px; background: var(--border); transition: background .4s; }
+.pip.on { background: var(--energy); }
+.pip.low.on { background: var(--danger); }
+.energy-note { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+/* SCENE */
+.scene-num { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.scene-title { font-family: var(--serif); font-size: 24px; line-height: 1.15; margin-bottom: 12px; }
+.scene-body { color: var(--text); margin-bottom: 6px; }
+.speaker { border-left: 3px solid var(--border-strong); padding: 8px 0 8px 14px; margin: 14px 0; }
+.speaker .who { font-weight: 700; font-size: 13px; }
+.speaker .who .role { color: var(--muted); font-weight: 400; }
+.speaker .line { font-style: italic; color: var(--text); }
+
+/* CHOICES */
+.choice { display: block; width: 100%; text-align: left; background: var(--card); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; font-family: var(--sans); font-size: 14px; color: var(--text); transition: border-color .15s, transform .1s; }
+.choice:hover { border-color: var(--accent); transform: translateX(3px); }
+.choice .tag { display: flex; justify-content: flex-end; align-items: center; gap: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+.choice .ecost { font-weight: 700; white-space: nowrap; }
+.choice .ecost.spend { color: var(--energy); }
+.choice .ecost.heavy { color: var(--danger); }
+.choice .ecost.rest { color: var(--success); }
+.choice .ecost.free { color: var(--faint); }
+
+/* OUTCOME (in-game: consequence only, no teaching hint) */
+.outcome { border-radius: var(--radius); padding: 15px 17px; margin: 4px 0 14px; border: 0.5px solid; }
+.outcome.good { background: var(--success-bg); border-color: var(--success); }
+.outcome.mixed { background: var(--warning-bg); border-color: var(--warning); }
+.outcome.bad { background: var(--danger-bg); border-color: var(--danger); }
+.outcome-head { font-weight: 700; margin-bottom: 4px; }
+.outcome.good .outcome-head { color: var(--success); }
+.outcome.mixed .outcome-head { color: var(--warning); }
+.outcome.bad .outcome-head { color: var(--danger); }
+.deltas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; font-weight: 700; }
+.d-up { color: var(--success); }
+.d-down { color: var(--danger); }
+.d-flat { color: var(--muted); }
+.d-energy { color: var(--energy); }
+
+/* INSIGHT (debrief only) */
+.insight { background: var(--info-bg); border: 0.5px solid var(--info); border-radius: var(--radius); padding: 10px 13px; margin-top: 8px; }
+.insight .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--info); font-weight: 700; margin-bottom: 3px; }
+.insight .txt { font-size: 13px; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); padding: 13px 20px; font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s; }
+.btn:hover { background: var(--accent-dark); }
+.btn.full { width: 100%; }
+.btn.ghost { background: transparent; color: var(--muted); border: 0.5px solid var(--border); }
+.btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-row { display: flex; gap: 10px; margin-top: 6px; }
+
+/* DEBRIEF */
+.debrief-grade { text-align: center; padding: 8px 0 4px; }
+.debrief-grade .title { font-family: var(--serif); font-size: 30px; }
+.debrief-grade .sub { color: var(--muted); }
+.log-item { padding: 14px 0; border-bottom: 0.5px solid var(--border); }
+.log-item:last-child { border: none; }
+.log-head { display: flex; gap: 10px; align-items: flex-start; }
+.log-icon { font-size: 18px; line-height: 1.4; }
+.log-body { flex: 1; }
+.log-scene { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.log-choice { font-weight: 500; }
+.log-skill { font-size: 12px; color: var(--info); margin-top: 2px; }
+
+.foot { text-align: center; color: var(--faint); font-size: 11px; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HOME -->
+<div id="s-home" class="screen active">
+  <div class="masthead">
+    <div class="masthead-tag">Career Scenario · Property Agent</div>
+    <h1>A Day at <em>NE1<br>Estate Agents</em></h1>
+    <p>You're the new agent. The slides said you'd need "good communication" and "market knowledge." Time to find out what that actually means. Pick a case.</p>
+  </div>
+
+  <div class="card path" onclick="startGame('let')">
+    <div class="path-emoji">🔑</div>
+    <div class="path-title">Letting a Student Flat</div>
+    <div class="path-desc">A landlord wants four students in a Jesmond terrace by September. Price it, market it, and try not to get sued over a kitchen leak.</div>
+  </div>
+
+  <div class="card path" onclick="startGame('sell')">
+    <div class="path-emoji">🏠</div>
+    <div class="path-title">Selling a Family Home</div>
+    <div class="path-desc">A nervous couple wants top price yesterday — and there's a leasehold skeleton in the closet. No central market, just your judgement and their emotions.</div>
+  </div>
+
+  <div class="card path" onclick="startGame('office')">
+    <div class="path-emoji">🏢</div>
+    <div class="path-title">Letting an Old Office Building</div>
+    <div class="path-desc">A tired 1970s block, a landlord who won't spend a penny, and a demanding tenant who wants everything. Commercial letting, on hard mode.</div>
+  </div>
+
+  <div class="card" style="background:var(--accent-light); border-color:var(--accent)">
+    <div class="card-title" style="font-size:16px">How it works</div>
+    <div class="card-sub">Choices move three meters — client <strong>Trust</strong>, your <strong>Commission</strong>, and <strong>Reputation</strong> — plus your <strong>Energy</strong> (⚡ only 4 pips). Diligent work and hard conversations <em>cost energy</em>; cutting corners is cheap but bites you later. You <strong>can't do everything well</strong> — pick your battles, because if energy hits zero you burn out and quit mid-job. The teaching notes on each decision are saved for your debrief at the end.</div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="s-game" class="screen">
+  <div class="meters">
+    <div class="meter m-trust"><div class="meter-lbl"><span>Trust</span><span id="v-trust">50</span></div><div class="meter-track"><div class="meter-fill" id="f-trust" style="width:50%"></div></div></div>
+    <div class="meter m-comm"><div class="meter-lbl"><span>£ Comm.</span><span id="v-comm">50</span></div><div class="meter-track"><div class="meter-fill" id="f-comm" style="width:50%"></div></div></div>
+    <div class="meter m-rep"><div class="meter-lbl"><span>Rep.</span><span id="v-rep">50</span></div><div class="meter-track"><div class="meter-fill" id="f-rep" style="width:50%"></div></div></div>
+  </div>
+  <div class="energy-bar">
+    <span class="energy-lbl">⚡ Energy</span>
+    <div class="energy-pips" id="energy-pips"></div>
+    <span class="energy-note">Hit zero and you quit</span>
+  </div>
+
+  <div class="card" id="scene-card">
+    <div class="scene-num" id="scene-num">Scene 1</div>
+    <div class="scene-title" id="scene-title"></div>
+    <div id="scene-content"></div>
+  </div>
+
+  <div id="choice-area"></div>
+  <div id="outcome-area"></div>
+</div>
+
+<!-- BURNOUT / GAME OVER -->
+<div id="s-burnout" class="screen">
+  <div class="masthead">
+    <div class="masthead-tag">Game Over</div>
+    <h1>Burned <em>Out</em></h1>
+    <p id="burnout-text"></p>
+  </div>
+  <div class="card">
+    <div class="card-title">How far you got — and the notes</div>
+    <div class="card-sub" style="margin-bottom:8px">Each decision you made, with what a real agent weighs.</div>
+    <div id="burnout-log"></div>
+  </div>
+  <div class="card" style="background:var(--accent-light); border-color:var(--accent)">
+    <div class="card-title" style="font-size:16px">The lesson</div>
+    <div class="card-sub">Diligence is essential but finite. A good agent can't do everything to a gold standard — the skill is triage: spend energy on the high-stakes moments (disclosure, contracts, real negotiation) and travel lighter on the rest. Burnout is a genuine occupational risk in a commission-driven, client-facing job.</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn ghost full" onclick="location.reload()">← Menu</button>
+    <button class="btn full" id="burnout-retry">Try again →</button>
+  </div>
+</div>
+
+<!-- DEBRIEF -->
+<div id="s-debrief" class="screen">
+  <div class="masthead">
+    <div class="masthead-tag">Debrief</div>
+    <h1 id="db-headline">The Verdict</h1>
+  </div>
+  <div class="card">
+    <div class="debrief-grade">
+      <div class="title" id="db-grade"></div>
+      <div class="sub" id="db-grade-sub"></div>
+    </div>
+    <div class="meters" style="position:static; margin-top:16px; margin-bottom:10px">
+      <div class="meter m-trust"><div class="meter-lbl"><span>Trust</span><span id="db-trust"></span></div><div class="meter-track"><div class="meter-fill" id="db-f-trust"></div></div></div>
+      <div class="meter m-comm"><div class="meter-lbl"><span>£ Comm.</span><span id="db-comm"></span></div><div class="meter-track"><div class="meter-fill" id="db-f-comm"></div></div></div>
+      <div class="meter m-rep"><div class="meter-lbl"><span>Rep.</span><span id="db-rep"></span></div><div class="meter-track"><div class="meter-fill" id="db-f-rep"></div></div></div>
+    </div>
+    <div class="energy-bar" style="position:static; border:none; padding-bottom:0">
+      <span class="energy-lbl">⚡ Energy left</span>
+      <div class="energy-pips" id="db-energy-pips"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Your decisions, reviewed</div>
+    <div class="card-sub" style="margin-bottom:8px">Each choice, the skill it tested, and what a real agent weighs.</div>
+    <div id="db-log"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn ghost full" onclick="location.reload()">← Menu</button>
+    <button class="btn full" id="db-other">Next case →</button>
+  </div>
+  <div class="foot">NE1 Estate Agents is fictional. Any resemblance to your actual letting agent's professionalism is coincidental.</div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+/* ============ STATE ============ */
+const MAX_ENERGY = 4;
+let M = { trust: 50, comm: 50, rep: 50 };
+let energy = MAX_ENERGY;
+let log = [];
+let path = null;
+let idx = 0;
+
+/* ============ SCENARIOS ============
+   choice: fx {trust,comm,rep}, e (energy: -2 heavy diligence/hard convo, -1 moderate, 0 free, +1 rest),
+   outcome [head, consequence text] (shown in-game),
+   insight (teaching note, shown ONLY in debrief next to the decision)
+================================= */
+const SCENARIOS = {
+  let: {
+    title: "Letting a Student Flat",
+    scenes: [
+      {
+        title: "The instruction",
+        content: `<div class="scene-body">Mr Odukoya owns a 4-bed terrace near the university. He wants it let by September.</div>
+          <div class="speaker"><div class="who">Mr Odukoya <span class="role">— landlord</span></div><div class="line">"My mate reckons I can get £2,200 a month. Just stick it online, yeah? And I don't want to sign any exclusive thing with you."</div></div>
+          <div class="scene-body">You've seen the local comparables. £2,200 is optimistic.</div>`,
+        choices: [
+          { text: "Pull three real comparables, recommend £1,950, and ask for a sole-agency agreement.", tag: "Evidence-led", skill: "Pricing with market info", e: -2,
+            fx: { trust: +4, comm: +12, rep: +12 }, kind: "good",
+            outcome: ["He grumbles, then agrees.", "Digging out comparables and holding the line takes real effort, but data beats a mate down the pub. He signs a 12-week sole agency — your work will actually pay off."],
+            insight: "There's no central market and no clearing price for lettings — the agent IS the market information. Comparables are your credibility." },
+          { text: "Split the difference to £2,050 and skip the agreement talk for now.", tag: "The dodge", skill: "Negotiation", e: -1,
+            fx: { trust: +2, comm: +2, rep: -2 }, kind: "mixed",
+            outcome: ["A compromise nobody loves.", "£2,050 will still sit a bit long, and without an agreement you're competing with whoever else he called. You've kept the peace but solved nothing."],
+            insight: "Compromise feels safe but can dodge the real issue. Sometimes the professional move is the uncomfortable, evidence-backed recommendation." },
+          { text: "Take it at £2,200 on his terms — the customer's always right.", tag: "Path of least resistance", skill: "Managing the client", e: 0,
+            fx: { trust: +8, comm: -5, rep: -10 }, kind: "bad",
+            outcome: ["Easy for now…", "He's delighted. Costs you nothing today — but a mis-priced listing is your problem in three weeks, and with no agreement he's already emailing two other agents."],
+            insight: "Agents are information providers first. Saying yes to a bad price to keep a client happy just delays a harder conversation — and undersells your expertise." }
+        ]
+      },
+      {
+        title: "The viewing",
+        content: `<div class="scene-body">Four students turn up to view. One peers under the sink.</div>
+          <div class="speaker"><div class="who">Priya <span class="role">— prospective tenant</span></div><div class="line">"Is that… a water stain? Has there been a leak in this kitchen?"</div></div>
+          <div class="scene-body">There <em>was</em> a leak. It's fixed, but the landlord was slow about it last time.</div>`,
+        choices: [
+          { text: "Be honest: it happened, it's fixed, and confirm the repair process with them.", tag: "Straight answer", skill: "Disclosure & trust", e: -2,
+            fx: { trust: +12, comm: 0, rep: +14 }, kind: "good",
+            outcome: ["Honesty lands well.", "You dig out the repair record and give a full, patient answer. Priya appreciates the straight talk and asks a sensible follow-up. Trust like this is why tenants come back next year."],
+            insight: "Transparency about known issues protects everyone and builds the reputation that brings repeat business. Bad news early beats a lawsuit late." },
+          { text: "\"I'd have to check with the landlord and get back to you.\"", tag: "Deflect upward", skill: "Communication", e: 0,
+            fx: { trust: +3, comm: -3, rep: +2 }, kind: "mixed",
+            outcome: ["Technically safe, quietly costly.", "Not wrong — but they wanted an answer now. Two of the four drift off to another viewing before you call back."],
+            insight: "Deferring can be correct when you genuinely don't know, but hesitation in a competitive market has a cost. Know your properties before the viewing." },
+          { text: "\"What leak? Looks perfectly dry to me!\"", tag: "Deny it", skill: "Disclosure & ethics", e: +1,
+            fx: { trust: -15, comm: +5, rep: -18 }, kind: "bad",
+            outcome: ["They rent it. Then it leaks.", "The quick brush-off saves you the awkward chat. But in October the pipe goes again, Priya finds your 'perfectly dry' email, and forwards it everywhere plus a review site."],
+            insight: "Misrepresentation isn't just unethical — under consumer protection rules it can void the agreement and land the agency in real trouble. Reputation is slow to build, instant to lose." }
+        ]
+      },
+      {
+        title: "The offer",
+        content: `<div class="scene-body">The students want it — but they're negotiating.</div>
+          <div class="speaker"><div class="who">Priya <span class="role">— on behalf of the group</span></div><div class="line">"We'll take it, but only at £1,800. And we want the landlord to repaint the lounge."</div></div>
+          <div class="scene-body">The landlord's floor was £1,900. It's mid-August; good student groups are scarce.</div>`,
+        choices: [
+          { text: "Counter at £1,875 with paint included — and phone the landlord to close it.", tag: "Broker the deal", skill: "Negotiation & closing", e: -2,
+            fx: { trust: +8, comm: +12, rep: +10 }, kind: "good",
+            outcome: ["Deal done.", "It takes several calls back and forth, but you find the number between their £1,800 and his £1,900, frame the paint as cheap goodwill, and both sides feel they won. This is the actual job."],
+            insight: "A good agent manufactures a deal both sides can accept — reading each party's real constraint, not just relaying numbers back and forth." },
+          { text: "Accept £1,800 immediately to lock it in.", tag: "Cave", skill: "Negotiation", e: 0,
+            fx: { trust: +5, comm: -8, rep: -2 }, kind: "mixed",
+            outcome: ["Fast, but you left money on the table.", "The tenants are thrilled — you gave them everything. The landlord quietly wonders whose side you were on."],
+            insight: "You represent the landlord's interest here. Closing fast feels productive, but caving instantly signals you never tested the other side at all." },
+          { text: "Reject flat — hold out for the full £1,950.", tag: "Hold firm", skill: "Negotiation position", e: 0,
+            fx: { trust: -4, comm: -12, rep: -4 }, kind: "bad",
+            outcome: ["They walk.", "It's late August. The next enquiry is a group of three who want it cheaper anyway. The flat sits empty into term time — the worst outcome for the landlord."],
+            insight: "Negotiating power shifts with timing and information. In a thinning market, holding out for list price can cost more than the discount would have." }
+        ]
+      },
+      {
+        title: "The rival agent",
+        content: `<div class="scene-body">Before contracts, Mr Odukoya calls, sounding tempted.</div>
+          <div class="speaker"><div class="who">Mr Odukoya <span class="role">— landlord</span></div><div class="line">"That other agency just rang. They reckon they'd only charge half your fee and could've got me more. Remind me why I'm with you?"</div></div>
+          <div class="scene-body">You never got that sole-agency signed tightly. How do you hold the client?</div>`,
+        choices: [
+          { text: "Calmly show the value you've delivered: the vetted tenants, the closed deal, the paperwork in hand.", tag: "Defend on value", skill: "Client retention", e: -2,
+            fx: { trust: +10, comm: +8, rep: +8 }, kind: "good",
+            outcome: ["He stays.", "It takes a real conversation, but you walk him through what a rock-bottom fee usually buys (nothing, done slowly) and the concrete progress you've already made. He sees it. The cheap rival wins on price only until service matters."],
+            insight: "Fee competition is relentless in agency. You win it not by matching price but by making your value legible — the alternative to a good agent is a bad one, discovered too late." },
+          { text: "Panic and slash your fee to match them.", tag: "Race to the bottom", skill: "Pricing your service", e: +1,
+            fx: { trust: +4, comm: -14, rep: -4 }, kind: "bad",
+            outcome: ["You kept him, and your dignity's on the floor.", "He's happy to pay less — of course he is. But you've trained him to see you as interchangeable with the cheapest option, and torched your own margin on a deal you'd already won."],
+            insight: "Competing purely on fee is a trap: it signals your service is a commodity. Undercutting your own value is rarely the way to keep a client worth keeping." },
+          { text: "Get defensive and rubbish the other agency.", tag: "Trash the rival", skill: "Professional conduct", e: 0,
+            fx: { trust: -6, comm: -2, rep: -8 }, kind: "mixed",
+            outcome: ["Bad-mouthing backfires.", "Slagging off a competitor makes you look rattled, not confident. Mr Odukoya wonders what you'd say about him behind his back."],
+            insight: "Attacking a rival reads as insecurity. RICS-style professional conduct — and basic credibility — means winning on your own merits, not on running others down." }
+        ]
+      },
+      {
+        title: "The contract",
+        content: `<div class="scene-body">Final step: the tenancy agreement, copied from the last let's template.</div>
+          <div class="scene-body">You notice the <strong>deposit protection clause is missing</strong> and the break clause still names the <em>previous</em> tenant. Everyone's keen to sign today, and you're running on fumes.</div>`,
+        choices: [
+          { text: "Fix both clauses and re-check the whole document before anyone signs.", tag: "Read the contract", skill: "Contracts & compliance", e: -2,
+            fx: { trust: +6, comm: +2, rep: +14 }, kind: "good",
+            outcome: ["Draining, and exactly right.", "It's the last thing you have energy for, but an unprotected deposit is a legal minefield — up to 3x penalties. You caught it. The wrong name would've made the break clause unenforceable. This is why 'have you read your contract?' is on the slide in red."],
+            insight: "The dull admin IS the job. A missed clause can cost more than a whole year's commission. Slow down at the paperwork even when you're tired — especially then." },
+          { text: "Sign now, promise to 'sort the paperwork' next week.", tag: "Sign first, read later", skill: "Contracts & compliance", e: +1,
+            fx: { trust: 0, comm: +3, rep: -16 }, kind: "bad",
+            outcome: ["A relief now, a bomb later.", "You knock off early. But 'next week' never comes cleanly — the deposit sits unprotected, and when a dispute arises in spring the agency is liable and your name is on the file."],
+            insight: "\"Have you read your contract?\" — the question on your slide — applies to the agent most of all. Signed beats fixed only until something goes wrong." }
+        ]
+      }
+    ]
+  },
+
+  sell: {
+    title: "Selling a Family Home",
+    scenes: [
+      {
+        title: "The valuation",
+        content: `<div class="scene-body">The Bells are selling the maisonette they raised three kids in. Zoopla estimates £245,000. Your comparables suggest £235,000.</div>
+          <div class="speaker"><div class="who">Mrs Bell <span class="role">— seller</span></div><div class="line">"Zoopla says two-forty-five. The agent down the road said he could get us two-sixty. Can you beat that?"</div></div>`,
+        choices: [
+          { text: "Walk them through your comparables and recommend £237,500 with a clear rationale.", tag: "Evidence-led", skill: "Pricing with market info", e: -2,
+            fx: { trust: +5, comm: +12, rep: +14 }, kind: "good",
+            outcome: ["Disappointing to hear, easy to defend.", "You put in the legwork on three recent nearby sales and explain what makes theirs different. They're deflated but they respect it — and a realistically-priced home actually sells."],
+            insight: "Hedonic thinking made human: price reflects the property's characteristics vs recent comparables, not a hopeful headline. This is the pricing logic behind your regression teaching." },
+          { text: "List at £249,950 — a bit above your figure, 'room to negotiate'.", tag: "Anchor high", skill: "Negotiation & pricing", e: -1,
+            fx: { trust: +6, comm: +4, rep: +2 }, kind: "mixed",
+            outcome: ["A defensible stretch.", "Slightly ambitious pricing to leave negotiating room is legitimate — but every £1k over fair value costs you viewings. You've balanced client psychology against market reality."],
+            insight: "There's a real craft to pricing just above comparables vs fantasy pricing. The first is strategy; the second is how homes rot on the market." },
+          { text: "\"Sure, let's list at £260k!\" — win the instruction, worry later.", tag: "Buy the listing", skill: "Pricing with market info", e: 0,
+            fx: { trust: +10, comm: -8, rep: -12 }, kind: "bad",
+            outcome: ["You won them over. Uh oh.", "'Overvaluing to win the instruction' is the oldest trap in agency. It'll sit unsold for months, then you'll have the awkward 'we need to drop the price' talk — and they trust you less each time."],
+            insight: "An automated estimate isn't a clearing price — there's no central market that guarantees it. Winning an instruction with a fantasy number harms everyone, slowly." }
+        ]
+      },
+      {
+        title: "The question you can't dodge",
+        content: `<div class="scene-body">You've just discovered from the deeds that the flat is <strong>leasehold, 74 years left</strong> — not the "shared freehold" the Bells casually assume. You haven't raised it yet. Then Mrs Bell asks:</div>
+          <div class="speaker"><div class="who">Mrs Bell <span class="role">— seller</span></div><div class="line">"Everyone's talking about this leasehold reform on the news. Can you explain what it actually means for us?"</div></div>
+          <div class="scene-body">Answer it properly and you'll have to reveal the flat is leasehold with a short lease. Duck it and you look like you don't know your job. There's no clean way through.</div>`,
+        choices: [
+          { text: "Explain the reform accurately — which forces you to reveal the true leasehold status and 74-year term.", tag: "Knowledge + honesty", skill: "Market knowledge & disclosure", e: -2,
+            fx: { trust: +4, comm: +6, rep: +14 }, kind: "good",
+            outcome: ["The hard, right road.", "You explain it clearly — ground rent reform, extension rights from day one since 2025, why lease length matters — and in doing so you have to tell them it's leasehold, 74 years, not shared freehold. They're shaken and briefly upset. But you've been straight, and now you can actually help them fix it."],
+            insight: "Sometimes real competence is exactly what forces an uncomfortable truth into the open — and that's the point. The honest route costs you a hard conversation now but is the only one that survives conveyancing. There is rarely a costless option; the least-bad one protects the client and your reputation." },
+          { text: "Give a vague, non-committal answer to avoid opening the leasehold can of worms.", tag: "Waffle", skill: "Market knowledge & disclosure", e: -1,
+            fx: { trust: -6, comm: -4, rep: -8 }, kind: "mixed",
+            outcome: ["You dodged — and it showed.", "You mumble something generic and steer away. Mrs Bell notices you didn't really answer, and the leasehold bomb is still ticking for the buyer's solicitor to find later."],
+            insight: "Withholding a material fact by being vague still misleads — and it makes you look like you don't understand your own market. The shock just moves to conveyancing, where deals collapse." },
+          { text: "Confidently 'reassure' them it's basically a shared freehold and reform won't affect them.", tag: "Bluff", skill: "Market knowledge & disclosure", e: +1,
+            fx: { trust: +6, comm: +2, rep: -20 }, kind: "bad",
+            outcome: ["Smooth, confident, and wrong.", "The easy answer buys you a happy client today. But you've now actively misdescribed the tenure — a consumer-protection breach — and when their buyer's solicitor finds a 74-year leasehold, the sale and your credibility both detonate."],
+            insight: "Bluffing on something you half-know is the most dangerous move of all: confident misinformation about a material fact is both a legal breach and the fastest way to destroy trust when it unravels." }
+        ]
+      },
+      {
+        title: "The lease, out in the open",
+        content: `<div class="scene-body">The 74-year lease is now on the table. Below 80 years, "marriage value" pushes up the cost of any future extension, and lenders get twitchy. The Bells are anxious.</div>
+          <div class="speaker"><div class="who">Mr Bell <span class="role">— seller</span></div><div class="line">"So what do we actually DO about it? Are we stuck?"</div></div>`,
+        choices: [
+          { text: "Lay out the options properly: start a statutory extension now, or market it and let the buyer extend day one.", tag: "Advise the fix", skill: "Disclosure & advising", e: -2,
+            fx: { trust: +8, comm: +10, rep: +14 }, kind: "good",
+            outcome: ["Problem becomes a plan.", "You take the time to explain both routes — since 2025 a buyer can extend from day one, or the Bells can begin the process now to widen the buyer pool. Tiring, but you've turned a scary problem into a decision they can make."],
+            insight: "Tenure and unexpired term are material facts, but the value you add is turning the problem into advice. A short lease is a solvable problem when the agent knows the routes through it." },
+          { text: "Tell them not to worry and just hope a cash buyer turns up.", tag: "Wing it", skill: "Advising", e: 0,
+            fx: { trust: -2, comm: -8, rep: -6 }, kind: "bad",
+            outcome: ["Hope is not a strategy.", "You wave it away. The buyer pool for a sub-80-year lease with no plan is thin and price-sensitive, and you've given the Bells nothing to act on."],
+            insight: "Below 80 years the buyer pool narrows to cash and specialist lenders. 'Don't worry' without a route is abdication, not advice." }
+        ]
+      },
+      {
+        title: "The lowball offer",
+        content: `<div class="scene-body">A buyer offers £218,000 — well under the £237,500 asking, citing the lease. They call it their 'final number'.</div>
+          <div class="speaker"><div class="who">Mrs Bell <span class="role">— seller, anxious</span></div><div class="line">"Should we just take it? What if nobody else wants a short lease?"</div></div>
+          <div class="scene-body">You've had two other viewings booked for the weekend.</div>`,
+        choices: [
+          { text: "Counter at £232k, note the extension can start day one, mention the weekend viewings.", tag: "Broker it", skill: "Negotiation & closing", e: -2,
+            fx: { trust: +6, comm: +14, rep: +10 }, kind: "good",
+            outcome: ["Nerve — and information — pay.", "You counter, reframe the lease as fixable, name the competing interest without bluffing, and the buyer returns at £229k. Real value, earned through a tough negotiation."],
+            insight: "'Final offers' are an opening move. An agent who knows the reform detail can neutralise the buyer's main lever and negotiate from strength." },
+          { text: "Push the Bells to accept out of caution.", tag: "Fear-sell", skill: "Negotiation position", e: 0,
+            fx: { trust: -6, comm: -14, rep: -6 }, kind: "bad",
+            outcome: ["£19,500 left on the table.", "You had leverage — two more viewings — and folded anyway. The buyer knows a 'final offer' is rarely final; you didn't test it at all."],
+            insight: "Your negotiating position depends on your alternatives. With viewings pending, panic-accepting throws away real leverage." },
+          { text: "Reject outright, no counter, 'come back with a serious number'.", tag: "Slam the door", skill: "Communication", e: +1,
+            fx: { trust: -2, comm: -4, rep: -4 }, kind: "mixed",
+            outcome: ["Tough talk, thin result.", "You might be right that it's low, but killing the conversation risks losing a buyer who was testing you. A counter keeps the door open."],
+            insight: "Rejecting isn't negotiating. Even a low opener deserves a counter — it keeps momentum and information flowing." }
+        ]
+      },
+      {
+        title: "The undercutting rival",
+        content: `<div class="scene-body">Mid-sale, a rival agency has been in the Bells' ear.</div>
+          <div class="speaker"><div class="who">Mr Bell <span class="role">— seller</span></div><div class="line">"That other lot said they'd have sold it by now and they wouldn't have 'made a fuss' about the lease. Maybe we should switch?"</div></div>
+          <div class="scene-body">The rival's pitch is basically 'we'd have hidden the problem'. How do you respond?</div>`,
+        choices: [
+          { text: "Explain calmly why the lease had to be disclosed — and that hiding it would have collapsed the sale at legals.", tag: "Defend on integrity", skill: "Client retention & ethics", e: -2,
+            fx: { trust: +10, comm: +6, rep: +10 }, kind: "good",
+            outcome: ["Honesty holds the client.", "You walk them through what would actually have happened: buyer's solicitor finds the 74-year lease, deal dies, months wasted. The rival's 'faster' sale was a fantasy. The Bells realise your 'fuss' was them being protected."],
+            insight: "An agent who cut the corner the rival is bragging about would have handed the Bells a collapsed sale. Retaining a client is often about reframing your diligence as the protection it actually is." },
+          { text: "Cave and promise to 'downplay' the lease going forward to match the rival.", tag: "Match the shortcut", skill: "Ethics", e: +1,
+            fx: { trust: +2, comm: -6, rep: -18 }, kind: "bad",
+            outcome: ["You just agreed to mislead.", "Keeping the client by promising to hide a material fact means you now own the same legal exposure the rival was dangling. This is how agents end up in front of a complaints panel."],
+            insight: "Competing with an unethical rival by copying them just transfers their liability onto you. The client you keep this way is one you'll regret keeping." },
+          { text: "Let them walk without a word — if they don't value honesty, fine.", tag: "Give up", skill: "Client retention", e: 0,
+            fx: { trust: -4, comm: -12, rep: -2 }, kind: "mixed",
+            outcome: ["Principled, but you lost the deal.", "You're right on the ethics — but you made no effort to help them see it, and a sale you'd worked hard on walks out the door to an agent who'll mishandle it."],
+            insight: "Being right isn't the same as being effective. Part of the job is helping clients understand why the honest route serves them — not just silently letting them make a bad call." }
+        ]
+      }
+    ]
+  },
+
+  office: {
+    title: "Letting an Old Office Building",
+    scenes: [
+      {
+        title: "The instruction",
+        content: `<div class="scene-body">Riverside House: a tired 1970s office block on the quayside. Landlord Mr Vance owns it outright and wants it filled — cheaply.</div>
+          <div class="speaker"><div class="who">Mr Vance <span class="role">— landlord</span></div><div class="line">"It's a lovely building. I'm not spending a penny on it. Just get me a tenant on a nice long lease at top rent. And no, I'm not doing an EPC upgrade — waste of money."</div></div>
+          <div class="scene-body">The block is cold, dated, and its energy rating is poor — which legally restricts letting.</div>`,
+        choices: [
+          { text: "Propose a rent-free period plus a modest refurb, traded for a longer lease term.", tag: "Creative deal", skill: "Deal structuring", e: -2,
+            fx: { trust: +6, comm: +12, rep: +10 }, kind: "good",
+            outcome: ["The commercial toolkit comes out.", "It takes real work to model, but you propose a short rent-free incentive and a light cat-A tidy-up in exchange for a longer term. Vance sees the logic. This is deal-making, not just listing."],
+            insight: "Commercial lettings use levers residential rarely touches — rent-free periods, fit-out contributions, break clauses, lease-length trade-offs. Structuring is where a broker adds real value." },
+          { text: "Level with him: realistic rent, and explain the EPC/MEES legal constraint.", tag: "Straight talk", skill: "Market & legal knowledge", e: -1,
+            fx: { trust: +2, comm: +8, rep: +12 }, kind: "good",
+            outcome: ["He hates it. You're right.", "You explain that below the MEES threshold he legally can't grant a new lease, and that a dated block commands a dated rent. He grumbles about 'consultants' — but now you're working with reality."],
+            insight: "In commercial agency your knowledge of leasing law and market rents IS the product. Telling a difficult landlord an inconvenient truth, backed by evidence, is the job." },
+          { text: "Agree to everything and market it at top rent as-is.", tag: "Yes-man", skill: "Managing the client", e: +1,
+            fx: { trust: +6, comm: -6, rep: -10 }, kind: "bad",
+            outcome: ["Frictionless — and futile.", "Easy meeting, no effort. But a dated block at top rent with a poor EPC will sit empty for months, and you may not legally be able to grant a new lease on the worst ratings."],
+            insight: "Commercial lettings run on MEES (Minimum Energy Efficiency Standards): below the threshold, you can't lawfully grant a new lease. Agreeing to the impossible just defers the reckoning." }
+        ]
+      },
+      {
+        title: "The demanding tenant",
+        content: `<div class="scene-body">A growing tech firm is interested — but their office manager has a list, and a tone.</div>
+          <div class="speaker"><div class="who">Dana <span class="role">— prospective tenant's office manager</span></div><div class="line">"We'd need new AC, a proper kitchen, fibre installed, a 6-month rent-free, AND a break clause at year 3. Sort it by next month. And I'll be calling you daily until it's done."</div></div>
+          <div class="scene-body">Vance won't spend. Dana wants everything, loudly. This one's going to take it out of you.</div>`,
+        choices: [
+          { text: "Work through her list patiently, separate must-haves from nice-to-haves, and broker a realistic package.", tag: "Broker it", skill: "Negotiation & deal-making", e: -2,
+            fx: { trust: +10, comm: +12, rep: +12 }, kind: "good",
+            outcome: ["The middle, found — and it drained you.", "A gruelling week of daily calls, but you get Dana to rank her list (fibre and AC are real; the gold-plated kitchen isn't), then trade a 4-month rent-free and a landlord AC contribution for a 5-year term with a year-4 break. Both sides can live with it. You're exhausted."],
+            insight: "Deal-making is triage: separate genuine constraints from opening asks on both sides, then trade across the terms each values differently. Hard-conversation clients are draining — which is exactly why energy is the resource that runs out." },
+          { text: "Tell Dana \"the landlord won't do any of that\" and hope she compromises.", tag: "Shut it down", skill: "Communication", e: -1,
+            fx: { trust: -4, comm: -10, rep: -4 }, kind: "mixed",
+            outcome: ["Honest, but you stopped too soon.", "You relayed Vance's 'no' without exploring any trade. Dana feels stonewalled and starts viewing a competitor's building. Less draining than negotiating — but you may have lost her."],
+            insight: "Simply passing messages between parties isn't agency — it's postage. Value comes from finding the structure that bridges two 'no's into a 'yes'." },
+          { text: "Promise Dana everything to keep her keen, sort the landlord out later.", tag: "Over-promise", skill: "Managing expectations", e: +1,
+            fx: { trust: -10, comm: -8, rep: -12 }, kind: "bad",
+            outcome: ["Two clients, both about to be furious.", "Saying yes to everyone is the least tiring thing in the room — right up until the positions collide, both feel misled, and the deal detonates."],
+            insight: "An agent sits between parties with opposite interests. Telling each what they want to hear feels smooth but guarantees a blow-up. Manage expectations honestly, early." }
+        ]
+      },
+      {
+        title: "The service charge surprise",
+        content: `<div class="scene-body">Deal nearly agreed. Reviewing the terms, you spot a hefty <strong>service charge</strong> and a looming <strong>dilapidations</strong> liability — the tenant could be on the hook for the tired interior when they leave.</div>
+          <div class="scene-body">Dana hasn't asked about either. Vance would rather you didn't mention them.</div>`,
+        choices: [
+          { text: "Flag both clearly and negotiate a service-charge cap and a schedule of condition.", tag: "Disclose + fix", skill: "Deal-making & ethics", e: -2,
+            fx: { trust: +10, comm: +10, rep: +14 }, kind: "good",
+            outcome: ["Problem turned into a deal term.", "Tiring, but you raise both, agree a service-charge cap, and get a schedule of condition to limit dilapidations to fair wear. Dana trusts you more, not less, for surfacing it."],
+            insight: "A schedule of condition and a service-charge cap are standard tools to make an old building lettable. Surfacing and solving the liability is exactly where a good agent earns the fee." },
+          { text: "Mention them in passing but don't push for protections.", tag: "Half-measure", skill: "Deal-making", e: -1,
+            fx: { trust: +2, comm: -2, rep: 0 }, kind: "mixed",
+            outcome: ["Disclosed, but undefended.", "You ticked the honesty box but left Dana exposed. She signs, then feels the sting later — a deal that holds but doesn't impress."],
+            insight: "Disclosure is the floor, not the ceiling. In commercial work, the value is in negotiating the protections, not just naming the risks." },
+          { text: "Say nothing — it's in the lease, she can find it herself.", tag: "Stay quiet", skill: "Disclosure & ethics", e: +1,
+            fx: { trust: -6, comm: +4, rep: -16 }, kind: "bad",
+            outcome: ["A silence that costs you.", "Convenient now. But when Dana's solicitor finds an uncapped service charge and a big dilapidations exposure, trust evaporates and she pulls out — blaming the agent who 'hid it'."],
+            insight: "Material costs like service charge and dilapidations shape the true cost of occupancy. Letting a tenant discover them at legals is how commercial deals die late and reputations sour." }
+        ]
+      },
+      {
+        title: "The rival broker",
+        content: `<div class="scene-body">Vance rings, having been courted by a flashier commercial agency.</div>
+          <div class="speaker"><div class="who">Mr Vance <span class="role">— landlord</span></div><div class="line">"A big national outfit says they've got tenants queuing and they'd charge me less. You're just a local. Why should I stick with you?"</div></div>
+          <div class="scene-body">The national brand has reach and a cheaper headline fee. You have the live deal and local knowledge.</div>`,
+        choices: [
+          { text: "Point to the deal already on the table and your specific knowledge of this building and this market.", tag: "Defend on value", skill: "Client retention", e: -2,
+            fx: { trust: +10, comm: +8, rep: +8 }, kind: "good",
+            outcome: ["Local knowledge wins.", "You remind him you already have Dana's firm halfway to signing, that you know this tired block's MEES and dilapidations issues cold, and that a national's 'queue of tenants' rarely materialises for a 1970s quayside office. He stays."],
+            insight: "Global brands have wider reach, but local agents win on specific market knowledge and live relationships. Retention means making your particular, hard-won advantage concrete — not competing on brand size or fee." },
+          { text: "Try to out-promise the national on reach and speed.", tag: "Fight on their turf", skill: "Positioning", e: -1,
+            fx: { trust: 0, comm: -6, rep: -4 }, kind: "mixed",
+            outcome: ["You picked the wrong battle.", "Competing on 'reach' against a national brand is a fight you can't win, and it drops your real edge — the live deal and local depth. Vance is unconvinced by a smaller firm claiming to be bigger."],
+            insight: "Don't compete on your rival's strengths. A local agent's edge is knowledge and relationships, not matching a national's footprint — play your own game." },
+          { text: "Shrug and say 'go with them then' — you've had enough of Vance.", tag: "Walk away", skill: "Client retention", e: 0,
+            fx: { trust: -8, comm: -14, rep: -4 }, kind: "bad",
+            outcome: ["You handed away a live deal.", "Tempting after all his penny-pinching — but you abandon a deal you'd already built, and the national inherits your work. Vance tells people you gave up on him."],
+            insight: "Difficult clients are exhausting, but walking from a deal you've nearly closed hands your effort to a competitor. There's a difference between firing a bad client cleanly and quitting in frustration." }
+        ]
+      },
+      {
+        title: "The heads of terms",
+        content: `<div class="scene-body">Last step: the <strong>heads of terms</strong> for both solicitors. You're exhausted.</div>
+          <div class="scene-body">The <em>break clause conditions</em> are vague (conditional on vacant possession? rent paid up?) and the rent-review basis isn't specified. Both sides keen to instruct solicitors today.</div>`,
+        choices: [
+          { text: "Nail down the break conditions and rent-review basis before it goes out.", tag: "Read the terms", skill: "Contracts & compliance", e: -2,
+            fx: { trust: +6, comm: +4, rep: +14 }, kind: "good",
+            outcome: ["Drained, but watertight.", "It's the last thing you have in the tank. But a vague break clause is the single most litigated thing in commercial leases — miss a condition and a tenant's exit can be invalid. You specify it all. The solicitors barely query a thing."],
+            insight: "In commercial leases the break-clause conditions and rent-review basis are where fortunes turn. Precise heads of terms save months of legal wrangling — the dull detail is the whole game." },
+          { text: "Send the draft as-is; the solicitors will tighten the wording.", tag: "Ship it", skill: "Contracts & compliance", e: +1,
+            fx: { trust: -2, comm: +2, rep: -14 }, kind: "bad",
+            outcome: ["Vagueness compounds.", "You go home early. But loose heads of terms mean weeks of solicitor ping-pong, a disputed break condition, and both clients wondering why their agent left it half-done."],
+            insight: "Heads of terms set the frame for the whole lease. 'The solicitors will sort it' turns a one-hour job now into a two-month argument later." }
+        ]
+      }
+    ]
+  }
+};
+
+/* ============ ENGINE ============ */
+function startGame(p){
+  path = p;
+  M = { trust: 50, comm: 50, rep: 50 };
+  energy = MAX_ENERGY;
+  log = [];
+  idx = 0;
+  show('s-game');
+  renderMeters();
+  renderEnergy('energy-pips', energy);
+  renderScene();
+}
+
+function renderScene(){
+  const sc = SCENARIOS[path].scenes[idx];
+  document.getElementById('scene-num').textContent = `Scene ${idx+1} of ${SCENARIOS[path].scenes.length} · ${SCENARIOS[path].title}`;
+  document.getElementById('scene-title').textContent = sc.title;
+  document.getElementById('scene-content').innerHTML = sc.content;
+  document.getElementById('outcome-area').innerHTML = '';
+  const ca = document.getElementById('choice-area');
+  ca.innerHTML = '';
+  sc.choices.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.className = 'choice';
+    // NOTE: no skill/insight shown here — only the choice text and its energy cost.
+    b.innerHTML = `<div>${c.text}</div><div class="tag"><span class="ecost ${ecostClass(c.e)}">${ecostLabel(c.e)}</span></div>`;
+    b.onclick = () => pick(i);
+    ca.appendChild(b);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function pick(i){
+  const sc = SCENARIOS[path].scenes[idx];
+  const c = sc.choices[i];
+  M.trust = clamp(M.trust + c.fx.trust);
+  M.comm  = clamp(M.comm  + c.fx.comm);
+  M.rep   = clamp(M.rep   + c.fx.rep);
+  energy = Math.max(0, Math.min(MAX_ENERGY, energy + c.e));
+  renderMeters();
+  renderEnergy('energy-pips', energy);
+  // store everything needed for the debrief note
+  log.push({ scene: sc.title, choice: c.text, skill: c.skill, kind: c.kind, insight: c.insight });
+  document.getElementById('choice-area').innerHTML = '';
+  const dl = deltaStr(c.fx, c.e);
+  const burned = energy <= 0;
+  const last = idx === SCENARIOS[path].scenes.length - 1;
+  document.getElementById('outcome-area').innerHTML = `
+    <div class="outcome ${c.kind}">
+      <div class="outcome-head">${c.outcome[0]}</div>
+      <div>${c.outcome[1]}</div>
+      <div class="deltas">${dl}</div>
+    </div>
+    <button class="btn full" id="next-btn"></button>`;
+  const nb = document.getElementById('next-btn');
+  if(burned && !last){
+    nb.textContent = 'You have nothing left in the tank…';
+    nb.onclick = () => burnout();
+  } else {
+    nb.textContent = last ? 'See your debrief →' : 'Next scene →';
+    nb.onclick = () => { if(last){ debrief(); } else { idx++; renderScene(); } };
+  }
+  window.scrollTo({ top: document.getElementById('outcome-area').offsetTop - 130, behavior: 'smooth' });
+}
+
+function burnout(){
+  show('s-burnout');
+  document.getElementById('burnout-text').textContent =
+    `You made ${log.length} decision${log.length===1?'':'s'} before your energy hit zero. Overworked and out of steam, you hand in your notice partway through the ${SCENARIOS[path].title.toLowerCase()}.`;
+  document.getElementById('burnout-log').innerHTML = renderLog(log);
+  document.getElementById('burnout-retry').onclick = () => startGame(path);
+}
+
+function debrief(){
+  show('s-debrief');
+  const total = M.trust + M.comm + M.rep + energy*6;
+  let grade, sub, headline;
+  if(total >= 232){ grade = "Rising Star 🌟"; sub = "Great outcomes AND you kept your sanity."; headline = "Nailed It"; }
+  else if(total >= 182){ grade = "Solid Agent 👍"; sub = "A dependable pair of hands."; headline = "Good Work"; }
+  else if(total >= 132){ grade = "Still Learning 📎"; sub = "The instincts need sharpening."; headline = "Room to Grow"; }
+  else { grade = "Rough Week 😬"; sub = "Survived — barely. Perhaps a career with a clearing market."; headline = "Ouch"; }
+  document.getElementById('db-headline').textContent = headline;
+  document.getElementById('db-grade').textContent = grade;
+  document.getElementById('db-grade-sub').textContent = sub;
+  setBar('db-trust','db-f-trust', M.trust);
+  setBar('db-comm','db-f-comm', M.comm);
+  setBar('db-rep','db-f-rep', M.rep);
+  renderEnergy('db-energy-pips', energy);
+  document.getElementById('db-log').innerHTML = renderLog(log);
+  const ob = document.getElementById('db-other');
+  const order = ['let','sell','office'];
+  const next = order[(order.indexOf(path)+1) % order.length];
+  const names = { let:'letting case', sell:'selling case', office:'office case' };
+  ob.textContent = `Try the ${names[next]} →`;
+  ob.onclick = () => startGame(next);
+}
+
+/* ============ HELPERS ============ */
+function renderLog(arr){
+  return arr.map(e => {
+    const icon = e.kind === 'good' ? '✅' : e.kind === 'bad' ? '❌' : '➖';
+    return `<div class="log-item">
+      <div class="log-head">
+        <div class="log-icon">${icon}</div>
+        <div class="log-body">
+          <div class="log-scene">${e.scene}</div>
+          <div class="log-choice">${e.choice}</div>
+          <div class="log-skill">Skill tested: ${e.skill}</div>
+        </div>
+      </div>
+      <div class="insight"><div class="lbl">What a real agent weighs</div><div class="txt">${e.insight}</div></div>
+    </div>`;
+  }).join('');
+}
+function clamp(v){ return Math.max(0, Math.min(100, v)); }
+function show(id){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function renderMeters(){
+  setBar('v-trust','f-trust', M.trust);
+  setBar('v-comm','f-comm', M.comm);
+  setBar('v-rep','f-rep', M.rep);
+}
+function setBar(valId, fillId, val){
+  document.getElementById(valId).textContent = Math.round(val);
+  document.getElementById(fillId).style.width = val + '%';
+}
+function renderEnergy(containerId, val){
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  for(let i=0;i<MAX_ENERGY;i++){
+    const p = document.createElement('div');
+    const low = val <= 1;
+    p.className = 'pip' + (i < val ? ' on' : '') + (low ? ' low' : '');
+    c.appendChild(p);
+  }
+}
+function ecostClass(e){ return e <= -2 ? 'heavy' : e < 0 ? 'spend' : e > 0 ? 'rest' : 'free'; }
+function ecostLabel(e){
+  if(e <= -2) return `⚡ ${e} · demanding`;
+  if(e < 0) return `⚡ ${e}`;
+  if(e > 0) return `⚡ +${e} · easy`;
+  return '⚡ 0';
+}
+function deltaStr(fx, e){
+  const parts = [];
+  const map = { trust: 'Trust', comm: 'Commission', rep: 'Reputation' };
+  for(const k in fx){
+    const v = fx[k];
+    if(v > 0) parts.push(`<span class="d-up">▲ ${map[k]} +${v}</span>`);
+    else if(v < 0) parts.push(`<span class="d-down">▼ ${map[k]} ${v}</span>`);
+    else parts.push(`<span class="d-flat">– ${map[k]} 0</span>`);
+  }
+  if(e < 0) parts.push(`<span class="d-energy">⚡ Energy ${e}</span>`);
+  else if(e > 0) parts.push(`<span class="d-energy">⚡ Energy +${e}</span>`);
+  return parts.join('');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Assistant Asset Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F2EFE9; --card: #FCFAF6; --border: rgba(40,40,55,0.12); --border-strong: rgba(40,40,55,0.22);
+  --text: #16161E; --muted: #6C6A78; --faint: #A8A5B4;
+  --accent: #2F5F8A; --accent-light: #E9EEF4; --accent-dark: #1E3F5E;
+  --success: #2E7A48; --success-bg: #EAF4EE; --warning: #A05010; --warning-bg: #FDF2E8;
+  --danger: #A02828; --danger-bg: #FAF0F0; --info: #1A5A88; --info-bg: #EAF2FA; --energy: #B8860B;
+  --m1: #2F5F8A; --m2: #2E7A48; --m3: #9C4DA0;
+  --tag-landlord: #7A4DB0; --tag-tenant: #2E7A48; --tag-opex: #B8860B; --tag-capex: #C0562A;
+  --radius: 10px; --radius-lg: 16px; --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.6; }
+.shell { max-width: 680px; margin: 0 auto; padding: 24px 16px 60px; }
+.screen { display: none; }
+.screen.active { display: block; animation: fade 0.4s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.masthead { text-align: center; padding: 30px 0 24px; border-bottom: 0.5px solid var(--border); margin-bottom: 24px; }
+.masthead-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.masthead h1 { font-family: var(--serif); font-size: 36px; line-height: 1.08; }
+.masthead h1 em { font-style: italic; color: var(--accent); }
+.masthead p { margin-top: 12px; color: var(--muted); max-width: 470px; margin-left: auto; margin-right: auto; }
+
+.card { background: var(--card); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; margin-bottom: 14px; }
+.card-title { font-family: var(--serif); font-size: 20px; margin-bottom: 6px; }
+.card-sub { color: var(--muted); font-size: 13px; }
+
+.path { cursor: pointer; transition: border-color .2s, transform .12s; border: 0.5px solid var(--border); }
+.path:hover { border-color: var(--accent); transform: translateY(-2px); }
+.path-top { display: flex; align-items: center; gap: 12px; }
+.path-emoji { font-size: 32px; }
+.path-title { font-family: var(--serif); font-size: 21px; }
+.path-style { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.path-style.core { color: var(--m2); }
+.path-style.va { color: var(--warning); }
+.path-desc { color: var(--muted); font-size: 13px; margin-top: 8px; }
+.path-meta { font-size: 11px; color: var(--faint); margin-top: 8px; }
+
+/* CAST / WHO'S WHO */
+.cast-row { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
+.cast-row:last-child { border: none; }
+.cast-emoji { font-size: 26px; line-height: 1.3; width: 34px; text-align: center; flex-shrink: 0; }
+.cast-body .who { font-weight: 700; }
+.cast-body .who .tagme { color: var(--accent); font-weight: 700; }
+.cast-body .desc { color: var(--muted); font-size: 13px; }
+.arrow-note { text-align:center; color: var(--faint); font-size: 12px; margin: 6px 0; }
+
+/* METERS with gloss */
+.meters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; position: sticky; top: 0; background: var(--bg); padding: 10px 0 4px; z-index: 5; }
+.meter { background: var(--card); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 9px 11px; position: relative; cursor: help; }
+.meter-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+.meter-lbl .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.meter-lbl .q { color: var(--faint); font-weight: 700; border: 1px solid var(--border-strong); border-radius: 50%; width: 13px; height: 13px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; flex-shrink: 0; }
+.meter-track { height: 4px; background: var(--border); border-radius: 2px; margin-top: 5px; overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 2px; transition: width .5s ease; }
+.meter.k1 .meter-fill { background: var(--m1); } .meter.k2 .meter-fill { background: var(--m2); } .meter.k3 .meter-fill { background: var(--m3); }
+.meter .tip { display: none; position: absolute; top: 100%; left: 0; right: 0; margin-top: 6px; background: var(--text); color: #fff; font-size: 11px; line-height: 1.4; letter-spacing: 0; text-transform: none; padding: 8px 10px; border-radius: 8px; z-index: 20; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.meter:hover .tip, .meter:focus .tip, .meter.show .tip { display: block; }
+.meter-hint { text-align: center; font-size: 11px; color: var(--faint); margin: -2px 0 10px; }
+
+.energy-bar { position: sticky; top: 62px; background: var(--bg); z-index: 5; display: flex; align-items: center; gap: 10px; padding: 4px 2px 14px; margin-bottom: 8px; border-bottom: 0.5px solid var(--border); }
+.energy-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--energy); font-weight: 700; }
+.energy-pips { display: flex; gap: 5px; }
+.pip { width: 26px; height: 11px; border-radius: 3px; background: var(--border); transition: background .4s; }
+.pip.on { background: var(--energy); } .pip.low.on { background: var(--danger); }
+.energy-note { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+.scene-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.scene-num { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.chip { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 2px 8px; border-radius: 20px; color: #fff; }
+.chip.landlord { background: var(--tag-landlord); } .chip.tenant { background: var(--tag-tenant); }
+.chip.opex { background: var(--tag-opex); } .chip.capex { background: var(--tag-capex); }
+.scene-title { font-family: var(--serif); font-size: 23px; line-height: 1.15; margin-bottom: 12px; }
+.scene-body { color: var(--text); margin-bottom: 6px; }
+.term { border-bottom: 1.5px dotted var(--accent); font-weight: 500; cursor: help; }
+.speaker { border-left: 3px solid var(--border-strong); padding: 8px 0 8px 14px; margin: 14px 0; }
+.speaker.boss { border-left-color: var(--accent); }
+.speaker .who { font-weight: 700; font-size: 13px; }
+.speaker .who .role { color: var(--muted); font-weight: 400; }
+.speaker .line { font-style: italic; color: var(--text); }
+.brief-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 700; margin-bottom: 2px; }
+
+.choice { display: block; width: 100%; text-align: left; background: var(--card); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; font-family: var(--sans); font-size: 14px; color: var(--text); transition: border-color .15s, transform .1s; }
+.choice:hover { border-color: var(--accent); transform: translateX(3px); }
+.choice .tag { display: flex; justify-content: flex-end; align-items: center; gap: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+.choice .ecost { font-weight: 700; white-space: nowrap; }
+.choice .ecost.heavy { color: var(--danger); } .choice .ecost.spend { color: var(--energy); }
+.choice .ecost.rest { color: var(--success); } .choice .ecost.free { color: var(--faint); }
+
+.outcome { border-radius: var(--radius); padding: 15px 17px; margin: 4px 0 14px; border: 0.5px solid; }
+.outcome.good { background: var(--success-bg); border-color: var(--success); }
+.outcome.mixed { background: var(--warning-bg); border-color: var(--warning); }
+.outcome.bad { background: var(--danger-bg); border-color: var(--danger); }
+.outcome-head { font-weight: 700; margin-bottom: 4px; }
+.outcome.good .outcome-head { color: var(--success); } .outcome.mixed .outcome-head { color: var(--warning); } .outcome.bad .outcome-head { color: var(--danger); }
+.deltas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; font-weight: 700; }
+.d-up { color: var(--success); } .d-down { color: var(--danger); } .d-energy { color: var(--energy); }
+.learn { background: #FFF8E8; border: 0.5px solid var(--energy); border-radius: var(--radius); padding: 10px 13px; margin: 0 0 14px; }
+.learn .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--warning); font-weight: 700; margin-bottom: 3px; }
+.learn .txt { font-size: 13px; }
+
+.insight { background: var(--info-bg); border: 0.5px solid var(--info); border-radius: var(--radius); padding: 10px 13px; margin-top: 8px; }
+.insight .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--info); font-weight: 700; margin-bottom: 3px; }
+.insight .txt { font-size: 13px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); padding: 13px 20px; font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: background .2s; }
+.btn:hover { background: var(--accent-dark); }
+.btn.full { width: 100%; }
+.btn.ghost { background: transparent; color: var(--muted); border: 0.5px solid var(--border); }
+.btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-row { display: flex; gap: 10px; margin-top: 6px; }
+
+.debrief-grade { text-align: center; padding: 8px 0 4px; }
+.debrief-grade .title { font-family: var(--serif); font-size: 30px; }
+.debrief-grade .sub { color: var(--muted); }
+.log-item { padding: 14px 0; border-bottom: 0.5px solid var(--border); }
+.log-item:last-child { border: none; }
+.log-head { display: flex; gap: 10px; align-items: flex-start; }
+.log-icon { font-size: 18px; line-height: 1.4; }
+.log-body { flex: 1; }
+.log-scene { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.log-choice { font-weight: 500; }
+.log-skill { font-size: 12px; color: var(--info); margin-top: 2px; }
+.foot { text-align: center; color: var(--faint); font-size: 11px; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HOME -->
+<div id="s-home" class="screen active">
+  <div class="masthead">
+    <div class="masthead-tag">Career Scenario · Property &amp; Asset Management</div>
+    <h1>The Assistant<br><em>Asset Manager</em></h1>
+    <p>It's your first job in property. You're the <strong>assistant</strong> to an asset manager — the person who looks after a building for the investor who owns it. You won't run the show yet; your job is to look into things, spot problems, and bring your manager good options. Pick where you'll start.</p>
+  </div>
+
+  <div class="card path" onclick="showCast('core')">
+    <div class="path-top"><div class="path-emoji">🏘️</div><div><div class="path-style core">Steady income · Easier start</div><div class="path-title">A Rented Flats Building</div></div></div>
+    <div class="path-desc">A block of flats that people rent to live in. The owner just wants a calm, reliable income and happy tenants who stay. Your job: help keep it that way. Great place to learn the ropes.</div>
+    <div class="path-meta">Difficulty: ★☆☆ · about 5 short decisions</div>
+  </div>
+
+  <div class="card path" onclick="showCast('va')">
+    <div class="path-top"><div class="path-emoji">🛍️</div><div><div class="path-style va">Fixing it up · A step up</div><div class="path-title">A Tired Shopping Centre</div></div></div>
+    <div class="path-desc">A run-down shopping centre the owner bought cheap, hoping to do it up and sell for more. Your job: help spend the money wisely, fix which shops are in it, and prove it's worth more. Trickier.</div>
+    <div class="path-meta">Difficulty: ★★☆ · about 5 short decisions</div>
+  </div>
+
+  <div class="card" style="background:var(--accent-light); border-color:var(--accent)">
+    <div class="card-title" style="font-size:16px">New to all this? Good.</div>
+    <div class="card-sub">You don't need to know any property jargon. Each building starts with a quick "who's who," your manager explains anything technical as it comes up, and every meter has a plain-English note if you tap it. You'll pick up the real terms (like <strong>NOI</strong> or <strong>void</strong>) by seeing what they mean in the story.</div>
+  </div>
+</div>
+
+<!-- CAST / WHO'S WHO -->
+<div id="s-cast" class="screen">
+  <div class="masthead">
+    <div class="masthead-tag" id="cast-tag"></div>
+    <h1 id="cast-title"></h1>
+    <p id="cast-intro"></p>
+  </div>
+  <div class="card">
+    <div class="card-title" style="font-size:17px">Who's who on this job</div>
+    <div id="cast-list"></div>
+  </div>
+  <div class="card" style="background:var(--accent-light); border-color:var(--accent)">
+    <div class="card-title" style="font-size:16px">The three things you're keeping an eye on</div>
+    <div class="card-sub" id="cast-meters"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn ghost full" onclick="show('s-home')">← Back</button>
+    <button class="btn full" id="cast-start">Start day one →</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="s-game" class="screen">
+  <div class="meters" id="meters"></div>
+  <div class="meter-hint">Tap a meter to see what it means</div>
+  <div class="energy-bar">
+    <span class="energy-lbl">⚡ Energy</span>
+    <div class="energy-pips" id="energy-pips"></div>
+    <span class="energy-note">Do everything the hard way and you'll burn out</span>
+  </div>
+  <div class="card" id="scene-card">
+    <div class="scene-head"><span class="scene-num" id="scene-num"></span><span class="chip" id="scene-chip"></span></div>
+    <div class="scene-title" id="scene-title"></div>
+    <div id="scene-content"></div>
+  </div>
+  <div id="choice-area"></div>
+  <div id="outcome-area"></div>
+</div>
+
+<!-- BURNOUT -->
+<div id="s-burnout" class="screen">
+  <div class="masthead">
+    <div class="masthead-tag">Game Over</div>
+    <h1>Run <em>Ragged</em></h1>
+    <p id="burnout-text"></p>
+  </div>
+  <div class="card">
+    <div class="card-title">How far you got — and what you learned</div>
+    <div class="card-sub" style="margin-bottom:8px">Each decision, with the note from your manager.</div>
+    <div id="burnout-log"></div>
+  </div>
+  <div class="card" style="background:var(--accent-light); border-color:var(--accent)">
+    <div class="card-title" style="font-size:16px">The lesson</div>
+    <div class="card-sub">Even a keen assistant can't do everything the thorough way — there aren't enough hours. The skill is choosing which jobs really deserve your full effort and which can be done quickly. Learning to pick your battles is part of the job.</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn ghost full" onclick="location.reload()">← Menu</button>
+    <button class="btn full" id="burnout-retry">Try again →</button>
+  </div>
+</div>
+
+<!-- DEBRIEF -->
+<div id="s-debrief" class="screen">
+  <div class="masthead">
+    <div class="masthead-tag">End of the week</div>
+    <h1 id="db-headline">How did you do?</h1>
+  </div>
+  <div class="card">
+    <div class="debrief-grade">
+      <div class="title" id="db-grade"></div>
+      <div class="sub" id="db-grade-sub"></div>
+      <div class="card-sub" id="db-tally" style="margin-top:8px; font-size:12px"></div>
+    </div>
+    <div class="meters" id="db-meters" style="position:static; margin-top:16px; margin-bottom:10px"></div>
+    <div class="energy-bar" style="position:static; border:none; padding-bottom:0">
+      <span class="energy-lbl">⚡ Energy left</span>
+      <div class="energy-pips" id="db-energy-pips"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">What you did, and what it taught you</div>
+    <div class="card-sub" style="margin-bottom:8px">Each decision, the type of challenge, and the takeaway.</div>
+    <div id="db-log"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn ghost full" onclick="location.reload()">← Menu</button>
+    <button class="btn full" id="db-other">Try the other building →</button>
+  </div>
+  <div class="foot">Buildings and people here are made up and simplified, to help you learn the shape of the job.</div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+/* ========= STATE ========= */
+let path=null, idx=0, log=[], energy=0, MAXE=4;
+let M=[50,50,50], METERS=[];
+const CHIP_LABEL={landlord:"The owner",tenant:"A tenant",opex:"Running costs",capex:"Big spend"};
+
+/* ========= CAST INFO ========= */
+const CAST = {
+  core: {
+    tag:"Building 1 · Rented flats", title:"A Rented <em>Flats Building</em>",
+    intro:"120 flats that people rent to live in. Before day one, here's who you'll be dealing with — and what your job actually is.",
+    list:[
+      {e:"💼",who:"The owner <span class='role'>(the investor)</span>",desc:"A pension fund owns the building. They never visit — they just want steady rent coming in and the building holding its value. They're your client. In the business they're called the <b>investor</b> or <b>landlord</b>."},
+      {e:"👩‍💼",who:"Your manager <span class='role'>(the asset manager)</span>",desc:"Your boss. She makes the big calls and answers to the owner. She'll hand you jobs and explain things as you go — learn from her."},
+      {e:"🧑‍🔧",who:"The facilities manager <span class='role'>(on site)</span>",desc:"Keeps the building physically running — cleaning, repairs, the lifts. You'll coordinate with them, but they're not your boss."},
+      {e:"🧑‍🤝‍🧑",who:"The tenants",desc:"The people renting the flats. Keep them happy and they stay and keep paying. Annoy them and they leave — an empty flat earns nothing."},
+      {e:"🧑‍💼",who:"You <span class='tagme'>— the assistant</span>",desc:"The junior. Your job is to look into things, spot problems early, and bring your manager clear options. You're learning."}
+    ],
+    metersExplain:"<b>NOI</b> — the rent collected minus what the building costs to run. The owner's favourite number. · <b>Occupancy</b> — how full the building is (empty flats earn nothing). · <b>Owner's trust</b> — how much your manager and the owner rely on you."
+  },
+  va: {
+    tag:"Building 2 · Shopping centre", title:"A Tired <em>Shopping Centre</em>",
+    intro:"A run-down shopping centre the owner bought cheap, planning to do it up and sell it for more in a few years. Here's who's involved — and your role.",
+    list:[
+      {e:"💼",who:"The owner <span class='role'>(the investor)</span>",desc:"A fund that buys tired buildings, improves them, and sells at a profit. They've set aside money (<b>capex</b>) to do this one up. They want it worth much more in ~4 years."},
+      {e:"👩‍💼",who:"Your manager <span class='role'>(the asset manager)</span>",desc:"Your boss, running the makeover. She decides the plan and reports to the owner. She'll brief you on each job and explain the terms."},
+      {e:"🏬",who:"The shops <span class='role'>(the tenants)</span>",desc:"The businesses renting space. Which shops are in the centre — the <b>tenant mix</b> — decides how busy and valuable it is. A big 'anchor' store pulls in shoppers."},
+      {e:"🧑‍💼",who:"You <span class='tagme'>— the assistant</span>",desc:"The junior on the project. You look into costs, chase options, and flag risks to your manager. You don't sign the cheques — you help her decide."}
+    ],
+    metersExplain:"<b>NOI growth</b> — are you growing the rent-minus-costs figure? · <b>Tenant mix</b> — how good the line-up of shops is. · <b>Value</b> — what the whole centre could sell for (the point of the job)."
+  }
+};
+
+/* ========= SCENARIOS =========
+ term glosses via <span class='term' title='...'>word</span>
+ choice: {text, tag, skill, e, fx:[3], kind, outcome:[head,body], learn(optional plain term note), insight}
+================================ */
+const SCENARIOS = {
+  core: {
+    title:"Rented Flats", maxEnergy:5,
+    meters:[
+      {name:"NOI",cls:"k1",gloss:"NOI = rent collected minus running costs. The number the owner cares about most."},
+      {name:"Occupancy",cls:"k2",gloss:"How full the building is. Empty flats ('voids') earn nothing."},
+      {name:"Owner's trust",cls:"k3",gloss:"How much your manager and the owner rely on you."}
+    ],
+    scenes:[
+      {
+        chip:"landlord", title:"Your manager's first ask",
+        content:`<div class="brief-lbl">Your manager briefs you</div>
+          <div class="speaker boss"><div class="who">Priya <span class="role">— your manager</span></div><div class="line">"The owner wants us to cut costs to boost the <span class="term" title="NOI = rent collected minus what the building costs to run.">NOI</span> — that's just the rent we collect minus what the building costs to run. They think the concierge and gym are easy things to cut. Can you look into it before I reply to them?"</div></div>
+          <div class="scene-body">So: do the amenities (gym, concierge) actually earn their keep? What do you bring back to Priya?</div>`,
+        choices:[
+          {text:"Dig into the numbers: check which amenities make tenants renew, and suggest cutting only the ones that don't.",tag:"Do your homework",skill:"Cost vs keeping tenants",e:-2,
+            fx:[6,4,10],kind:"good",
+            outcome:["Priya's impressed.","You find the gym is why lots of tenants renew, but an unused parcel-locker contract is dead money. You suggest cutting just that. Costs drop, nobody leaves, and Priya has a solid answer for the owner."],
+            insight:"The whole point of a steady-income building is protecting the rent. Cutting costs is fine — cutting the costs that make tenants stay is not. Knowing the difference (and showing your working) is the core skill."},
+          {text:"Tell Priya the costs can't really be cut and leave it there.",tag:"Give a flat answer",skill:"Being useful to your manager",e:0,
+            fx:[-2,2,-8],kind:"mixed",
+            outcome:["A bit of a shrug.","Nothing gets worse — but 'can't be done' with no analysis behind it isn't much help. Priya has to do the digging herself, and wonders what she asked you for."],
+            insight:"Even when the answer might be 'don't cut much,' your job is to look into it and show options. A flat 'no' without any homework makes you look disengaged."},
+          {text:"Quickly suggest cutting the obvious visible stuff to give a fast 'yes'.",tag:"Cut corners for a quick win",skill:"Cost vs keeping tenants",e:+1,
+            fx:[4,-12,-2],kind:"bad",
+            outcome:["Looked good for a week.","You suggest slashing the concierge and gym cleaning. Costs drop — then three tenants give notice about 'falling standards.' One flat sits empty for months and wipes out the saving."],
+            learn:"An empty rented unit is called a <b>void</b>. Voids are the enemy — a flat earning nothing for months usually costs far more than the money you saved by cutting a service.",
+            insight:"In rented housing, keeping the building full IS the income. A visible service cut can push tenants out, and one long void often costs more than the saving. Quick wins can quietly destroy value."}
+        ]
+      },
+      {
+        chip:"tenant", title:"A good tenant might leave",
+        content:`<div class="scene-body">A tenant who's lived here happily for three years emails you. Her kitchen's dated and the extractor fan is noisy. She hints she'll move out when her contract ends unless something's done.</div>
+          <div class="speaker"><div class="who">Ms Reid <span class="role">— long-term tenant</span></div><div class="line">"I love it here, but the flat's tired. Any chance of a little refresh before I re-sign?"</div></div>
+          <div class="scene-body">She's reliable and always pays on time. What do you do?</div>`,
+        choices:[
+          {text:"Price up a small refresh, compare it to the cost of her leaving, and recommend the fix to Priya.",tag:"Weigh it up",skill:"Keeping a tenant vs the cost",e:-2,
+            fx:[4,10,6],kind:"good",
+            outcome:["Cheapest tenant is a kept one.","You get a quote for the fan and a light kitchen refresh, then show it's far cheaper than an empty flat plus finding someone new. Priya approves it; Ms Reid re-signs for two years."],
+            insight:"Keeping a proven tenant is almost always cheaper than a void plus advertising plus doing the flat up for someone new. A small, well-judged fix pays for itself in a tenant who stays."},
+          {text:"Offer her a small rent discount instead of spending on the flat.",tag:"Trade on the rent",skill:"Different ways to keep a tenant",e:0,
+            fx:[-2,4,0],kind:"mixed",
+            outcome:["Keeps her — but dents the rent.","She stays, but now you're collecting less rent every month, instead of a one-off fix that would also make the flat nicer for the future."],
+            insight:"A rent cut keeps the tenant but lowers your income for good; a one-off repair keeps the rent and improves the flat. Both work — but for a steady-income building, how you do it matters."},
+          {text:"Ignore it — one tenant won't make or break the building.",tag:"Brush it off",skill:"Keeping a tenant",e:+1,
+            fx:[0,-10,-2],kind:"bad",
+            outcome:["She leaves, and she talks.","She doesn't renew. The empty flat costs more than the fix would have, and her parting review — 'tired flats, couldn't care less' — puts off two people who were about to view."],
+            insight:"Waving off a reliable tenant ignores the real cost of them leaving: the empty flat, the advertising, the freshen-up for the next person, and the bad word-of-mouth."}
+        ]
+      },
+      {
+        chip:"opex", title:"The bills keep creeping up",
+        content:`<div class="brief-lbl">Your manager briefs you</div>
+          <div class="speaker boss"><div class="who">Priya <span class="role">— your manager</span></div><div class="line">"Our <span class="term" title="Running costs = the regular bills to keep the building going: cleaning, security, gardening, etc.">running costs</span> — cleaning, security, gardening — keep rising every year on autopilot. Nobody's checked if we're still getting a good deal. Have a look?"</div></div>`,
+        choices:[
+          {text:"Get fresh quotes from other suppliers and compare, before renewing anything.",tag:"Shop around",skill:"Controlling running costs",e:-2,
+            fx:[10,2,6],kind:"good",
+            outcome:["Real money, saved.","Fresh quotes bring two contracts down 15% for the same service, and the current cleaner matches the price to keep the job. Costs fall, NOI recovers, and you've proof you got a good deal."],
+            insight:"Running costs drift up unless someone actively checks them — contracts that renew on autopilot are where money quietly leaks. Getting fresh quotes now and then directly protects the income."},
+          {text:"Just ask the current suppliers for a small discount.",tag:"Have a quiet word",skill:"Controlling running costs",e:-1,
+            fx:[4,0,2],kind:"mixed",
+            outcome:["A trim, not a fix.","You squeeze a little off the current suppliers without shopping around. Better than nothing — but with no competition, they didn't sharpen their pencils much."],
+            insight:"Asking your existing supplier for a discount only gets you so far. They cut prices hardest when they think they might actually lose the work to someone else."},
+          {text:"Let the contracts roll over — it's a hassle and they're reliable.",tag:"Leave it",skill:"Controlling running costs",e:+1,
+            fx:[-8,0,-4],kind:"bad",
+            outcome:["The leak keeps dripping.","You wave the renewals through. Costs keep climbing every year, the income quietly erodes, and at the next owner review you can't explain why."],
+            insight:"Letting contracts roll on forever guarantees costs creep up. Over the years, unchecked bills add up to a real drag on income — and a question you can't answer to the owner."}
+        ]
+      },
+      {
+        chip:"capex", title:"A big bill you can't avoid",
+        content:`<div class="scene-body">New energy rules mean several flats will soon be <strong>illegal to rent out</strong> unless they're made warmer — new insulation and heating. That's a big one-off cost.</div>
+          <div class="brief-lbl">Your manager briefs you</div>
+          <div class="speaker boss"><div class="who">Priya <span class="role">— your manager</span></div><div class="line">"The owner's grumbling about the <span class="term" title="Capex = big one-off spending on the building itself, like a new roof or heating — as opposed to day-to-day running costs.">big one-off cost</span> (we call that <b>capex</b>). But if we don't do it, we literally can't rent those flats. Build me the case?"</div></div>`,
+        choices:[
+          {text:"Show the owner the maths: fix it now, or the flats sit empty and illegal to let — plus the fix lowers energy bills too.",tag:"Make the business case",skill:"Big spend vs the cost of not doing it",e:-2,
+            fx:[8,4,8],kind:"good",
+            outcome:["A 'no' turned into a 'yes'.","You lay it out: unfixed flats earn zero (can't legally rent them), while the work also cuts running costs and protects the building's value. The owner signs off — not to be green, but because the numbers work."],
+            insight:"Spending to make a building energy-efficient isn't just a green tick: it keeps flats legal to rent and cuts running costs, which protects income. Explaining it in money terms is how you win the owner over."},
+          {text:"Suggest doing just the bare legal minimum, nothing more.",tag:"Bare minimum",skill:"Big spend decisions",e:-1,
+            fx:[2,0,0],kind:"mixed",
+            outcome:["Legal, but a missed chance.","You scrape the flats over the line. Fine for now — but you skip the extra work that would've cut bills, and you'll be back here at the next rule change."],
+            insight:"Doing the legal minimum keeps flats rentable but leaves savings on the table and no headroom for the next tightening of the rules. Sometimes right for a cautious owner — but know what you're giving up."},
+          {text:"Suggest putting it off — it's a lot to spend this year.",tag:"Kick the can",skill:"Big spend decisions",e:+1,
+            fx:[2,-10,-6],kind:"bad",
+            outcome:["The problem comes back bigger.","You advise delaying. When the rules bite, three flats can't legally be rented, sit empty, and the rushed fix later costs more. Income and occupancy both take a hit."],
+            insight:"Putting off a required fix just turns a planned cost into an emergency one — plus lost rent from flats you can't let in the meantime. Predictable spending beats a panic bill."}
+        ]
+      },
+      {
+        chip:"tenant", title:"A tenant looks shaky",
+        content:`<div class="scene-body">The ground floor has a shop unit rented by a coffee chain — a big chunk of the building's income. You spot in the news that their parent company just warned it might make a loss.</div>
+          <div class="brief-lbl">Your manager briefs you</div>
+          <div class="speaker boss"><div class="who">Priya <span class="role">— your manager</span></div><div class="line">"I've got the owner's review coming up. If that coffee tenant goes under, how exposed are we? Find out before the meeting."</div></div>`,
+        choices:[
+          {text:"Check how much of our income relies on them and how solid they are, then flag it to Priya with a back-up plan.",tag:"Spot the risk early",skill:"Spotting a tenant who might fail",e:-2,
+            fx:[4,2,12],kind:"good",
+            outcome:["Ahead of the problem.","You work out how much of the income sits with this one tenant, check how financially shaky they are, and hand Priya a note with back-up options if they fail. When they do wobble, you're ready — and she looks prepared."],
+            insight:"A big tenant that fails can blow a hole in the income. Spotting the warning signs early and telling your manager — with options — is exactly the kind of heads-up that makes you trusted with more."},
+          {text:"Keep an eye on it yourself but don't mention it yet.",tag:"Watch quietly",skill:"Spotting a tenant who might fail",e:-1,
+            fx:[0,0,-4],kind:"mixed",
+            outcome:["You knew — but stayed quiet.","You watch it privately. But by not flagging it before the review, you leave Priya unprepared if the owner asks — and a risk only you know about helps no one."],
+            insight:"Noticing a risk isn't enough — you have to say something in time. A warning that stays in your head is no use to your manager or the owner."},
+          {text:"Leave it — they're still paying, no need to worry anyone.",tag:"Say nothing",skill:"Spotting a tenant who might fail",e:+1,
+            fx:[0,0,-14],kind:"bad",
+            outcome:["Caught out.","You stay quiet. Weeks later they collapse, the shop goes dark, and Priya hears about the risk from the news instead of from you. That stings your reputation."],
+            insight:"'Still paying' tells you about today, not tomorrow — a profit warning is the real clue. Not passing on a risk you'd spotted is worse than the risk itself; it's the silence that damages you."}
+        ]
+      }
+    ]
+  },
+
+  va: {
+    title:"Shopping Centre", maxEnergy:5,
+    meters:[
+      {name:"NOI growth",cls:"k1",gloss:"Are you growing the rent-minus-costs figure? The engine of the whole project."},
+      {name:"Tenant mix",cls:"k2",gloss:"How good the line-up of shops is. The right mix pulls in shoppers."},
+      {name:"Value",cls:"k3",gloss:"What the whole centre could sell for. Lifting this is the point of the job."}
+    ],
+    scenes:[
+      {
+        chip:"landlord", title:"Agreeing the plan",
+        content:`<div class="brief-lbl">Your manager briefs you</div>
+          <div class="speaker boss"><div class="who">Marcus <span class="role">— your manager</span></div><div class="line">"We bought this place cheap to do it up and sell it on for more. The owner's given us money to spend — <span class="term" title="Capex = big one-off spending to improve the building.">capex</span>. They want a plan. Help me put one together — what should we actually do to make it worth more?"</div></div>`,
+        choices:[
+          {text:"Draft a proper plan: refurbish the tired parts, improve which shops are here, with costs and the expected payoff.",tag:"Build a real plan",skill:"Planning the improvement",e:-2,
+            fx:[8,10,8],kind:"good",
+            outcome:["A plan worth the money.","You map out a step-by-step refresh, work out which dead units could become cafés, a gym or leisure spots, cost it, and estimate the extra rent and value. Marcus takes a plan to the owner that actually adds up."],
+            insight:"This kind of fund makes money by actively improving a building, not just collecting rent. A costed plan to refurbish and improve the shop line-up is the entire reason the job exists."},
+          {text:"Suggest a cautious, cheap tweak to keep the spending small.",tag:"Play it too safe",skill:"Matching effort to the goal",e:-1,
+            fx:[-4,-2,-6],kind:"mixed",
+            outcome:["Too timid for the mission.","You propose light touches only. But the owner bought this place expecting a real makeover — a shy plan won't make it worth much more, which was the whole idea."],
+            insight:"Under-spending here misses the point: the owner is paying for an active makeover. Matching your ambition to the goal matters as much as being careful with money."},
+          {text:"Suggest just collecting the current rent and keeping costs low.",tag:"Do nothing much",skill:"Matching effort to the goal",e:0,
+            fx:[-8,-6,-10],kind:"bad",
+            outcome:["Wrong approach entirely.","You treat it like a quiet income building. But this owner wanted it transformed and sold on for a profit — years later it's worth about the same, and you've missed the mission."],
+            insight:"Running a 'do it up and sell' building as if it were a quiet income earner fails the goal completely. The right approach always depends on what the owner is trying to achieve."}
+        ]
+      },
+      {
+        chip:"tenant", title:"The big shop's threat",
+        content:`<div class="scene-body">The centre's biggest store — the one that pulls in most of the shoppers — is struggling, and its contract is up for renewal.</div>
+          <div class="speaker"><div class="who">Anchor store <span class="role">— big national chain</span></div><div class="line">"We'll stay — but only at half the rent. Take it or we walk, and good luck filling this huge space."</div></div>
+          <div class="scene-body">Lose them and you've a massive empty unit; keep them cheap and you cap what the centre earns.</div>`,
+        choices:[
+          {text:"Work out both options: half-rent big store, vs splitting the space into several busy smaller ones.",tag:"Do the maths on both",skill:"Choosing the right shops",e:-2,
+            fx:[10,12,10],kind:"good",
+            outcome:["The empty threat becomes a chance.","You crunch it and find splitting the giant unit into a gym, a food hall and two shops actually earns more AND pulls in more people than the cheap big store. You let them walk — with a plan ready to fill the space."],
+            learn:"That big shopper-pulling store is called the <b>anchor</b>. A weak anchor at a cheap rent can be worth less than several strong smaller tenants in its place.",
+            insight:"In a shopping centre, which shops you have (the mix) is the product. A failing anchor at half-rent can be worth less than a well-chosen set of replacements. The skill is doing the maths, not just fearing the empty space."},
+          {text:"Let them go, but without a plan for the space yet.",tag:"Refuse, then scramble",skill:"Planning for empty space",e:-1,
+            fx:[-6,2,-6],kind:"mixed",
+            outcome:["Right call, risky timing.","Refusing the cheap deal is defensible — but with nothing lined up, the huge unit sits dark for a year and a half, dragging down the whole centre while you scramble."],
+            insight:"Being willing to lose a weak anchor is right; doing it with no replacement ready is risky. Active management means having your next move lined up before you make the first."},
+          {text:"Give in and grant the half-rent deal to avoid the empty space.",tag:"Fear the empty unit",skill:"Negotiating with a big tenant",e:0,
+            fx:[-10,-6,-8],kind:"bad",
+            outcome:["The weak store drags it all down.","You lock in half-rent for ten years. No empty unit — but you've capped what the centre earns, and a struggling anchor keeps putting off the better shops you wanted to attract."],
+            insight:"Renewing a failing anchor cheaply out of fear traps the centre in decline: low rent, and it scares off the shops that would've lifted the place. Sometimes taking the short-term empty space is the smarter move."}
+        ]
+      },
+      {
+        chip:"capex", title:"The refurb goes over budget",
+        content:`<div class="scene-body">The building work is underway. Builders find asbestos in the old roof. The cost is about to blow 20% past the budget you'd told the owner.</div>
+          <div class="brief-lbl">Your manager needs to know</div>
+          <div class="speaker boss"><div class="who">Marcus <span class="role">— your manager</span></div><div class="line">"We told the owner this was on budget. What's the damage, and what do we do?"</div></div>`,
+        choices:[
+          {text:"Tell Marcus straight away, with the new numbers and what it means for the final sale value.",tag:"Own up early",skill:"Reporting bad news honestly",e:-2,
+            fx:[-2,2,8],kind:"good",
+            outcome:["Bad news, handled well.","You bring Marcus the revised costs and what they do to the expected profit. Nobody enjoys it — but he can re-plan around honest numbers, and he trusts you more for telling him fast."],
+            insight:"Telling your manager bad news early — with the new figures and options — is when you're most useful. Hiding a cost overrun turns a money problem into a trust problem, which is far worse."},
+          {text:"Suggest pausing all the work while everyone figures it out.",tag:"Hit pause",skill:"Handling a project",e:-1,
+            fx:[-6,-2,-4],kind:"mixed",
+            outcome:["Delay costs money too.","Stopping avoids spending more today — but idle builders, delayed re-openings and lost rent all cost money. Freezing isn't free."],
+            insight:"On a live building project, pausing feels safe but racks up its own costs — delay, disruption, lost income. Often the disciplined move is to re-plan and keep going, not stop."},
+          {text:"Quietly cover it by using cheaper materials elsewhere, and say nothing.",tag:"Hide it",skill:"Reporting bad news honestly",e:0,
+            fx:[2,-8,-14],kind:"bad",
+            outcome:["The cheapness shows.","You secretly downgrade finishes to hide the overspend. The refurb looks cheap, shoppers and tenants notice, and when the asbestos cost turns up in the accounts anyway, you've got two problems and no trust."],
+            insight:"Hiding an overspend by cutting quality swaps one honest number for two hidden problems. Managers can handle bad news they're told — they can't forgive bad news they discover."}
+        ]
+      },
+      {
+        chip:"tenant", title:"A shop goes bust mid-makeover",
+        content:`<div class="scene-body">Halfway through the makeover, one of the mid-size clothing shops goes bust and hands back the keys. Now there's an empty unit right in the middle of your improving centre.</div>
+          <div class="brief-lbl">Your manager asks</div>
+          <div class="speaker boss"><div class="who">Marcus <span class="role">— your manager</span></div><div class="line">"Do we just find another clothes shop like-for-like, or use this as a chance to improve the line-up?"</div></div>`,
+        choices:[
+          {text:"Use the gap to upgrade: find a shopper-pulling tenant (a dessert or leisure spot) that fits the new look.",tag:"Turn a loss into a win",skill:"Improving the mix under pressure",e:-2,
+            fx:[8,10,8],kind:"good",
+            outcome:["A setback, flipped.","Instead of another struggling clothes shop, you land a popular dessert-and-leisure spot that pulls in crowds and lifts the shops either side. The failure became a chance to improve the mix."],
+            insight:"When a shop fails, it's disruptive — but it's also a chance to swap in something better rather than the same again. Handling it with the bigger plan in mind is what separates a pro from a firefighter."},
+          {text:"Fill it fast with a similar shop to stop losing rent.",tag:"Fill it quickly",skill:"Handling an empty unit",e:0,
+            fx:[2,-2,0],kind:"mixed",
+            outcome:["Gap closed, chance missed.","You plug it fast with another clothes shop. The rent steadies — but you've put back the weak kind of tenant instead of upgrading while you had the opening."],
+            insight:"Filling an empty unit fast protects rent but can lock in a so-so line-up. Sometimes a slightly longer wait for the right tenant is worth more than a quick like-for-like."},
+          {text:"Leave it empty for now and focus on the building work.",tag:"Ignore the empty unit",skill:"Handling an empty unit",e:+1,
+            fx:[-8,-6,-6],kind:"bad",
+            outcome:["A dark shop in a bright centre.","You let it sit. A shuttered, empty unit in the middle of a half-finished makeover makes the whole place look like it's failing, puts shoppers off, and worries the other shops."],
+            insight:"An ignored empty unit actively damages a makeover — it signals decline to shoppers and other tenants. Leaving it to save effort costs you both rent and the story you're trying to tell."}
+        ]
+      },
+      {
+        chip:"landlord", title:"Selling it on",
+        content:`<div class="scene-body">The makeover's done. Time to sell the centre for a profit. A buyer's interested, but their surveyor is poking around, checking the shops and the quality of the work.</div>
+          <div class="brief-lbl">Your manager asks</div>
+          <div class="speaker boss"><div class="who">Marcus <span class="role">— your manager</span></div><div class="line">"Pull together the pack that proves how much better this place is now. This is where our work either pays off or doesn't."</div></div>`,
+        choices:[
+          {text:"Put together an honest, well-evidenced pack: the rents, the improved shop line-up, the quality of the work.",tag:"Prove the improvement",skill:"Showing the value you added",e:-2,
+            fx:[8,4,14],kind:"good",
+            outcome:["The work pays off.","You hand the buyer a clean, honest pack — higher rents, the fresh mix of shops, proof of the refurb quality. Because it all checks out, the sale closes near the target price, and your name's on a win."],
+            insight:"Selling is where all the makeover work gets its score. Proving the improvement honestly is what turns years of effort into a real profit — and a track record that gets you the next, bigger job."},
+          {text:"Talk up the shaky bits and gloss over the weak shops to push the price.",tag:"Oversell it",skill:"Being straight in a deal",e:+1,
+            fx:[2,-6,-16],kind:"bad",
+            outcome:["They check, and find everything.","You dress up the story. The buyer's surveyor digs into the weak tenants and thin refurb, knocks the price down hard, and word gets round that your packs can't be trusted."],
+            insight:"Buyers check everything before they buy; a dressed-up story gets found and the price gets cut — and the hit to your reputation outlasts the deal. The real value comes from work actually done, shown straight."}
+        ]
+      }
+    ]
+  }
+};
+
+/* ========= ENGINE ========= */
+function showCast(p){
+  const c=CAST[p];
+  document.getElementById('cast-tag').textContent=c.tag;
+  document.getElementById('cast-title').innerHTML=c.title;
+  document.getElementById('cast-intro').innerHTML=c.intro;
+  document.getElementById('cast-list').innerHTML=c.list.map(x=>
+    `<div class="cast-row"><div class="cast-emoji">${x.e}</div><div class="cast-body"><div class="who">${x.who}</div><div class="desc">${x.desc}</div></div></div>`).join('');
+  document.getElementById('cast-meters').innerHTML=c.metersExplain;
+  document.getElementById('cast-start').onclick=()=>startGame(p);
+  show('s-cast');
+  window.scrollTo({top:0});
+}
+function startGame(p){
+  path=p; idx=0; log=[]; M=[50,50,50];
+  const sc=SCENARIOS[p]; MAXE=sc.maxEnergy; energy=MAXE; METERS=sc.meters;
+  show('s-game'); buildMeterDom('meters'); renderMeters(); renderEnergy('energy-pips',energy);
+  renderScene();
+}
+function buildMeterDom(containerId){
+  const c=document.getElementById(containerId); c.innerHTML='';
+  METERS.forEach((m,i)=>{
+    const d=document.createElement('div'); d.className='meter '+m.cls; d.tabIndex=0;
+    d.innerHTML=`<div class="meter-lbl"><span class="nm">${m.name}</span><span><span id="${containerId}-v${i}">50</span> <span class="q">?</span></span></div><div class="meter-track"><div class="meter-fill" id="${containerId}-f${i}" style="width:50%"></div></div><div class="tip">${m.gloss}</div>`;
+    d.addEventListener('click',()=>{ d.classList.toggle('show'); });
+    c.appendChild(d);
+  });
+}
+function renderScene(){
+  const sc=SCENARIOS[path].scenes[idx];
+  document.getElementById('scene-num').textContent=`Day ${idx+1} of ${SCENARIOS[path].scenes.length} · ${SCENARIOS[path].title}`;
+  const chip=document.getElementById('scene-chip'); chip.className='chip '+sc.chip; chip.textContent=CHIP_LABEL[sc.chip];
+  document.getElementById('scene-title').textContent=sc.title;
+  document.getElementById('scene-content').innerHTML=sc.content;
+  document.getElementById('outcome-area').innerHTML='';
+  const ca=document.getElementById('choice-area'); ca.innerHTML='';
+  sc.choices.forEach((c,i)=>{
+    const b=document.createElement('button'); b.className='choice';
+    b.innerHTML=`<div>${c.text}</div><div class="tag"><span class="ecost ${ecostClass(c.e)}">${ecostLabel(c.e)}</span></div>`;
+    b.onclick=()=>pick(i); ca.appendChild(b);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function pick(i){
+  const sc=SCENARIOS[path].scenes[idx]; const c=sc.choices[i];
+  for(let k=0;k<3;k++) M[k]=clamp(M[k]+c.fx[k]);
+  energy=Math.max(0,Math.min(MAXE,energy+c.e));
+  renderMeters(); renderEnergy('energy-pips',energy);
+  log.push({scene:sc.title,chip:sc.chip,choice:c.text,skill:c.skill,kind:c.kind,insight:c.insight});
+  document.getElementById('choice-area').innerHTML='';
+  const last=idx===SCENARIOS[path].scenes.length-1; const burned=energy<=0;
+  const learnHtml=c.learn?`<div class="learn"><div class="lbl">New word</div><div class="txt">${c.learn}</div></div>`:'';
+  document.getElementById('outcome-area').innerHTML=`
+    <div class="outcome ${c.kind}">
+      <div class="outcome-head">${c.outcome[0]}</div><div>${c.outcome[1]}</div>
+      <div class="deltas">${deltaStr(c.fx,c.e)}</div>
+    </div>
+    ${learnHtml}
+    <button class="btn full" id="next-btn"></button>`;
+  const nb=document.getElementById('next-btn');
+  if(burned&&!last){ nb.textContent='You\u2019re completely out of steam…'; nb.onclick=()=>burnout(); }
+  else { nb.textContent=last?'See how you did →':'Next day →'; nb.onclick=()=>{ if(last){debrief();}else{idx++;renderScene();} }; }
+  window.scrollTo({top:document.getElementById('outcome-area').offsetTop-130,behavior:'smooth'});
+}
+function burnout(){
+  show('s-burnout');
+  document.getElementById('burnout-text').textContent=`You got through ${log.length} decision${log.length===1?'':'s'} before running completely out of energy. Worn out, you take some time off — and miss the rest of the ${SCENARIOS[path].title.toLowerCase()} job.`;
+  document.getElementById('burnout-log').innerHTML=renderLog(log);
+  document.getElementById('burnout-retry').onclick=()=>startGame(path);
+}
+function debrief(){
+  show('s-debrief');
+  const nScenes=SCENARIOS[path].scenes.length;
+  // --- Judgement score: the main driver ---
+  // good = +2, mixed = +0.5, bad = -1
+  let dScore=0, goods=0, mixes=0, bads=0;
+  log.forEach(e=>{
+    if(e.kind==='good'){ dScore+=2; goods++; }
+    else if(e.kind==='mixed'){ dScore+=0.5; mixes++; }
+    else { dScore-=1; bads++; }
+  });
+  const maxD=nScenes*2;                 // all-good ceiling
+  const minD=-nScenes;                  // all-bad floor
+  const jPct=(dScore-minD)/(maxD-minD); // 0..1, how good the decisions were
+  // --- Meter average: tie-breaker only ---
+  const meterAvg=(M[0]+M[1]+M[2])/3;    // 0..100
+  // --- Energy: small bonus for finishing with spare, never a penalty ---
+  const energyBonus=energy>=Math.ceil(MAXE*0.6)?1:0; // rested well = nudge up at boundaries
+  // Grade bands on judgement %, with meterAvg breaking ties near the edges
+  let band; // 3 = top, 2, 1, 0
+  if(jPct>=0.80) band=3;
+  else if(jPct>=0.58) band=2;
+  else if(jPct>=0.35) band=1;
+  else band=0;
+  // tie-break: strong meters (or good rest) can lift a borderline score one band
+  const nearUpper = (band<3) && (
+    (band===2 && jPct>=0.73) || (band===1 && jPct>=0.52) || (band===0 && jPct>=0.30)
+  );
+  if(nearUpper && (meterAvg>=60 || energyBonus)) band++;
+  const grades=[
+    {g:"Rough week 😬",s:"A lot went sideways. Try a different approach — check the takeaways below.",h:"Tough one"},
+    {g:"Still learning 📎",s:"Some good calls, some to rethink. The instincts are coming.",h:"Getting there"},
+    {g:"Solid start 👍",s:"Mostly sound judgement — a reliable, useful assistant.",h:"Nicely done"},
+    {g:"A natural 🌟",s:"Strong judgement across the week. Your manager's taking notice.",h:"Brilliant first week"}
+  ];
+  const gr=grades[band];
+  document.getElementById('db-headline').textContent=gr.h;
+  document.getElementById('db-grade').textContent=gr.g;
+  document.getElementById('db-grade-sub').textContent=gr.s;
+  buildMeterDom('db-meters'); renderMeters('db-meters'); renderEnergy('db-energy-pips',energy);
+  document.getElementById('db-log').innerHTML=renderLog(log);
+  // small tally line so the basis is transparent
+  const tally=document.getElementById('db-tally');
+  if(tally){
+    const bits=[];
+    if(goods) bits.push(`${goods} strong`);
+    if(mixes) bits.push(`${mixes} so-so`);
+    if(bads) bits.push(`${bads} poor`);
+    tally.textContent=`Your ${nScenes} decisions: ${bits.join(' · ')}. Grade is based mainly on decision quality; your meters and energy break ties.`;
+  }
+  const next=path==='core'?'va':'core';
+  const names={core:'the rented flats',va:'the shopping centre'};
+  const ob=document.getElementById('db-other');
+  ob.textContent=`Try ${names[next]} →`; ob.onclick=()=>showCast(next);
+}
+
+/* ========= HELPERS ========= */
+function renderLog(arr){
+  return arr.map(e=>{
+    const icon=e.kind==='good'?'✅':e.kind==='bad'?'❌':'➖';
+    return `<div class="log-item"><div class="log-head"><div class="log-icon">${icon}</div><div class="log-body">
+      <div class="log-scene"><span class="chip ${e.chip}" style="margin-right:6px">${CHIP_LABEL[e.chip]}</span>${e.scene}</div>
+      <div class="log-choice">${e.choice}</div><div class="log-skill">This tested: ${e.skill}</div></div></div>
+      <div class="insight"><div class="lbl">The takeaway</div><div class="txt">${e.insight}</div></div></div>`;
+  }).join('');
+}
+function clamp(v){ return Math.max(0,Math.min(100,v)); }
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function renderMeters(prefix){
+  prefix=prefix||'meters';
+  for(let i=0;i<3;i++){ const v=document.getElementById(prefix+'-v'+i); const f=document.getElementById(prefix+'-f'+i); if(v) v.textContent=Math.round(M[i]); if(f) f.style.width=M[i]+'%'; }
+}
+function renderEnergy(containerId,val){
+  const c=document.getElementById(containerId); c.innerHTML=''; const low=val<=1;
+  for(let i=0;i<MAXE;i++){ const p=document.createElement('div'); p.className='pip'+(i<val?' on':'')+(low?' low':''); c.appendChild(p); }
+}
+function ecostClass(e){ return e<=-2?'heavy':e<0?'spend':e>0?'rest':'free'; }
+function ecostLabel(e){ if(e<=-2) return `⚡ ${e} · big effort`; if(e<0) return `⚡ ${e} · some effort`; if(e>0) return `⚡ +${e} · easy`; return '⚡ 0'; }
+function deltaStr(fx,e){
+  const parts=[];
+  for(let k=0;k<3;k++){ const v=fx[k]; if(v===0) continue; const cls=v>0?'d-up':'d-down'; const arrow=v>0?'▲':'▼'; parts.push(`<span class="${cls}">${arrow} ${METERS[k].name} ${v>0?'+':''}${v}</span>`); }
+  if(e<0) parts.push(`<span class="d-energy">⚡ Energy ${e}</span>`); else if(e>0) parts.push(`<span class="d-energy">⚡ Energy +${e}</span>`);
+  return parts.join('');
+}
+</script>
+</body>
+</html>
