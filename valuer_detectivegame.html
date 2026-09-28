@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Valuer — a Property Detective Game</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F0EEEA; --card:#FCFBF8; --border:rgba(45,40,30,0.13); --border-strong:rgba(45,40,30,0.24);
+  --text:#1A1712; --muted:#6B6459; --faint:#A69E90;
+  --accent:#7A5230; --accent-light:#F1E9E0; --accent-dark:#553719;
+  --gold:#B8860B; --gold-bg:#FBF4E2; --danger:#A83232; --danger-bg:#FAEEEE;
+  --success:#2E7A48; --success-bg:#EAF4EE; --info:#1A5A88; --info-bg:#EAF2FA;
+  --comp:#2F5F8A; --inspect:#7A5230; --market:#1F7A5C; --party:#9C4DA0; --intel:#0E7C86;
+  --radius:10px; --radius-lg:16px; --serif:'DM Serif Display',Georgia,serif; --sans:'DM Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.55;}
+.shell{max-width:720px;margin:0 auto;padding:20px 14px 60px;}
+.screen{display:none;} .screen.active{display:block;animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.masthead{text-align:center;padding:28px 0 22px;border-bottom:.5px solid var(--border);margin-bottom:22px;}
+.masthead-tag{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.masthead h1{font-family:var(--serif);font-size:38px;line-height:1.05;}
+.masthead h1 em{font-style:italic;color:var(--accent);}
+.masthead p{margin-top:12px;color:var(--muted);max-width:490px;margin-left:auto;margin-right:auto;}
+
+.card{background:var(--card);border:.5px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:14px;}
+.card-title{font-family:var(--serif);font-size:20px;margin-bottom:6px;}
+.card-sub{color:var(--muted);font-size:13px;}
+.term{border-bottom:1.5px dotted var(--accent);cursor:help;font-weight:500;}
+
+.tut-step{display:flex;gap:14px;padding:12px 0;border-bottom:.5px solid var(--border);align-items:flex-start;}
+.tut-step:last-child{border:none;}
+.tut-ico{font-size:24px;width:32px;text-align:center;flex-shrink:0;line-height:1.3;}
+.tut-body .h{font-weight:700;} .tut-body .d{color:var(--muted);font-size:13px;}
+
+.case-pick{cursor:pointer;transition:border-color .2s,transform .12s;border:.5px solid var(--border);}
+.case-pick:hover{border-color:var(--accent);transform:translateY(-2px);}
+.case-pick.locked{opacity:.5;cursor:not-allowed;}
+.case-num{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700;}
+.stars{color:var(--gold);letter-spacing:2px;}
+.method-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:20px;background:var(--info-bg);color:var(--info);border:.5px solid var(--info);}
+
+.hud{position:sticky;top:0;z-index:8;background:var(--bg);padding:8px 0 8px;border-bottom:.5px solid var(--border);margin-bottom:14px;}
+.hud-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.hud-case{font-family:var(--serif);font-size:16px;}
+.hud-phase{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:20px;background:var(--accent);color:#fff;margin-left:auto;}
+.budget{display:flex;align-items:center;gap:8px;}
+.budget-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700;}
+.budget-pips{display:flex;gap:5px;}
+.bpip{width:20px;height:11px;border-radius:3px;background:var(--border);transition:background .3s;}
+.bpip.on{background:var(--accent);}
+.budget-note{font-size:11px;color:var(--danger);margin-left:auto;font-weight:600;}
+
+.brief{background:var(--accent-light);border:.5px solid var(--accent);border-radius:var(--radius);padding:12px 15px;margin-bottom:14px;}
+.brief .bl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:700;margin-bottom:3px;}
+.brief .subject{font-family:var(--serif);font-size:17px;margin-bottom:2px;}
+
+.section-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:14px 2px 8px;display:flex;justify-content:space-between;}
+.section-lbl .hint{color:var(--danger);text-transform:none;letter-spacing:0;font-weight:600;}
+
+.actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px;}
+.action{background:var(--card);border:.5px solid var(--border);border-radius:var(--radius);padding:13px 14px;cursor:pointer;transition:border-color .15s,transform .1s;display:flex;flex-direction:column;}
+.action:hover:not(.done):not(.disabled){border-color:var(--accent);transform:translateY(-2px);}
+.action.done{opacity:.72;cursor:default;}
+.action.disabled{opacity:.4;cursor:not-allowed;}
+.action-top{display:flex;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap;}
+.action-ico{font-size:19px;}
+.action-cat{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:2px 6px;border-radius:20px;color:#fff;}
+.cat-comp{background:var(--comp);} .cat-inspect{background:var(--inspect);} .cat-market{background:var(--market);} .cat-party{background:var(--party);} .cat-intel{background:var(--intel);}
+.action-cost{font-size:11px;color:var(--accent);font-weight:700;margin-left:auto;white-space:nowrap;}
+.action-name{font-weight:600;font-size:13.5px;}
+.action-desc{font-size:12px;color:var(--muted);margin-top:2px;flex:1;}
+.action-result{font-size:12.5px;margin-top:7px;padding-top:7px;border-top:.5px solid var(--border);}
+.action-result .rl{font-weight:600;}
+.bias-flag{font-size:11px;color:var(--party);font-weight:600;margin-top:3px;}
+.noise-flag{font-size:11px;color:var(--faint);font-weight:600;margin-top:3px;}
+.predict-flag{font-size:11px;color:var(--intel);font-weight:700;margin-top:3px;}
+
+.notebook{background:#FFFDF6;border:.5px solid var(--gold);border-radius:var(--radius);padding:12px 15px;margin-top:6px;}
+.notebook .nl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:4px;}
+.note-item{font-size:12.5px;padding:3px 0;border-bottom:.5px dotted var(--border);}
+.note-item:last-child{border:none;}
+
+.comp-adj{background:var(--card);border:.5px solid var(--border);border-radius:var(--radius);padding:14px 15px;margin-bottom:12px;}
+.comp-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.comp-name{font-family:var(--serif);font-size:16px;}
+.comp-sold{font-weight:700;font-variant-numeric:tabular-nums;}
+.comp-facts{font-size:12px;color:var(--muted);margin:4px 0 8px;}
+.adj-row{margin:8px 0;}
+.adj-row label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:3px;}
+.adj-row label b{color:var(--text);font-variant-numeric:tabular-nums;}
+input[type=range]{width:100%;accent-color:var(--accent);}
+.comp-indicated{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;padding-top:8px;border-top:.5px solid var(--border);}
+.comp-indicated .il{font-size:12px;color:var(--muted);}
+.comp-indicated .iv{font-family:var(--serif);font-size:18px;font-variant-numeric:tabular-nums;}
+
+.dcf{background:var(--info-bg);border:.5px solid var(--info);border-radius:var(--radius);padding:15px 16px;margin-bottom:12px;}
+.dcf .dl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--info);font-weight:700;margin-bottom:2px;}
+.dcf-explain{font-size:12px;color:var(--muted);margin-bottom:12px;}
+.dcf-bars{display:flex;align-items:flex-end;gap:6px;height:90px;margin:10px 0 4px;}
+.dcf-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:flex-end;height:100%;}
+.dcf-bar{width:100%;background:var(--info);border-radius:3px 3px 0 0;transition:height .3s,background .3s;min-height:2px;}
+.dcf-bar.void{background:var(--danger);}
+.dcf-bar-lbl{font-size:9.5px;color:var(--muted);} .dcf-bar-val{font-size:9.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.dcf-ctrl{margin:12px 0;}
+.dcf-ctrl label{font-size:12.5px;display:flex;justify-content:space-between;margin-bottom:4px;}
+.dcf-ctrl label b{font-variant-numeric:tabular-nums;}
+.toggle-row{display:flex;gap:8px;margin-top:4px;}
+.toggle{flex:1;text-align:center;padding:8px;border:.5px solid var(--border-strong);border-radius:var(--radius);cursor:pointer;font-size:12px;background:var(--card);transition:all .15s;}
+.toggle.active{background:var(--info);color:#fff;border-color:var(--info);}
+.dcf-value{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:10px;border-top:.5px solid var(--info);}
+.dcf-value .dvl{font-size:12px;color:var(--muted);} .dcf-value .dvv{font-family:var(--serif);font-size:22px;font-variant-numeric:tabular-nums;color:var(--info);}
+
+.valbox{background:var(--accent-light);border:.5px solid var(--accent);border-radius:var(--radius);padding:14px 16px;margin:12px 0;}
+.valbox .vl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;}
+.valbox .range{font-family:var(--serif);font-size:15px;margin:4px 0;}
+.slider-val{text-align:center;font-family:var(--serif);font-size:24px;margin:6px 0;font-variant-numeric:tabular-nums;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:12px 18px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,opacity .2s;}
+.btn:hover{background:var(--accent-dark);} .btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn.full{width:100%;} .btn.ghost{background:transparent;color:var(--muted);border:.5px solid var(--border);}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-row{display:flex;gap:10px;margin-top:10px;}
+.endbar{position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 72%,transparent);padding:12px 0 4px;margin-top:14px;z-index:7;}
+
+.debrief-grade{text-align:center;padding:8px 0 4px;}
+.debrief-grade .title{font-family:var(--serif);font-size:28px;}
+.debrief-grade .sub{color:var(--muted);}
+.reveal{display:flex;justify-content:space-between;padding:8px 0;border-bottom:.5px solid var(--border);font-variant-numeric:tabular-nums;}
+.reveal:last-child{border:none;}
+.reveal .big{font-weight:700;font-family:var(--serif);font-size:17px;}
+.accuracy-bar{height:12px;border-radius:6px;background:linear-gradient(to right,var(--danger),var(--gold),var(--success),var(--gold),var(--danger));position:relative;margin:14px 0 4px;}
+.accuracy-bar .you{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--text);box-shadow:0 2px 8px rgba(0,0,0,.25);}
+.acc-scale{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);}
+.clue-item{display:flex;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border);font-size:13px;align-items:flex-start;}
+.clue-item:last-child{border:none;}
+.clue-ico{font-size:16px;flex-shrink:0;}
+.reasoncard{border-radius:var(--radius);padding:12px 14px;margin-top:10px;border:.5px solid;}
+.reasoncard.good{background:var(--success-bg);border-color:var(--success);}
+.reasoncard.mixed{background:var(--gold-bg);border-color:var(--gold);}
+.reasoncard.poor{background:var(--danger-bg);border-color:var(--danger);}
+.reasoncard .rl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:3px;}
+.reasoncard.good .rl{color:var(--success);} .reasoncard.mixed .rl{color:var(--gold);} .reasoncard.poor .rl{color:var(--danger);}
+.timecard{background:var(--card);border:.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-top:10px;}
+.timecard .tl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:4px;}
+.time-item{font-size:12.5px;padding:3px 0;display:flex;gap:8px;}
+.foot{text-align:center;color:var(--faint);font-size:11px;margin-top:26px;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HOME -->
+<div id="s-home" class="screen active">
+  <div class="masthead">
+    <div class="masthead-tag">Career Scenario · The Valuer</div>
+    <h1>The <em>Valuer</em></h1>
+    <p>You've dealt as a broker and steered assets as a manager. Now the hardest question: what's it actually <em>worth</em>? Your time is short and not every source is worth chasing — spend it where it counts.</p>
+  </div>
+  <div class="card" style="background:var(--accent-light);border-color:var(--accent)">
+    <div class="card-title" style="font-size:17px">Two methods, and a nose for evidence</div>
+    <div class="card-sub"><b>Comparables</b> for homes; the <b>investment method</b> (value the income) for let property. But the real test is your time: you can't investigate everything, and sources vary — some are biased, some are noise, and a few genuinely predict where the market's heading. Miss the decisive clue and your figure will be wrong.</div>
+  </div>
+  <div class="btn-row"><button class="btn full" onclick="show('s-tutorial')">How to play (2 min) →</button></div>
+  <div class="btn-row"><button class="btn ghost full" onclick="show('s-cases')">Skip to the cases →</button></div>
+</div>
+
+<!-- TUTORIAL -->
+<div id="s-tutorial" class="screen">
+  <div class="masthead"><div class="masthead-tag">How to play</div><h1>The <em>Method</em></h1></div>
+  <div class="card">
+    <div class="tut-step"><div class="tut-ico">⏳</div><div class="tut-body"><div class="h">1. Time is tight — choose wisely</div><div class="d">You get only <b>5 units of time</b>, but there are far more things you <em>could</em> investigate, and some cost 2. You physically can't do it all. Deciding what's worth your time is the first skill.</div></div></div>
+    <div class="tut-step"><div class="tut-ico">🕵️</div><div class="tut-body"><div class="h">2. Not all evidence is equal</div><div class="d">Some sources are <b>biased</b> (the seller wants a high figure). Some are <b>noise</b> that tells you little. And a few are <b>predictive</b> — a planning approval, an employer arriving — that reveal where the market's going. You won't know which until you spend the time.</div></div></div>
+    <div class="tut-step"><div class="tut-ico">⚠️</div><div class="tut-body"><div class="h">3. Miss the key clue, be wrong</div><div class="d">A decisive clue can change what the property is truly worth. Skip it and you'll value the wrong thing — the debrief will show you what you missed and what it was worth.</div></div></div>
+    <div class="tut-step"><div class="tut-ico">⚖️</div><div class="tut-body"><div class="h">4. Then value it — the right way</div><div class="d">Adjust comparables (homes), or run the income method (let property — the game does the maths, you make the judgements). Commit a figure you can defend.</div></div></div>
+  </div>
+  <div class="btn-row"><button class="btn ghost full" onclick="show('s-home')">← Back</button><button class="btn full" onclick="show('s-cases')">See the cases →</button></div>
+</div>
+
+<!-- CASE SELECT -->
+<div id="s-cases" class="screen">
+  <div class="masthead"><div class="masthead-tag">Your caseload</div><h1>Pick a <em>Case</em></h1><p>Three properties, each harder — more to investigate, same tight clock. Start with the flat.</p></div>
+  <div id="case-list"></div>
+  <div class="btn-row"><button class="btn ghost full" onclick="show('s-home')">← Menu</button></div>
+</div>
+
+<!-- INVESTIGATE -->
+<div id="s-investigate" class="screen">
+  <div class="hud">
+    <div class="hud-top"><span class="hud-case" id="inv-case"></span><span class="hud-phase">Investigate</span></div>
+    <div class="budget"><span class="budget-lbl">⏳ Time</span><div class="budget-pips" id="inv-pips"></div><span class="budget-note" id="inv-budget-note"></span></div>
+  </div>
+  <div class="brief">
+    <div class="bl">Your instruction</div>
+    <div class="subject" id="inv-subject"></div>
+    <div class="card-sub" id="inv-brief"></div>
+  </div>
+  <div class="section-lbl"><span>Choose your investigations</span><span class="hint" id="inv-count-hint"></span></div>
+  <div class="actions" id="inv-actions"></div>
+  <div class="notebook" id="inv-notebook" style="display:none"><div class="nl">📓 Your notebook — what you've found</div><div id="notebook-items"></div></div>
+  <div class="endbar"><button class="btn full" id="inv-done" onclick="startValuation()"></button></div>
+</div>
+
+<!-- VALUE -->
+<div id="s-value" class="screen">
+  <div class="hud"><div class="hud-top"><span class="hud-case" id="val-case"></span><span class="hud-phase">Value</span></div></div>
+  <div class="brief"><div class="bl">You're valuing</div><div class="subject" id="val-subject"></div><div class="card-sub" id="val-subject-facts"></div></div>
+  <div id="val-method-note" class="card-sub" style="margin:0 2px 8px"></div>
+  <div id="comp-list"></div>
+  <div id="dcf-panel"></div>
+  <div class="valbox">
+    <div class="vl" id="val-points-lbl">Your evidence points to</div>
+    <div class="range" id="val-range">—</div>
+    <div class="card-sub">Commit your figure. Use judgement for anything the evidence doesn't fully capture.</div>
+    <div class="slider-val" id="val-final-display">£0</div>
+    <input type="range" id="val-final" min="0" max="100" value="50" oninput="updateFinal()">
+  </div>
+  <div class="endbar"><button class="btn full" onclick="commitValuation()">✍️ Sign off this valuation</button></div>
+</div>
+
+<!-- DEBRIEF -->
+<div id="s-debrief" class="screen">
+  <div class="masthead"><div class="masthead-tag" id="db-tag">Case debrief</div><h1 id="db-headline">The Verdict</h1></div>
+  <div class="card">
+    <div class="debrief-grade"><div class="title" id="db-grade"></div><div class="sub" id="db-grade-sub"></div></div>
+    <div style="margin-top:12px">
+      <div class="reveal"><span>Your valuation</span><span class="big" id="db-your"></span></div>
+      <div class="reveal"><span>Defensible value</span><span class="big" id="db-true"></span></div>
+      <div class="reveal"><span>You were off by</span><span class="big" id="db-off"></span></div>
+    </div>
+    <div class="accuracy-bar"><div class="you" id="db-acc-marker"></div></div>
+    <div class="acc-scale"><span>way under</span><span>spot on</span><span>way over</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="font-size:16px">What drove the value</div>
+    <div class="card-sub" id="db-drivers"></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="font-size:16px">Clues you caught &amp; missed</div>
+    <div id="db-clues"></div>
+    <div class="reasoncard" id="db-reason"><div class="rl">Your method</div><div id="db-reason-txt"></div></div>
+    <div class="timecard"><div class="tl">⏳ How you spent your time</div><div id="db-time"></div></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn ghost full" onclick="show('s-cases')">← Caseload</button>
+    <button class="btn full" id="db-next"></button>
+  </div>
+  <div class="foot">Cases are simplified for teaching. Real valuation follows RICS "Red Book" standards — but the thinking is exactly this.</div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+/* ============ HELPERS ============ */
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo({top:0}); }
+const fmt=n=>'£'+Math.round(n).toLocaleString();
+const fmtK=n=>{ n=Math.round(n); if(Math.abs(n)>=1e6) return '£'+(n/1e6).toFixed(2)+'m'; return '£'+Math.round(n/1e3)+'k'; };
+
+/* ============ DCF ENGINE ============ */
+function runDCF({rent, yield_, marketRent=null, voidYear=null}){
+  const disc=yield_; const cashflows=[];
+  for(let y=1;y<=5;y++){ let c=(marketRent&&y>=3)?marketRent:rent; if(voidYear&&y===voidYear)c=0; cashflows.push(c); }
+  let pv=0; cashflows.forEach((c,i)=>pv+=c/Math.pow(1+disc,i+1));
+  const sus=marketRent!=null?marketRent:rent; const terminal=(sus/yield_)/Math.pow(1+disc,5);
+  return { value:pv+terminal, cashflows, terminal };
+}
+
+/* ============ CASES ============
+ Evidence types via flags on actions:
+   biased:'high'  → source pushes a high figure (⚠ shown after)
+   noise:true     → low-value, mostly a time-waster (revealed after)
+   predictive:'key-<id>' → decisive; sets a flag that shifts the true value
+   key:true       → important, needed for reasoning score
+ Each case: baseTrue value; predictiveShift{flag, newTrue, driver} applied if that predictive clue was taken.
+================================ */
+const CASES=[
+  {
+    id:0, title:"The Leasehold Flat", stars:1, method:'Comparable', budget:5, phase:'comps',
+    subjectName:"2-bed leasehold flat, Gosforth — 68 m²",
+    subjectFacts:"68 m² · good condition · leasehold, 72 years left",
+    subject:{ size:68 }, baseTrue:236000,
+    valRange:[170000,320000],
+    predictive:{ id:'x1', newTrue:250000, driver:"a <b>regeneration scheme</b> next door was approved — nearby values are set to rise ~6%. Catching that lifts the flat to about <b>£250,000</b>." },
+    brief:"A gentle warm-up on comparables — but you still only have 5 units of time and 6 things you could look at. Choose well; not everything is worth chasing.",
+    actions:[
+      {id:'c1',cat:'comp',ico:'🏠',name:"Comp: Flat A",cost:1,desc:"A recent nearby sale.",
+        result:"Flat A sold £270,000. 78 m², good condition, 3 months ago — long 125-year lease.",
+        comp:{name:'Flat A',sold:270000,size:78,note:'long lease'}, note:"Comp A: £270k, 78 m², long lease."},
+      {id:'c2',cat:'comp',ico:'🏠',name:"Comp: Flat B",cost:1,desc:"Another recent sale.",
+        result:"Flat B sold £242,000. 66 m², good condition, 5 months ago, long lease.",
+        comp:{name:'Flat B',sold:242000,size:66,note:'long lease'}, note:"Comp B: £242k, 66 m², long lease."},
+      {id:'i1',cat:'inspect',ico:'🔍',name:"Inspect & read the lease",cost:1,desc:"View it; check the legal pack.",
+        result:"⚠ 68 m², good condition — BUT only 72 years left on the lease. Under 80 it bites: knock ~8% off a long-lease comp.",
+        key:true, note:"KEY: 72-year lease — adjust DOWN ~8% vs the long-lease comps."},
+      {id:'x1',cat:'intel',ico:'🏗️',name:"Check local planning portal",cost:1,desc:"Any approvals nearby? Might be nothing.",
+        result:"🔮 Big find: a REGENERATION scheme next door was just approved — new public realm and shops. Values on this street should rise ~6% as it lands.",
+        predictive:'x1', note:"PREDICTIVE ★: regeneration approved next door — values set to rise ~6%. This lifts the true value."},
+      {id:'p1',cat:'party',ico:'🗣️',name:"Ask the owner",cost:1,desc:"Their view of the price.",
+        result:"\u201cAt least £275,000 — it's just like the one upstairs.\u201d",
+        biased:'high', note:"Owner: £275k, ignoring their short lease. Discount."},
+      {id:'n1',cat:'market',ico:'📰',name:"Read a national house-price headline",cost:1,desc:"The big-picture market mood.",
+        result:"\u201cUK house prices broadly flat this year, says index.\u201d True, but generic — tells you nothing specific about this flat.",
+        noise:true, note:"Noise: national headline, no local insight. A wasted slot."}
+    ],
+    drivers:"Comparables, adjusted for size, point to about <b>£256,000</b> for 68 m². Your flat's <b>72-year lease</b> (both comps had long leases) knocks ~8% off, to a base of <b>£236,000</b>. The decisive extra: if you checked planning, __PREDICTIVE__ Miss the regeneration and you'd under-value; the owner's £275k ignored their own short lease.",
+    clues:[
+      {good:true, need:'i1', txt:"Checked the lease and caught the 72-year problem"},
+      {good:true, need:'anycomp2', txt:"Gathered two comparables to triangulate on size"},
+      {good:true, need:'x1', predictive:true, txt:"Found the regeneration approval — the decisive market signal"},
+      {good:false, trap:'high', txt:"Didn't just accept the owner's £275k"}
+    ]
+  },
+  {
+    id:1, title:"The City-Centre Office", stars:2, method:'Comparable + Income', budget:5, phase:'dcf',
+    subjectName:"Office floor, city centre — let at £200,000/yr",
+    subjectFacts:"Let to one tenant · passing rent £200,000/yr · valued on its income",
+    subject:{ passingRent:200000 }, baseTrue:2740000,
+    valRange:[2000000,4000000],
+    dcf:{ passingRent:200000, trueMarketRent:160000, baseYield:0.06, predictiveMarketRent:175000, predictiveYield:0.0575 },
+    predictive:{ id:'x1', newTrue:3089000, driver:"a <b>major employer signed a huge lease nearby</b> — demand for city-centre floors is about to firm up. Market rents recover (toward £175k) and the yield tightens to ~5.75%, lifting value to about <b>£3.09m</b>." },
+    brief:"An office let to a tenant — value it on INCOME. Eight things you could chase, only 5 time, and a couple cost 2. Read the lease AND keep an ear out for what's coming to this market.",
+    actions:[
+      {id:'y1',cat:'comp',ico:'🏢',name:"Comparable yields",cost:1,desc:"What yield are similar offices trading at?",
+        result:"Similar city offices trade at ~5.5%–6.5%. A 6% yield is a fair middle today.",
+        yieldEvidence:true, key:true, note:"Comp yields ~6% — use this, not a made-up rate."},
+      {id:'r1',cat:'comp',ico:'🏢',name:"Comparable rents",cost:1,desc:"What rent do similar floors get?",
+        result:"⚠ Similar floors let at ~£160,000/yr — noticeably LESS than this tenant's £200,000.",
+        marketRentEvidence:true, key:true, note:"KEY: market rent ~£160k but tenant pays £200k → OVER-RENTED, income will fall."},
+      {id:'i1',cat:'inspect',ico:'🔍',name:"Read the lease in full",cost:2,desc:"Terms, rent history, break clauses.",
+        result:"⚠ Over-rented: they pay £200k, market is £160k — rent will drop at review. No break clause, though.",
+        overRented:true, key:true, note:"KEY: over-rented, rent not durable. No break clause."},
+      {id:'x1',cat:'intel',ico:'📈',name:"Local economic intel",cost:2,desc:"What's coming to this district? Could be big, could be nothing.",
+        result:"🔮 Big: a MAJOR EMPLOYER just signed a huge nearby lease — office demand here is about to firm up. Rents should recover and yields tighten.",
+        predictive:'x1', note:"PREDICTIVE ★: major employer arriving — rents firm, yield tightens. Lifts the value."},
+      {id:'p1',cat:'party',ico:'🗣️',name:"Ask the owner",cost:1,desc:"Their pitch.",
+        result:"\u201cIt yields £200,000 — capitalise at 5% and it's worth four million!\u201d",
+        biased:'high', note:"Owner wants £200k ÷ 5% = £4m. Rent isn't durable and 5% is too keen."},
+      {id:'p2',cat:'party',ico:'🗣️',name:"Ask the tenant's facilities manager",cost:1,desc:"How settled is the tenant?",
+        result:"\u201cWe're happy here, no plans to move.\u201d Reassuring on occupancy, but says nothing about whether the rent is at market.",
+        noise:true, note:"Noise-ish: tenant is settled, but doesn't reveal the over-renting."},
+      {id:'n1',cat:'market',ico:'📰',name:"Read a 'future of offices' think-piece",cost:1,desc:"Opinion on hybrid working.",
+        result:"A columnist speculates about hybrid working. Interesting, but no hard signal for THIS building.",
+        noise:true, note:"Noise: generic opinion, no specific signal."},
+      {id:'v1',cat:'inspect',ico:'📐',name:"Measure the floor area",cost:1,desc:"Get the exact size.",
+        result:"1,850 sq ft, net. Useful for a £/sqft sanity check — but an office is valued on income, so this is secondary.",
+        noise:true, note:"Low value: size is secondary for an income-producing office."}
+    ],
+    drivers:"An office is valued on its <b>income</b>. The owner wanted £200k ÷ 5% = £4m — but the floor is <b>over-rented</b> (£200k vs a £160k market), so durable income is £160k, and 6% is the fairer yield. That base is about <b>£2.74m</b>. The decisive extra: __PREDICTIVE__ Miss it and you'd under-value the recovery; swallow the owner's line and you'd wildly over-value.",
+    clues:[
+      {good:true, need:'anyRentEvidence', txt:"Spotted the office is over-rented (income will fall)"},
+      {good:true, need:'y1', txt:"Used comparable yield evidence (~6%), not a guess"},
+      {good:true, need:'x1', predictive:true, txt:"Caught the incoming employer — the market signal that lifts value"},
+      {good:false, trap:'high', txt:"Didn't fall for the owner's '£200k at 5% = £4m'"}
+    ]
+  },
+  {
+    id:2, title:"The Suburban Castle", stars:3, method:'Income, under uncertainty', budget:5, phase:'dcf',
+    subjectName:"Eccentric mansion ('the castle'), suburban — no real comparables",
+    subjectFacts:"One-of-a-kind · over-built for the area · lettable at ~£90,000/yr",
+    subject:{ passingRent:90000 }, baseTrue:1125000,
+    valRange:[700000,2200000],
+    dcf:{ passingRent:90000, trueMarketRent:90000, baseYield:0.08 },
+    predictive:{ id:'x1', newTrue:1385000, driver:"a <b>new private school</b> is opening nearby — suddenly large family homes here are in demand, widening the buyer pool for an oddity like this. That compresses the yield from 8% to ~6.5%, lifting value to about <b>£1.39m</b>." },
+    brief:"A real head-scratcher: a turreted mansion in an ordinary suburb, no true comparables. Nine things you could chase, only 5 time, and the decisive one costs 2. Reason from income — and beware shiny evidence that doesn't fit.",
+    actions:[
+      {id:'c1',cat:'comp',ico:'🏰',name:"Comp: a real castle (far away)",cost:1,desc:"A castle that sold — but 200 miles off.",
+        result:"A folly-mansion sold for £2,100,000 — in a PRIME rural county, a totally different market. Tempting, but not a fair comparable.",
+        redHerring:true, note:"RED HERRING: £2.1m castle is 200 miles away in a prime area. Location is everything — don't anchor."},
+      {id:'c2',cat:'comp',ico:'🏠',name:"Comp: a normal local house",cost:1,desc:"An ordinary large house nearby.",
+        result:"A large (normal) 6-bed on the same road sold for £850,000. Yours is grander — but you can't recover all the extra build cost here.",
+        localComp:true, key:true, note:"KEY: normal big local houses ~£850k → the castle is over-improved for the area."},
+      {id:'i1',cat:'inspect',ico:'🔍',name:"Inspect & assess lettability",cost:2,desc:"What income could it realistically produce?",
+        result:"⚠ Beautiful but eccentric. Lettable at ~£90,000/yr, but few tenants want a turreted mansion — it's illiquid. An illiquid special property needs a HIGHER yield (~8%).",
+        yieldEvidence:true, key:true, note:"KEY: illiquid/special-use → higher yield ~8% (lower value)."},
+      {id:'x1',cat:'intel',ico:'🏫',name:"Local development intel",cost:2,desc:"Anything changing the area's appeal? Might be nothing.",
+        result:"🔮 Big: a NEW PRIVATE SCHOOL is opening nearby — large family homes here are about to be in demand. The buyer pool for a place like this widens; the yield should compress.",
+        predictive:'x1', note:"PREDICTIVE ★: new school widens the buyer pool → yield compresses ~8%→6.5%, lifts value."},
+      {id:'m1',cat:'market',ico:'📊',name:"Buyer-pool check",cost:1,desc:"Who'd actually buy this?",
+        result:"Very few want an over-the-top mansion in this suburb — a handful a year. Thin demand supports a higher yield.",
+        note:"Thin buyer pool — supports a higher yield / value below naive figure."},
+      {id:'p1',cat:'party',ico:'🗣️',name:"Ask the owner",cost:1,desc:"Their (lofty) view.",
+        result:"\u201cA one-of-a-kind CASTLE — easily £2 million, like that one down south!\u201d",
+        biased:'high', note:"Owner anchors on the faraway £2.1m castle. Uniqueness cuts both ways."},
+      {id:'p2',cat:'party',ico:'🗣️',name:"Ask a specialist agent",cost:1,desc:"An agent who sells unusual homes.",
+        result:"\u201cThese take a long time to sell and the buyer pool is tiny — price it keenly or it sits for a year.\u201d",
+        key:true, note:"Specialist: illiquid, price keenly — corroborates the higher yield."},
+      {id:'n1',cat:'party',ico:'🗣️',name:"Ask a neighbour about the turrets",cost:1,desc:"Local colour.",
+        result:"\u201cLovely to look at! We call it the castle.\u201d Charming, but no help on value.",
+        noise:true, note:"Noise: local colour, no valuation signal."},
+      {id:'n2',cat:'inspect',ico:'📐',name:"Count the bedrooms",cost:1,desc:"Tally the rooms.",
+        result:"Nine bedrooms, four reception rooms. Impressive — but for an oddity like this, income and demand drive value, not room count.",
+        noise:true, note:"Low value: room count doesn't drive value for a special-use property."}
+    ],
+    drivers:"The trap is scarcity. The owner and the faraway £2.1m castle say 'unique = valuable' — but unique also means <b>few buyers and hard to sell</b>. With no true comps, value the <b>income</b> (~£90,000/yr) at a <b>higher ~8% yield</b> (illiquidity), giving a base of about <b>£1,150,000</b>; the local £850k house confirms it's over-improved. The decisive extra: __PREDICTIVE__ Miss the school and you'd under-value the widening demand; anchor on the distant castle and you'd wildly over-value.",
+    clues:[
+      {good:true, need:'i1', txt:"Recognised illiquidity and used a higher (~8%) base yield"},
+      {good:true, need:'c2', txt:"Used the local house to see it's over-improved"},
+      {good:true, need:'x1', predictive:true, txt:"Caught the new school — the signal that widens the buyer pool"},
+      {good:false, trap:'redherring', txt:"Didn't anchor on the faraway £2.1m castle"}
+    ]
+  }
+];
+
+/* ============ STATE ============ */
+let caseIdx=0, C=null, budgetLeft=0, taken={}, foundComps=[], finalVal=0;
+let solvedCases={}, dcfState=null, predictiveCaught=false, trueVal=0;
+
+/* ============ CASE SELECT ============ */
+function renderCases(){
+  const list=document.getElementById('case-list'); list.innerHTML='';
+  CASES.forEach((c,i)=>{
+    const locked=i>0&&!solvedCases[i-1];
+    const el=document.createElement('div'); el.className='card case-pick'+(locked?' locked':'');
+    el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:baseline">
+      <span class="case-num">Case ${i+1}${solvedCases[i]?' · ✓ done':''}</span>
+      <span class="stars">${'★'.repeat(c.stars)}${'☆'.repeat(3-c.stars)}</span></div>
+      <div class="card-title" style="font-size:18px;margin-top:4px">${c.title}</div>
+      <div class="card-sub" style="margin-bottom:6px">${c.subjectName}</div>
+      <span class="method-tag">${c.method}</span>
+      ${locked?'<div class="card-sub" style="color:var(--faint);margin-top:8px">🔒 Finish the previous case to unlock</div>':''}`;
+    if(!locked) el.onclick=()=>startCase(i);
+    list.appendChild(el);
+  });
+}
+
+/* ============ INVESTIGATE ============ */
+function startCase(i){
+  caseIdx=i; C=CASES[i]; budgetLeft=C.budget; taken={}; foundComps=[]; finalVal=0; dcfState=null; predictiveCaught=false;
+  document.getElementById('inv-case').textContent=`Case ${i+1}: ${C.title}`;
+  document.getElementById('inv-subject').textContent=C.subjectName;
+  document.getElementById('inv-brief').textContent=C.brief;
+  document.getElementById('inv-notebook').style.display='none';
+  document.getElementById('notebook-items').innerHTML='';
+  const totalCost=C.actions.reduce((a,x)=>a+x.cost,0);
+  document.getElementById('inv-count-hint').textContent=`${C.actions.length} options · ${totalCost} time to do all · you have ${C.budget}`;
+  show('s-investigate'); renderBudget(); renderActions();
+}
+function renderBudget(){
+  const p=document.getElementById('inv-pips'); p.innerHTML='';
+  for(let k=0;k<C.budget;k++){ const d=document.createElement('div'); d.className='bpip'+(k<budgetLeft?' on':''); p.appendChild(d); }
+  document.getElementById('inv-budget-note').textContent = budgetLeft===0?'Time up — value it now':budgetLeft+' left';
+}
+function renderActions(){
+  const wrap=document.getElementById('inv-actions'); wrap.innerHTML='';
+  C.actions.forEach(a=>{
+    const done=taken[a.id]; const tooExpensive=!done&&budgetLeft<a.cost;
+    const el=document.createElement('div'); el.className='action'+(done?' done':tooExpensive?' disabled':'');
+    const catLbl={comp:'Comparable',inspect:'Inspection',market:'Market',party:'Ask someone',intel:'Intel'}[a.cat];
+    let flag='';
+    if(done&&a.biased) flag=`<div class="bias-flag">⚠ Biased — this source wants a ${a.biased} figure. Discount it.</div>`;
+    else if(done&&a.noise) flag=`<div class="noise-flag">— Low value: this didn't tell you much. Time you won't get back.</div>`;
+    else if(done&&a.predictive) flag=`<div class="predict-flag">🔮 Predictive — a real signal about where value is heading. Good spend.</div>`;
+    else if(done&&a.redHerring) flag=`<div class="bias-flag">⚠ Red herring — looks relevant, isn't a fair comparable.</div>`;
+    el.innerHTML=`<div class="action-top"><span class="action-ico">${a.ico}</span><span class="action-cat cat-${a.cat}">${catLbl}</span><span class="action-cost">${done?'✓ done':'⏳'.repeat(a.cost)}</span></div>
+      <div class="action-name">${a.name}</div>
+      <div class="action-desc">${done?'':a.desc}</div>
+      ${done?`<div class="action-result"><span class="rl">Found:</span> ${a.result}${flag}</div>`:''}`;
+    if(!done&&!tooExpensive) el.onclick=()=>doAction(a.id);
+    wrap.appendChild(el);
+  });
+  const need = C.phase==='comps' ? foundComps.length>0 : Object.keys(taken).length>0;
+  const btn=document.getElementById('inv-done'); btn.disabled=!need;
+  btn.textContent = !need ? (C.phase==='comps'?'Find at least one comparable first':'Investigate at least one thing first')
+    : (budgetLeft>0 ? `Value it now (${budgetLeft} time unspent) →` : 'Done — value it →');
+}
+function doAction(id){
+  const a=C.actions.find(x=>x.id===id);
+  if(taken[id]||budgetLeft<a.cost) return;
+  taken[id]=true; budgetLeft-=a.cost;
+  if(a.comp) foundComps.push({...a.comp, actionId:id});
+  if(a.predictive) predictiveCaught=true;
+  if(a.note){
+    document.getElementById('inv-notebook').style.display='block';
+    const item=document.createElement('div'); item.className='note-item';
+    const mark=a.predictive?'🔮 ':a.biased?'⚠ ':a.noise?'· ':a.key?'★ ':a.redHerring?'⚠ ':'• ';
+    item.innerHTML=mark+a.note;
+    document.getElementById('notebook-items').appendChild(item);
+  }
+  renderBudget(); renderActions();
+}
+
+/* ============ VALUATION ============ */
+let adjustments={};
+function startValuation(){
+  document.getElementById('val-case').textContent=`Case ${caseIdx+1}: ${C.title}`;
+  document.getElementById('val-subject').textContent=C.subjectName;
+  document.getElementById('val-subject-facts').textContent=C.subjectFacts;
+  document.getElementById('comp-list').innerHTML=''; document.getElementById('dcf-panel').innerHTML='';
+  // determine the true value for scoring: predictive clue shifts it
+  trueVal = predictiveCaught ? C.predictive.newTrue : C.baseTrue;
+  if(C.phase==='comps') buildCompPhase(); else buildDCFPhase();
+  const sl=document.getElementById('val-final'); sl.min=C.valRange[0]; sl.max=C.valRange[1]; sl.step=1000;
+  sl.value=Math.round((C.valRange[0]+C.valRange[1])/2); updateFinal();
+  show('s-value');
+}
+function buildCompPhase(){
+  document.getElementById('val-method-note').textContent="Adjust each comparable toward your property. The game shows what value each one points to.";
+  document.getElementById('val-points-lbl').textContent="Your comparables point to";
+  adjustments={}; const wrap=document.getElementById('comp-list');
+  foundComps.forEach((c,i)=>{
+    adjustments[i]={size:0,cond:0};
+    const el=document.createElement('div'); el.className='comp-adj';
+    el.innerHTML=`<div class="comp-head"><span class="comp-name">${c.name}</span><span class="comp-sold">sold ${fmt(c.sold)}</span></div>
+      <div class="comp-facts">${c.size} m²${c.note?' · '+c.note:''}</div>
+      <div class="adj-row"><label><span>Size (theirs ${c.size} m², yours ${C.subject.size} m²)</span><b id="sa-lbl-${i}">0%</b></label>
+        <input type="range" min="-30" max="30" value="0" step="1" oninput="adjComp(${i},'size',this.value)"></div>
+      <div class="adj-row"><label><span>Lease / other adjustment</span><b id="ca-lbl-${i}">0%</b></label>
+        <input type="range" min="-30" max="30" value="0" step="1" oninput="adjComp(${i},'cond',this.value)"></div>
+      <div class="comp-indicated"><span class="il">Points to</span><span class="iv" id="ind-${i}">${fmt(c.sold)}</span></div>
+      <div class="card-sub" id="hint-${i}" style="margin-top:4px;font-size:11.5px"></div>`;
+    wrap.appendChild(el);
+    const d=c.size-C.subject.size;
+    if(Math.abs(d)>=4) document.getElementById('hint-'+i).textContent=`Theirs is ${d>0?'bigger':'smaller'} — adjust ${d>0?'down':'up'}. (And mind the lease.)`;
+  });
+  updateRange();
+}
+function adjComp(i,kind,val){
+  adjustments[i][kind]=+val;
+  document.getElementById((kind==='size'?'sa-lbl-':'ca-lbl-')+i).textContent=(val>0?'+':'')+val+'%';
+  const c=foundComps[i]; const ind=c.sold*(1+adjustments[i].size/100)*(1+adjustments[i].cond/100);
+  document.getElementById('ind-'+i).textContent=fmt(ind); updateRange();
+}
+function indicatedValues(){ return foundComps.map((c,i)=>{ const a=adjustments[i]||{size:0,cond:0}; return c.sold*(1+a.size/100)*(1+a.cond/100); }); }
+
+function buildDCFPhase(){
+  document.getElementById('val-method-note').innerHTML="A let property — value its <b>income</b>. Set the judgements; the game does the maths.";
+  document.getElementById('val-points-lbl').textContent="The income method gives";
+  dcfState={ yield_:C.dcf.baseYield, rentReliable:true, breakOn:false };
+  const p=document.getElementById('dcf-panel');
+  p.innerHTML=`<div class="dcf">
+    <div class="dl">📊 The income (DCF) — the game does the maths</div>
+    <div class="dcf-explain">Five years of rent plus the property's end value, brought back to today's money. You set the inputs.</div>
+    <div class="dcf-bars" id="dcf-bars"></div>
+    <div class="dcf-ctrl"><label><span>Yield you'll apply <span class="term" title="Capitalisation rate. Higher yield = lower value. Riskier / more illiquid property needs a higher yield.">(cap rate)</span></span><b id="dcf-yield-lbl"></b></label>
+      <input type="range" id="dcf-yield" min="4.5" max="9" step="0.25" oninput="setDcfYield(this.value)"></div>
+    <div class="dcf-ctrl"><label><span>Is the passing rent durable?</span></label>
+      <div class="toggle-row"><div class="toggle active" id="tg-rent-yes" onclick="setRentReliable(true)">Yes — it'll hold</div>
+        <div class="toggle" id="tg-rent-no" onclick="setRentReliable(false)">No — over-rented, will fall</div></div></div>
+    <div class="dcf-ctrl"><label><span>Any lease event?</span></label>
+      <div class="toggle-row"><div class="toggle active" id="tg-break-no" onclick="setBreak(false)">None</div>
+        <div class="toggle" id="tg-break-yes" onclick="setBreak(true)">Break clause — void in yr 3</div></div></div>
+    <div class="dcf-value"><span class="dvl">Indicated value (income method)</span><span class="dvv" id="dcf-value">£0</span></div></div>`;
+  document.getElementById('dcf-yield').value=C.dcf.baseYield*100;
+  document.getElementById('dcf-yield-lbl').textContent=(C.dcf.baseYield*100).toFixed(1)+'%';
+  recomputeDCF();
+}
+function setDcfYield(v){ dcfState.yield_=+v/100; document.getElementById('dcf-yield-lbl').textContent=(+v).toFixed(1)+'%'; recomputeDCF(); }
+function setRentReliable(b){ dcfState.rentReliable=b; document.getElementById('tg-rent-yes').classList.toggle('active',b); document.getElementById('tg-rent-no').classList.toggle('active',!b); recomputeDCF(); }
+function setBreak(b){ dcfState.breakOn=b; document.getElementById('tg-break-yes').classList.toggle('active',b); document.getElementById('tg-break-no').classList.toggle('active',!b); recomputeDCF(); }
+function recomputeDCF(){
+  const d=C.dcf;
+  // if the incoming-demand signal was caught, rents recover to the higher level and yield can tighten
+  const revertRent = (predictiveCaught && d.predictiveMarketRent) ? d.predictiveMarketRent : d.trueMarketRent;
+  const marketRent=dcfState.rentReliable?null:revertRent; const voidYear=dcfState.breakOn?3:null;
+  const res=runDCF({ rent:d.passingRent, yield_:dcfState.yield_, marketRent, voidYear });
+  const bars=document.getElementById('dcf-bars'); bars.innerHTML=''; const maxC=Math.max(...res.cashflows,d.passingRent);
+  res.cashflows.forEach((c,i)=>{ const h=maxC>0?Math.round(c/maxC*70)+6:6; const w=document.createElement('div'); w.className='dcf-bar-wrap';
+    w.innerHTML=`<div class="dcf-bar-val">${c>0?fmtK(c):'£0'}</div><div class="dcf-bar ${c===0?'void':''}" style="height:${h}px"></div><div class="dcf-bar-lbl">Yr ${i+1}</div>`; bars.appendChild(w); });
+  document.getElementById('dcf-value').textContent=fmt(res.value); dcfState.value=res.value; updateRange();
+}
+function updateRange(){
+  if(C.phase==='comps'){ const iv=indicatedValues(); if(!iv.length){ document.getElementById('val-range').textContent='—'; return; }
+    const lo=Math.min(...iv),hi=Math.max(...iv),avg=iv.reduce((a,b)=>a+b,0)/iv.length;
+    document.getElementById('val-range').innerHTML=`${fmt(lo)} – ${fmt(hi)} &nbsp;<span style="color:var(--muted);font-size:13px">(midpoint ${fmt(avg)})</span>`;
+  } else { const v=dcfState&&dcfState.value?dcfState.value:0; document.getElementById('val-range').innerHTML=`${fmt(v)} <span style="color:var(--muted);font-size:13px">from your income assumptions</span>`; }
+}
+function updateFinal(){ finalVal=+document.getElementById('val-final').value; document.getElementById('val-final-display').textContent=fmt(finalVal); }
+
+/* ============ SCORING ============ */
+function commitValuation(){
+  const off=finalVal-trueVal, offPct=Math.abs(off)/trueVal;
+  let reasonPts=0, reasonMax=0; const clueResults=[];
+  C.clues.forEach(cl=>{
+    reasonMax++; let ok=false;
+    if(cl.need==='anycomp2') ok=foundComps.length>=2;
+    else if(cl.need==='anyRentEvidence') ok=!!(taken['r1']||taken['i1']);
+    else if(cl.need) ok=!!taken[cl.need];
+    else if(cl.trap==='high') ok=offPct<0.12||off<=0;
+    else if(cl.trap==='redherring') ok=finalVal<1650000;
+    clueResults.push({...cl,ok}); if(ok) reasonPts++;
+  });
+  const reasonPct=reasonMax?reasonPts/reasonMax:0;
+  let accScore; if(offPct<=0.03)accScore=1; else if(offPct<=0.07)accScore=0.8; else if(offPct<=0.12)accScore=0.55; else if(offPct<=0.20)accScore=0.3; else accScore=0.1;
+  const combined=reasonPct*0.55+accScore*0.45;
+  let band; if(combined>=0.8)band=3; else if(combined>=0.6)band=2; else if(combined>=0.4)band=1; else band=0;
+  if(offPct>0.15&&band>1)band=1;
+  if(band>=2) solvedCases[caseIdx]=true;
+
+  const grades=[
+    {t:"Struck off 😬",s:"Off the mark and light on evidence — this wouldn't stand up."},
+    {t:"Trainee 📎",s:"Getting there, but the method needs work."},
+    {t:"Competent Valuer 👍",s:"A defensible valuation, properly evidenced."},
+    {t:"Chartered-grade 🌟",s:"Close to the mark AND well-reasoned. RICS would be proud."}
+  ];
+  show('s-debrief');
+  document.getElementById('db-tag').textContent=`Case ${caseIdx+1} debrief · ${C.title}`;
+  document.getElementById('db-headline').textContent=accScore>=0.8?'Well judged':offPct>0.2?'Wide of the mark':'Not bad';
+  document.getElementById('db-grade').textContent=grades[band].t;
+  document.getElementById('db-grade-sub').textContent=grades[band].s;
+  document.getElementById('db-your').textContent=fmt(finalVal);
+  document.getElementById('db-true').textContent=fmt(trueVal);
+  document.getElementById('db-off').innerHTML=`${off>=0?'+':'−'}${fmt(Math.abs(off))} <span style="color:var(--muted);font-size:13px">(${(offPct*100).toFixed(0)}%)</span>`;
+  const clamped=Math.max(-0.25,Math.min(0.25,off/trueVal));
+  document.getElementById('db-acc-marker').style.left=((clamped+0.25)/0.5*100)+'%';
+
+  // drivers text, with predictive segment resolved
+  let drivers=C.drivers.replace('__PREDICTIVE__', predictiveCaught
+    ? `you caught it — ${C.predictive.driver}`
+    : `<b style="color:var(--danger)">you missed it.</b> ${C.predictive.driver} Because you didn't find it, your figure was measured against the higher, correct value — so you likely came in low.`);
+  document.getElementById('db-drivers').innerHTML=drivers;
+
+  document.getElementById('db-clues').innerHTML=clueResults.map(cl=>{
+    const ico=cl.ok?'✅':(cl.good?'❌':'⚠️');
+    const tag=cl.predictive&&cl.ok?' <span style="color:var(--intel);font-weight:700">🔮 decisive</span>':cl.predictive&&!cl.ok?' <b style="color:var(--danger)">— the clue that changed the value!</b>':'';
+    return `<div class="clue-item"><span class="clue-ico">${ico}</span><span>${cl.txt}${cl.ok?tag:(' <b style="color:var(--danger)">— missed</b>'+tag)}</span></div>`;
+  }).join('');
+
+  const rc=document.getElementById('db-reason'); let rcls,rtxt;
+  if(reasonPct>=0.75){ rcls='good'; rtxt="Strong method: you gathered the right evidence, used the correct approach, and didn't just trust the biased parties."; }
+  else if(reasonPct>=0.5){ rcls='mixed'; rtxt="Reasonable, but you left gaps. The best valuations come from the right method plus cross-checking interested parties — and catching the decisive signal."; }
+  else { rcls='poor'; rtxt="Thin method: too little groundwork. A valuation you can't evidence won't stand up — that's the whole job."; }
+  if(accScore>=0.8&&reasonPct<0.5) rtxt="You landed close — but largely without the evidence to back it. A lucky guess isn't a valuation.";
+  rc.className='reasoncard '+rcls; document.getElementById('db-reason-txt').textContent=rtxt;
+
+  // time review: what you spent on, and what each was worth
+  const spent=C.actions.filter(a=>taken[a.id]);
+  const wasted=spent.filter(a=>a.noise).length;
+  const missedPredictive=!predictiveCaught;
+  let timeHtml=spent.map(a=>{
+    const worth=a.predictive?'🔮 decisive':a.key?'★ valuable':a.biased?'⚠ biased (still worth knowing)':a.redHerring?'⚠ red herring':a.noise?'— low value':'• useful';
+    return `<div class="time-item"><span>${a.ico}</span><span>${a.name} <span style="color:var(--muted)">— ${worth}</span></span></div>`;
+  }).join('');
+  const notes=[];
+  if(missedPredictive) notes.push(`<div class="time-item" style="color:var(--danger)"><span>🔮</span><span>You skipped the decisive signal (${C.predictive.id==='x1'?C.actions.find(a=>a.predictive).name:''}) — that's what threw your figure off.</span></div>`);
+  if(wasted>=2) notes.push(`<div class="time-item" style="color:var(--muted)"><span>⏳</span><span>You spent ${wasted} slots on low-value sources. With only 5 units, that's costly.</span></div>`);
+  if(budgetLeft>0) notes.push(`<div class="time-item" style="color:var(--muted)"><span>⏳</span><span>You left ${budgetLeft} time unspent — you could have chased one more lead.</span></div>`);
+  document.getElementById('db-time').innerHTML=timeHtml+(notes.length?'<div style="margin-top:6px;border-top:.5px dotted var(--border);padding-top:6px">'+notes.join('')+'</div>':'');
+
+  const nextBtn=document.getElementById('db-next'); const hasNext=caseIdx<CASES.length-1;
+  if(hasNext&&solvedCases[caseIdx]){ nextBtn.textContent=`Next case: ${CASES[caseIdx+1].title} →`; nextBtn.onclick=()=>startCase(caseIdx+1); }
+  else if(!solvedCases[caseIdx]){ nextBtn.textContent='Try this case again →'; nextBtn.onclick=()=>startCase(caseIdx); }
+  else { nextBtn.textContent='All cases done — back to caseload →'; nextBtn.onclick=()=>{ renderCases(); show('s-cases'); }; }
+}
+
+renderCases();
+</script>
+</body>
+</html>

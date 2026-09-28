@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yield! A Property Investment Game</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F0; --card:#FBFCFB; --border:rgba(30,45,40,0.13); --border-strong:rgba(30,45,40,0.24);
+  --text:#131A17; --muted:#63706B; --faint:#9AA6A1;
+  --accent:#1F7A5C; --accent-light:#E4F0EB; --accent-dark:#124d3b;
+  --gold:#B8860B; --gold-bg:#FBF4E2;
+  --danger:#B23A3A; --danger-bg:#FBEEEE; --success:#2E7A48; --success-bg:#EAF4EE;
+  --info:#1A5A88; --info-bg:#EAF2FA; --up:#2E7A48; --down:#B23A3A;
+  --office:#2F5F8A; --retail:#B23A3A; --retailpark:#B8860B; --industrial:#8A5A2F; --resi:#1F7A5C; --dev:#7A4DB0;
+  --radius:10px; --radius-lg:16px; --serif:'DM Serif Display',Georgia,serif; --sans:'DM Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.55;}
+.shell{max-width:780px;margin:0 auto;padding:20px 14px 60px;}
+.screen{display:none;} .screen.active{display:block;animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+.masthead{text-align:center;padding:28px 0 22px;border-bottom:.5px solid var(--border);margin-bottom:22px;}
+.masthead-tag{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.masthead h1{font-family:var(--serif);font-size:40px;line-height:1.05;}
+.masthead h1 em{font-style:italic;color:var(--accent);}
+.masthead p{margin-top:12px;color:var(--muted);max-width:490px;margin-left:auto;margin-right:auto;}
+
+.card{background:var(--card);border:.5px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:14px;}
+.card-title{font-family:var(--serif);font-size:20px;margin-bottom:6px;}
+.card-sub{color:var(--muted);font-size:13px;}
+
+.tut-step{display:flex;gap:14px;padding:12px 0;border-bottom:.5px solid var(--border);align-items:flex-start;}
+.tut-step:last-child{border:none;}
+.tut-ico{font-size:26px;width:34px;text-align:center;flex-shrink:0;line-height:1.3;}
+.tut-body .h{font-weight:700;} .tut-body .d{color:var(--muted);font-size:13px;}
+.formula{background:var(--gold-bg);border:.5px solid var(--gold);border-radius:var(--radius);padding:14px 16px;text-align:center;margin:8px 0 4px;}
+.formula .eq{font-family:var(--serif);font-size:22px;color:var(--accent-dark);}
+.formula .note{font-size:12px;color:var(--muted);margin-top:4px;}
+.demo-row{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:4px 0;}
+
+.hud{position:sticky;top:0;z-index:8;background:var(--bg);padding:8px 0 6px;border-bottom:.5px solid var(--border);margin-bottom:12px;}
+.hud-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.stat{background:var(--card);border:.5px solid var(--border);border-radius:var(--radius);padding:7px 9px;cursor:help;position:relative;}
+.stat .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;gap:3px;}
+.stat .v{font-size:15px;font-weight:700;font-family:var(--serif);font-variant-numeric:tabular-nums;}
+.stat .q{color:var(--faint);border:1px solid var(--border-strong);border-radius:50%;width:12px;height:12px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;}
+.stat .tip{display:none;position:absolute;top:100%;left:0;right:0;margin-top:5px;background:var(--text);color:#fff;font-size:11px;line-height:1.35;text-transform:none;letter-spacing:0;padding:7px 9px;border-radius:7px;z-index:20;box-shadow:0 6px 18px rgba(0,0,0,.18);width:180px;}
+.stat:hover .tip,.stat.show .tip{display:block;}
+
+.market{display:flex;align-items:center;gap:10px;background:var(--card);border:.5px solid var(--border);border-radius:var(--radius);padding:9px 12px;margin-bottom:12px;flex-wrap:wrap;}
+.market .yr{font-family:var(--serif);font-size:16px;}
+.market .sentiment{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:20px;color:#fff;margin-left:auto;}
+.sentiment.boom{background:var(--success);} .sentiment.steady{background:var(--info);}
+.sentiment.cooling{background:var(--gold);} .sentiment.down{background:var(--danger);}
+.rate-line{font-size:12px;color:var(--muted);width:100%;}
+.sector-strip{display:flex;gap:6px;flex-wrap:wrap;width:100%;margin-top:2px;}
+.sec-pill{font-size:10.5px;padding:2px 7px;border-radius:20px;color:#fff;font-weight:600;display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums;}
+.sec-pill .mv{font-weight:700;}
+
+.event{border-radius:var(--radius);padding:11px 14px;margin-bottom:12px;border:.5px solid;font-size:13px;}
+.event.bad{background:var(--danger-bg);border-color:var(--danger);}
+.event.good{background:var(--success-bg);border-color:var(--success);}
+.event.dev{background:#F3EDF9;border-color:var(--dev);}
+.event .eh{font-weight:700;margin-bottom:2px;}
+.event.bad .eh{color:var(--danger);} .event.good .eh{color:var(--success);} .event.dev .eh{color:var(--dev);}
+
+.section-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:14px 2px 8px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:10px;}
+.prop{background:var(--card);border:.5px solid var(--border);border-radius:var(--radius);padding:12px 13px;display:flex;flex-direction:column;gap:6px;}
+.prop.owned{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;}
+.prop.dev-card{border-color:var(--dev);}
+.prop.dev-card.owned{box-shadow:0 0 0 1px var(--dev) inset;}
+.prop-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.prop-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:20px;color:#fff;}
+.type-office{background:var(--office);} .type-retail{background:var(--retail);} .type-retailpark{background:var(--retailpark);} .type-industrial{background:var(--industrial);} .type-resi{background:var(--resi);} .type-dev{background:var(--dev);}
+.prop-name{font-family:var(--serif);font-size:16px;line-height:1.1;}
+.owned-badge{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);}
+.prop-fig{display:flex;justify-content:space-between;font-size:12.5px;font-variant-numeric:tabular-nums;}
+.prop-fig .lab{color:var(--muted);}
+.prop-yield{font-weight:700;}
+.yield-hi{color:var(--success);} .yield-mid{color:var(--gold);} .yield-lo{color:var(--danger);}
+.prop-price{font-family:var(--serif);font-size:18px;font-variant-numeric:tabular-nums;}
+.price-move{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;}
+.pm-up{color:var(--up);} .pm-down{color:var(--down);}
+.prop-actions{display:flex;gap:6px;margin-top:4px;}
+.dev-progress{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:2px;}
+.dev-progress > div{height:100%;background:var(--dev);transition:width .4s;}
+.dev-note{font-size:11px;color:var(--dev);font-weight:600;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:11px 16px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,opacity .2s;}
+.btn:hover{background:var(--accent-dark);} .btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn.full{width:100%;} .btn.sm{padding:7px 10px;font-size:12px;flex:1;}
+.btn.ghost{background:transparent;color:var(--muted);border:.5px solid var(--border);}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn.sell{background:var(--gold);} .btn.sell:hover{background:#966d09;}
+.btn.dev{background:var(--dev);} .btn.dev:hover{background:#5f3a85;}
+.btn-row{display:flex;gap:10px;margin-top:6px;}
+.endbar{position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 70%,transparent);padding:12px 0 4px;margin-top:14px;z-index:7;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,20,16,.45);z-index:50;align-items:center;justify-content:center;padding:16px;}
+.modal-bg.show{display:flex;}
+.modal{background:var(--card);border-radius:var(--radius-lg);padding:20px;max-width:410px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);max-height:92vh;overflow:auto;}
+.modal h3{font-family:var(--serif);font-size:20px;margin-bottom:6px;}
+.modal .row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:.5px solid var(--border);font-variant-numeric:tabular-nums;}
+.modal .row:last-of-type{border:none;}
+.ltv-wrap{margin:14px 0 6px;}
+.ltv-wrap label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:4px;}
+input[type=range]{width:100%;accent-color:var(--accent);}
+.warn{font-size:12px;color:var(--danger);margin-top:8px;display:none;} .warn.show{display:block;}
+
+.debrief-grade{text-align:center;padding:8px 0 4px;}
+.debrief-grade .title{font-family:var(--serif);font-size:30px;}
+.debrief-grade .sub{color:var(--muted);}
+.scoreline{display:flex;justify-content:space-between;padding:8px 0;border-bottom:.5px solid var(--border);font-variant-numeric:tabular-nums;}
+.scoreline:last-child{border:none;}
+.scoreline .big{font-weight:700;font-family:var(--serif);font-size:16px;}
+.skillcard{background:var(--info-bg);border:.5px solid var(--info);border-radius:var(--radius);padding:12px 14px;margin-top:10px;}
+.skillcard .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--info);font-weight:700;margin-bottom:3px;}
+.chart-wrap{margin-top:6px;}
+.chart-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;}
+.chart-legend span{display:flex;align-items:center;gap:4px;color:var(--muted);}
+.chart-legend .sw{width:12px;height:3px;border-radius:2px;display:inline-block;}
+.foot{text-align:center;color:var(--faint);font-size:11px;margin-top:26px;}
+/* style spectrum */
+.spectrum{position:relative;height:12px;border-radius:6px;margin:20px 0 6px;
+  background:linear-gradient(to right, var(--resi) 0%, var(--gold) 50%, var(--dev) 100%);}
+.spectrum .marker{position:absolute;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--text);box-shadow:0 2px 8px rgba(0,0,0,.25);transition:left .6s ease;}
+.spectrum-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:8px;}
+.spectrum-labels b{font-weight:700;}
+.style-name{font-family:var(--serif);font-size:24px;text-align:center;margin-top:4px;}
+.style-why{font-size:13px;color:var(--muted);margin-top:8px;}
+.style-fit{border-radius:var(--radius);padding:10px 13px;margin-top:10px;font-size:13px;border:.5px solid;}
+.style-fit.good{background:var(--success-bg);border-color:var(--success);}
+.style-fit.mixed{background:var(--gold-bg);border-color:var(--gold);}
+.style-fit.poor{background:var(--danger-bg);border-color:var(--danger);}
+svg text{font-family:var(--sans);}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HOME -->
+<div id="s-home" class="screen active">
+  <div class="masthead">
+    <div class="masthead-tag">Career Scenario · Investment &amp; Valuation</div>
+    <h1><em>Yield!</em></h1>
+    <p>£1&nbsp;million, ten years, and a property market where different sectors move in different directions. Read the yields, spot the sectors on the rise, and build the biggest fortune.</p>
+  </div>
+  <div class="card" style="background:var(--accent-light);border-color:var(--accent)">
+    <div class="card-title" style="font-size:17px">The whole game in one line</div>
+    <div class="card-sub">A property's price is its yearly rent ÷ its <strong>yield</strong>. When a sector's yield falls, its prices rise — and different sectors rise and fall at different times. Buy the sectors on the way up, sell before they turn, and don't get caught over-borrowed.</div>
+  </div>
+  <div class="btn-row"><button class="btn full" onclick="show('s-tutorial')">How it works (2 min) →</button></div>
+  <div class="btn-row"><button class="btn ghost full" onclick="startGame()">Skip — just play →</button></div>
+</div>
+
+<!-- TUTORIAL -->
+<div id="s-tutorial" class="screen">
+  <div class="masthead"><div class="masthead-tag">The ideas to get</div><h1>How <em>Yield</em> Works</h1></div>
+  <div class="card">
+    <div class="formula"><div class="eq">Price&nbsp;=&nbsp;Rent&nbsp;÷&nbsp;Yield</div><div class="note">a shop earning £70,000 rent at a 7% yield is worth £70,000 ÷ 0.07 = £1,000,000</div></div>
+    <div class="card-sub" style="margin-top:10px">"Yield" is the yearly rent as a % of price — your return. <b>High yield = cheap</b> (lots of rent per pound). <b>Low yield = expensive</b>.</div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="font-size:16px">Prices move when yields move</div>
+    <div class="card-sub" style="margin-bottom:8px">Same £70,000 rent, different market moods:</div>
+    <div class="demo-row"><span>Optimistic — yield 5%</span><b>£1,400,000</b></div>
+    <div class="demo-row"><span>Normal — yield 7%</span><b>£1,000,000</b></div>
+    <div class="demo-row"><span>Nervous — yield 8%</span><b>£875,000</b></div>
+    <div class="card-sub" style="margin-top:8px">The rent never changed — the price swung £525,000 on yield alone.</div>
+  </div>
+  <div class="card">
+    <div class="tut-step"><div class="tut-ico">🔀</div><div class="tut-body"><div class="h">Sectors move differently</div><div class="d">Offices and high-street shops might be sliding while retail parks, warehouses and flats are climbing — all at once. Watch each sector's yield and back the winners. Warehouses (industrial) swing the hardest, up and down.</div></div></div>
+    <div class="tut-step"><div class="tut-ico">🏦</div><div class="tut-body"><div class="h">You can borrow (leverage)</div><div class="d">Put down some cash, borrow the rest (up to 70%). Rent helps pay the interest. Borrowing multiplies gains when prices rise — and losses when they fall.</div></div></div>
+    <div class="tut-step"><div class="tut-ico">🏗️</div><div class="tut-body"><div class="h">You can build (development)</div><div class="d">Start a development: it costs cash for ~3 years with no rent while it's built, and might overrun. If it finishes, it's worth far more than it cost — the biggest prize, and the biggest risk.</div></div></div>
+    <div class="tut-step"><div class="tut-ico">🏆</div><div class="tut-body"><div class="h">Goal: biggest net worth after 10 years</div><div class="d">Cash + property value − debt. We'll also grade how smart your timing was, and show you charts of what every sector did.</div></div></div>
+  </div>
+  <div class="btn-row"><button class="btn ghost full" onclick="show('s-home')">← Back</button><button class="btn full" onclick="startGame()">Start investing →</button></div>
+</div>
+
+<!-- GAME -->
+<div id="s-game" class="screen">
+  <div class="hud"><div class="hud-row">
+    <div class="stat"><div class="k">Cash <span class="q">?</span></div><div class="v" id="h-cash"></div><div class="tip">Money to spend. Rent lands here; interest, purchases and build costs come out.</div></div>
+    <div class="stat"><div class="k">Portfolio <span class="q">?</span></div><div class="v" id="h-port"></div><div class="tip">What everything you own is worth right now (a development counts at its money-in so far).</div></div>
+    <div class="stat"><div class="k">Debt <span class="q">?</span></div><div class="v" id="h-debt"></div><div class="tip">Total owed on mortgages. You pay interest on this each year.</div></div>
+    <div class="stat"><div class="k">Net worth <span class="q">?</span></div><div class="v" id="h-net"></div><div class="tip">Cash + portfolio − debt. This is your score.</div></div>
+  </div></div>
+
+  <div class="market">
+    <span class="yr" id="m-year"></span>
+    <span class="sentiment" id="m-sent"></span>
+    <div class="rate-line" id="m-rate"></div>
+    <div class="sector-strip" id="m-sectors"></div>
+  </div>
+
+  <div id="event-area"></div>
+
+  <div class="section-lbl">On the market &amp; your portfolio</div>
+  <div class="grid" id="grid"></div>
+
+  <div class="endbar"><button class="btn full" id="end-year-btn" onclick="endYear()">End year →</button></div>
+</div>
+
+<!-- DEBRIEF -->
+<div id="s-debrief" class="screen">
+  <div class="masthead"><div class="masthead-tag">Ten years later</div><h1 id="db-headline">The Final Reckoning</h1></div>
+  <div class="card">
+    <div class="debrief-grade"><div class="title" id="db-net"></div><div class="sub" id="db-net-sub"></div></div>
+    <div style="margin-top:14px">
+      <div class="scoreline"><span>Started with</span><span class="big">£1,000,000</span></div>
+      <div class="scoreline"><span>Ended with (net worth)</span><span class="big" id="db-final"></span></div>
+      <div class="scoreline"><span>Total return</span><span class="big" id="db-return"></span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="font-size:17px" id="db-grade"></div>
+    <div class="card-sub" id="db-grade-sub"></div>
+    <div class="skillcard"><div class="lbl">Your investing skill — the timing read</div><div class="txt" id="db-skill"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="font-size:16px">Your investment style</div>
+    <div class="card-sub">Judging by how you actually behaved — not what you'd call yourself.</div>
+    <div class="style-name" id="db-style-name"></div>
+    <div class="spectrum"><div class="marker" id="db-style-marker" style="left:15%"></div></div>
+    <div class="spectrum-labels"><b>Core</b><b>Value-Add</b><b>Opportunistic</b></div>
+    <div class="style-why" id="db-style-why"></div>
+    <div class="style-fit" id="db-style-fit"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="font-size:16px">The numbers — a mini financial summary</div>
+    <div class="card-sub" style="margin-bottom:2px">Your ten years, broken down the way a real fund report would.</div>
+    <div id="db-financials"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="font-size:16px">Where you made (or lost) money, by sector</div>
+    <div class="card-sub" style="margin-bottom:4px">Capital gains and losses booked in each sector — the rotation, in pounds.</div>
+    <div id="db-sectors"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="font-size:16px">How each sector's value moved</div>
+    <div class="card-sub" style="margin-bottom:4px">Value of £1 invested in each sector, tracked across the ten years. Watch them diverge.</div>
+    <div class="chart-wrap" id="chart-value"></div>
+    <div class="chart-legend" id="legend-value"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="font-size:16px">How each sector's yield moved</div>
+    <div class="card-sub" style="margin-bottom:4px">Remember: yield up = value down. This is the mirror image of the chart above.</div>
+    <div class="chart-wrap" id="chart-yield"></div>
+    <div class="chart-legend" id="legend-yield"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="font-size:16px">What happened this time</div>
+    <div class="card-sub" id="db-market"></div>
+  </div>
+
+  <div class="btn-row"><button class="btn ghost full" onclick="location.reload()">← Menu</button><button class="btn full" onclick="startGame()">Play again →</button></div>
+  <div class="foot">Sectors and events are randomised each play — the yield idea stays exactly this real.</div>
+</div>
+
+</div><!-- /shell -->
+
+<!-- BUY MODAL -->
+<div class="modal-bg" id="buy-modal"><div class="modal">
+  <h3 id="bm-title"></h3>
+  <div class="card-sub" id="bm-sub" style="margin-bottom:10px"></div>
+  <div class="row"><span>Price today</span><span id="bm-price"></span></div>
+  <div class="row"><span>Annual rent</span><span id="bm-rent"></span></div>
+  <div class="row"><span>Yield</span><span id="bm-yield"></span></div>
+  <div class="ltv-wrap"><label><span>Borrow (loan-to-value): <b id="bm-ltv-val">0%</b></span><span id="bm-loan-amt"></span></label>
+    <input type="range" id="bm-ltv" min="0" max="70" step="5" value="0" oninput="updateBuyModal()"></div>
+  <div class="row"><span>Cash you'll put in</span><span id="bm-cash-needed"></span></div>
+  <div class="row"><span>Loan interest / yr (at <span id="bm-rate"></span>)</span><span id="bm-interest"></span></div>
+  <div class="row"><span>Rent after interest / yr</span><span id="bm-netrent"></span></div>
+  <div class="warn" id="bm-warn"></div>
+  <div class="btn-row" style="margin-top:14px"><button class="btn ghost sm" onclick="closeBuy()">Cancel</button><button class="btn sm" id="bm-confirm" onclick="confirmBuy()">Buy it</button></div>
+</div></div>
+
+<!-- DEV MODAL -->
+<div class="modal-bg" id="dev-modal"><div class="modal">
+  <h3>🏗️ Start the development?</h3>
+  <div class="card-sub" style="margin-bottom:10px" id="dv-sub"></div>
+  <div class="row"><span>Cost to build</span><span id="dv-cost"></span></div>
+  <div class="row"><span>Spread over</span><span>3 years (no rent while building)</span></div>
+  <div class="row"><span>Risk</span><span>may overrun toward 5 years</span></div>
+  <div class="row"><span>Worth when finished (est.)</span><span id="dv-gdv"></span></div>
+  <div class="ltv-wrap"><label><span>Borrow to fund it: <b id="dv-ltv-val">0%</b></span><span id="dv-loan-amt"></span></label>
+    <input type="range" id="dv-ltv" min="0" max="60" step="10" value="0" oninput="updateDevModal()"></div>
+  <div class="row"><span>Cash you'll commit (over 3 yrs)</span><span id="dv-cash"></span></div>
+  <div class="row"><span>First payment now</span><span id="dv-first"></span></div>
+  <div class="warn" id="dv-warn"></div>
+  <div class="btn-row" style="margin-top:14px"><button class="btn ghost sm" onclick="closeDev()">Not now</button><button class="btn dev sm" id="dv-confirm" onclick="confirmDev()">Break ground</button></div>
+</div></div>
+
+<script>
+/* ============ CONFIG ============ */
+const START_CASH=1000000, YEARS=10, MAX_LTV=70;
+const PENALTY_RATE=0.14;   // overdraft interest charged on a negative cash balance
+const FIRE_DISCOUNT=0.15;  // haircut when the bank forces a sale
+
+// Sector definitions. Each builds a randomised yield path around a base story.
+// start yield, drift over 10y (+ = weakens/value falls), vol (swing size), hump (+1 strengthen mid, -1 weaken mid)
+const SECTOR_DEF={
+  office:    {lbl:"Office",       start:0.062, drift:+0.022, vol:0.005, hump:-1, col:'var(--office)'},
+  retail:    {lbl:"High-St Retail",start:0.072, drift:+0.026, vol:0.006, hump:-1, col:'var(--retail)'},
+  retailpark:{lbl:"Retail Park",  start:0.068, drift:-0.012, vol:0.005, hump:+1, col:'var(--retailpark)'},
+  industrial:{lbl:"Industrial",   start:0.058, drift:-0.016, vol:0.009, hump:+1, col:'var(--industrial)'},
+  resi:      {lbl:"Residential",  start:0.052, drift:-0.007, vol:0.003, hump:+1, col:'var(--resi)'}
+};
+const SECTOR_KEYS=Object.keys(SECTOR_DEF);
+
+// Property catalogue (each tied to a sector). Own-price uses its sector's yield + a small asset spread.
+const CATALOGUE=[
+  {id:"a",name:"City Office",sector:"office",rent:70000,spread:0.000},
+  {id:"f",name:"Suburban Office",sector:"office",rent:40000,spread:0.010},
+  {id:"b",name:"High-St Shop",sector:"retail",rent:52000,spread:0.008},
+  {id:"d",name:"Retail Park Unit",sector:"retailpark",rent:88000,spread:0.006},
+  {id:"e",name:"Warehouse",sector:"industrial",rent:46000,spread:0.004},
+  {id:"h",name:"Logistics Shed",sector:"industrial",rent:95000,spread:0.006},
+  {id:"c",name:"BTR Flats",sector:"resi",rent:60000,spread:0.000},
+  {id:"g",name:"Studio Block",sector:"resi",rent:34000,spread:0.004}
+];
+
+const RATE_PATH_BASE=[0.045,0.040,0.038,0.035,0.035,0.045,0.060,0.065,0.055,0.050];
+
+/* ============ STATE ============ */
+let year=0, cash=0, props=[], lastPrices={}, buyingId=null;
+let sectorYields={}; // key -> [10]
+let ratePath=[];
+let decisions=[], dev=null;
+// accounting accumulators (for end-game financial summary)
+let acct={ rent:0, interest:0, penalty:0, capitalBySector:{}, purchases:0, sales:0, peakDebt:0, fireSales:0, loansTaken:0, geared:0 };
+let sentiment=[];
+
+/* ============ HELPERS ============ */
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo({top:0}); }
+const fmt=n=>'£'+Math.round(n).toLocaleString();
+const fmtK=n=>{ n=Math.round(n); const a=Math.abs(n); if(a>=1e6) return '£'+(n/1e6).toFixed(2)+'m'; if(a>=1e3) return '£'+Math.round(n/1e3)+'k'; return '£'+n; };
+const pct=y=>(y*100).toFixed(1)+'%';
+function secYield(sector){ return sectorYields[sector][year]; }
+function ownYield(p){ return sectorYields[p.sector][year]+p.spread; }
+function priceOf(p){ return p.rent/ownYield(p); }
+function yieldClass(y){ if(y>=0.070) return 'yield-hi'; if(y>=0.058) return 'yield-mid'; return 'yield-lo'; }
+
+/* build a randomised yield path for a sector */
+function buildYieldPath(s,seed){
+  let x=Math.abs(Math.floor(seed))%233280; if(x===0)x=1;
+  const rnd=()=>{ x=(x*9301+49297)%233280; return x/233280; };
+  const path=[];
+  for(let y=0;y<YEARS;y++){
+    const t=y/(YEARS-1);
+    const cyclical=Math.sin(t*Math.PI)*s.vol*3*s.hump;
+    const noise=(rnd()-0.5)*2*s.vol;
+    let yld=s.start + s.drift*t + cyclical + noise;
+    yld=Math.max(0.040, Math.min(0.115, yld));
+    path.push(Math.round(yld*1000)/1000);
+  }
+  return path;
+}
+
+/* ============ GAME FLOW ============ */
+function startGame(){
+  year=0; cash=START_CASH;
+  const runSeed=Math.floor(Math.random()*1e6);
+  sectorYields={};
+  SECTOR_KEYS.forEach((k,i)=>{ sectorYields[k]=buildYieldPath(SECTOR_DEF[k], runSeed+ i*777 + 13); });
+  // rate path with a little noise
+  ratePath=RATE_PATH_BASE.map(r=> Math.max(0.02, r + (Math.random()-0.5)*0.01));
+  // sentiment from average yield direction
+  sentiment=[];
+  for(let y=0;y<YEARS;y++){
+    const avg=SECTOR_KEYS.reduce((a,k)=>a+sectorYields[k][y],0)/SECTOR_KEYS.length;
+    const prev=y>0?SECTOR_KEYS.reduce((a,k)=>a+sectorYields[k][y-1],0)/SECTOR_KEYS.length:avg;
+    if(avg<0.055) sentiment.push(["boom","Optimistic"]);
+    else if(avg>prev+0.002) sentiment.push(["down","Nervous"]);
+    else if(avg>0.075) sentiment.push(["down","Weak"]);
+    else if(avg>prev) sentiment.push(["cooling","Cooling"]);
+    else sentiment.push(["steady","Steady"]);
+  }
+  props=CATALOGUE.map(c=>({...c, owned:false, loan:0}));
+  lastPrices={}; props.forEach(p=>lastPrices[p.id]=priceOf(p));
+  decisions=[];
+  acct={ rent:0, interest:0, penalty:0, capitalBySector:{}, purchases:0, sales:0, peakDebt:0, fireSales:0, loansTaken:0, geared:0 };
+  SECTOR_KEYS.forEach(k=>acct.capitalBySector[k]=0);
+  dev=null;
+  document.getElementById('event-area').innerHTML='';
+  show('s-game'); render();
+}
+
+function devCurrentValue(){
+  if(!dev) return 0;
+  if(dev.done) return dev.gdv * (dev.sector? (SECTOR_DEF[dev.sector].start/secYield(dev.sector)) : 1); // finished value floats a bit with market
+  return dev.spent; // during build, counts at money-in
+}
+function netWorth(){
+  let port=0, debt=0;
+  props.forEach(p=>{ if(p.owned){ port+=priceOf(p); debt+=p.loan; } });
+  if(dev){ port+=devCurrentValue(); debt+=dev.loan; }
+  return cash+port-debt;
+}
+
+function render(){
+  let port=0, debt=0;
+  props.forEach(p=>{ if(p.owned){ port+=priceOf(p); debt+=p.loan; } });
+  if(dev){ port+=devCurrentValue(); debt+=dev.loan; }
+  document.getElementById('h-cash').textContent=fmtK(cash);
+  document.getElementById('h-port').textContent=fmtK(port);
+  document.getElementById('h-debt').textContent=fmtK(debt);
+  document.getElementById('h-net').textContent=fmtK(cash+port-debt);
+
+  document.getElementById('m-year').textContent=`Year ${year+1} / ${YEARS}`;
+  const s=sentiment[year]; const sent=document.getElementById('m-sent');
+  sent.className='sentiment '+s[0]; sent.textContent=s[1];
+  document.getElementById('m-rate').textContent=`Borrowing costs ${pct(ratePath[year])} a year. Each sector has its own yield — high yield = cheap, low = dear.`;
+
+  // sector strip: show each sector yield + move arrow vs last year
+  const strip=document.getElementById('m-sectors'); strip.innerHTML='';
+  SECTOR_KEYS.forEach(k=>{
+    const y=sectorYields[k][year];
+    let arrow='';
+    if(year>0){ const dy=y-sectorYields[k][year-1]; if(Math.abs(dy)>0.0005){ // yield down = value UP
+      arrow = dy<0? '<span class="mv">▲</span>' : '<span class="mv">▼</span>'; } }
+    const pill=document.createElement('span');
+    pill.className='sec-pill'; pill.style.background=SECTOR_DEF[k].col;
+    pill.innerHTML=`${SECTOR_DEF[k].lbl} ${pct(y)} ${arrow}`;
+    strip.appendChild(pill);
+  });
+
+  const grid=document.getElementById('grid'); grid.innerHTML='';
+  // owned first
+  const ordered=[...props].sort((a,b)=>(b.owned?1:0)-(a.owned?1:0));
+  ordered.forEach(p=>grid.appendChild(propCard(p)));
+  grid.appendChild(devCard());
+
+  document.getElementById('end-year-btn').textContent = year===YEARS-1 ? 'Finish & see results →' : 'End year →';
+}
+
+function propCard(p){
+  const price=priceOf(p); const y=ownYield(p);
+  const el=document.createElement('div'); el.className='prop'+(p.owned?' owned':'');
+  let moveHtml='';
+  if(lastPrices[p.id]!=null){ const d=price-lastPrices[p.id]; if(Math.abs(d)>500){ const up=d>0; moveHtml=`<span class="price-move ${up?'pm-up':'pm-down'}">${up?'▲':'▼'} ${fmtK(Math.abs(d))}</span>`; } }
+  el.innerHTML=`
+    <div class="prop-top"><div><span class="prop-type type-${p.sector}">${SECTOR_DEF[p.sector].lbl}</span><div class="prop-name">${p.name}</div></div>${p.owned?'<span class="owned-badge">✓ Owned</span>':''}</div>
+    <div class="prop-fig"><span class="lab">Rent / yr</span><span>${fmt(p.rent)}</span></div>
+    <div class="prop-fig"><span class="lab">Yield</span><span class="prop-yield ${yieldClass(y)}">${pct(y)}</span></div>
+    ${p.owned&&p.loan>0?`<div class="prop-fig"><span class="lab">Loan owed</span><span>${fmtK(p.loan)}</span></div>`:''}
+    <div class="prop-fig" style="align-items:baseline"><span class="prop-price">${fmtK(price)}</span>${moveHtml}</div>
+    <div class="prop-actions">${ p.owned
+      ? `<button class="btn sell sm" onclick="sellProp('${p.id}')">Sell${p.loan>0?' (repay loan)':''}</button>`
+      : `<button class="btn sm" onclick="openBuy('${p.id}')" ${price*(1-MAX_LTV/100)>cash?'disabled':''}>Buy</button>` }</div>`;
+  return el;
+}
+
+function devCard(){
+  const el=document.createElement('div'); el.className='prop dev-card'+(dev?' owned':'');
+  if(!dev){
+    // offer to start
+    const cost=1200000, gdv=2100000;
+    el.innerHTML=`
+      <div class="prop-top"><div><span class="prop-type type-dev">Development</span><div class="prop-name">Canalside Scheme</div></div></div>
+      <div class="prop-fig"><span class="lab">Build cost</span><span>${fmtK(cost)}</span></div>
+      <div class="prop-fig"><span class="lab">Worth when done</span><span>~${fmtK(gdv)}</span></div>
+      <div class="prop-fig"><span class="lab">Build time</span><span>3 yrs (may overrun)</span></div>
+      <div class="dev-note">No rent while building · biggest prize, biggest risk</div>
+      <div class="prop-actions"><button class="btn dev sm" onclick="openDev()" ${year>YEARS-4?'disabled':''}>${year>YEARS-4?'Too late to start':'Start building'}</button></div>`;
+  } else {
+    const pctDone=Math.min(100, Math.round(dev.spent/dev.cost*100));
+    if(dev.done){
+      const val=devCurrentValue();
+      el.innerHTML=`
+        <div class="prop-top"><div><span class="prop-type type-dev">Development</span><div class="prop-name">${dev.name}</div></div><span class="owned-badge">✓ Built</span></div>
+        <div class="prop-fig"><span class="lab">Spent building</span><span>${fmtK(dev.spent)}</span></div>
+        ${dev.loan>0?`<div class="prop-fig"><span class="lab">Loan owed</span><span>${fmtK(dev.loan)}</span></div>`:''}
+        <div class="prop-fig" style="align-items:baseline"><span class="prop-price">${fmtK(val)}</span></div>
+        <div class="dev-note">Finished — sell it to bank the profit</div>
+        <div class="prop-actions"><button class="btn sell sm" onclick="sellDev()">Sell${dev.loan>0?' (repay loan)':''}</button></div>`;
+    } else {
+      el.innerHTML=`
+        <div class="prop-top"><div><span class="prop-type type-dev">Development</span><div class="prop-name">${dev.name}</div></div><span class="owned-badge">Building</span></div>
+        <div class="prop-fig"><span class="lab">Spent so far</span><span>${fmtK(dev.spent)} / ${fmtK(dev.cost)}</span></div>
+        <div class="prop-fig"><span class="lab">Year of build</span><span>${dev.yearsBuilt} of ${dev.duration}</span></div>
+        ${dev.loan>0?`<div class="prop-fig"><span class="lab">Loan owed</span><span>${fmtK(dev.loan)}</span></div>`:''}
+        <div class="dev-progress"><div style="width:${pctDone}%"></div></div>
+        <div class="dev-note">Costs cash each year, no rent yet${dev.overran?' · ⚠ overran!':''}</div>`;
+    }
+  }
+  return el;
+}
+
+/* ============ BUY ============ */
+function openBuy(id){
+  buyingId=id; const p=props.find(x=>x.id===id); const price=priceOf(p); const y=ownYield(p);
+  document.getElementById('bm-title').textContent='Buy: '+p.name;
+  document.getElementById('bm-sub').textContent=SECTOR_DEF[p.sector].lbl+' · '+(y>=0.07?'high-yield (cheap right now)':y>=0.058?'fair-priced':'low-yield (pricey right now)');
+  document.getElementById('bm-price').textContent=fmt(price);
+  document.getElementById('bm-rent').textContent=fmt(p.rent)+' / yr';
+  document.getElementById('bm-yield').textContent=pct(y);
+  document.getElementById('bm-rate').textContent=pct(ratePath[year]);
+  document.getElementById('bm-ltv').value=0; updateBuyModal();
+  document.getElementById('buy-modal').classList.add('show');
+}
+function updateBuyModal(){
+  const p=props.find(x=>x.id===buyingId); const price=priceOf(p);
+  const ltv=+document.getElementById('bm-ltv').value; const loan=price*ltv/100; const cashNeeded=price-loan;
+  const interest=loan*ratePath[year]; const netRent=p.rent-interest;
+  document.getElementById('bm-ltv-val').textContent=ltv+'%';
+  document.getElementById('bm-loan-amt').textContent=loan>0?('borrow '+fmtK(loan)):'no loan';
+  document.getElementById('bm-cash-needed').textContent=fmt(cashNeeded);
+  document.getElementById('bm-interest').textContent=fmt(interest);
+  document.getElementById('bm-netrent').textContent=fmt(netRent)+(netRent<0?' ⚠️':'');
+  const warn=document.getElementById('bm-warn'); const confirm=document.getElementById('bm-confirm'); let msg='';
+  if(cashNeeded>cash) msg="Not enough cash for that deposit — borrow more, or you can't afford this.";
+  else if(netRent<0) msg="Careful: rent won't cover the loan interest — this drains cash each year.";
+  if(msg){ warn.textContent=msg; warn.classList.add('show'); } else warn.classList.remove('show');
+  confirm.disabled=cashNeeded>cash;
+}
+function closeBuy(){ document.getElementById('buy-modal').classList.remove('show'); buyingId=null; }
+function confirmBuy(){
+  const p=props.find(x=>x.id===buyingId); const price=priceOf(p);
+  const ltv=+document.getElementById('bm-ltv').value; const loan=price*ltv/100; const cashNeeded=price-loan;
+  if(cashNeeded>cash) return;
+  cash-=cashNeeded; p.owned=true; p.loan=loan; p.costBasis=price;
+  acct.purchases+=price; acct.loansTaken+=loan;
+  decisions.push({type:'buy',sector:p.sector,ownYield:ownYield(p),year});
+  closeBuy(); render();
+}
+
+/* ============ SELL ============ */
+function sellProp(id){
+  const p=props.find(x=>x.id===id); const price=priceOf(p);
+  cash+=price-p.loan;
+  const gain=price-(p.costBasis!=null?p.costBasis:price);
+  acct.capitalBySector[p.sector]=(acct.capitalBySector[p.sector]||0)+gain;
+  acct.sales+=price;
+  decisions.push({type:'sell',sector:p.sector,ownYield:ownYield(p),year});
+  p.owned=false; p.loan=0; p.costBasis=null; render();
+}
+
+/* ============ DEVELOPMENT ============ */
+function openDev(){
+  document.getElementById('dv-sub').textContent='A canalside mixed-use build. Costs money for three years with nothing coming in — then it is worth well over cost. But builds can overrun.';
+  document.getElementById('dv-cost').textContent=fmt(1200000);
+  document.getElementById('dv-gdv').textContent='~'+fmt(2100000);
+  document.getElementById('dv-ltv').value=0; updateDevModal();
+  document.getElementById('dev-modal').classList.add('show');
+}
+function updateDevModal(){
+  const cost=1200000; const ltv=+document.getElementById('dv-ltv').value; const loan=cost*ltv/100;
+  const cashTotal=cost-loan; const first=cashTotal/3;
+  document.getElementById('dv-ltv-val').textContent=ltv+'%';
+  document.getElementById('dv-loan-amt').textContent=loan>0?('borrow '+fmtK(loan)):'no loan';
+  document.getElementById('dv-cash').textContent=fmt(cashTotal);
+  document.getElementById('dv-first').textContent=fmt(first);
+  const warn=document.getElementById('dv-warn'); const confirm=document.getElementById('dv-confirm'); let msg='';
+  if(first>cash) msg="Not enough cash for the first year's payment. Borrow more or wait.";
+  else if(cashTotal>cash) msg="You can make the first payment, but keep enough cash for the next two years — a development that starves mid-build is dangerous.";
+  if(msg){ warn.textContent=msg; warn.classList.add('show'); } else warn.classList.remove('show');
+  confirm.disabled=first>cash;
+}
+function closeDev(){ document.getElementById('dev-modal').classList.remove('show'); }
+function confirmDev(){
+  const cost=1200000; const ltv=+document.getElementById('dv-ltv').value; const loan=cost*ltv/100;
+  const cashTotal=cost-loan; const perYear=cashTotal/3;
+  if(perYear>cash) return;
+  dev={ name:"Canalside Scheme", sector:"resi", cost, gdv:2100000, loan, cashTotal, perYear,
+        spent:0, yearsBuilt:0, duration:3, done:false, overran:false, startYear:year };
+  acct.purchases+=cost; acct.loansTaken+=loan;
+  decisions.push({type:'dev-start',year});
+  closeDev(); render();
+}
+function sellDev(){
+  if(!dev||!dev.done) return;
+  const val=devCurrentValue();
+  cash+=val-dev.loan;
+  const gain=val-dev.spent;
+  acct.capitalBySector[dev.sector]=(acct.capitalBySector[dev.sector]||0)+gain;
+  acct.sales+=val;
+  decisions.push({type:'dev-sell',year,profit:gain});
+  dev=null; render();
+}
+
+/* advance the development one year; returns an event object or null */
+function progressDev(){
+  if(!dev||dev.done) return null;
+  // pay this year's build cost (cash portion); loan portion already 'borrowed' up front conceptually
+  const pay=Math.min(dev.perYear, dev.cost/dev.duration); // cash out per year
+  // spend from cash
+  cash-=dev.perYear;
+  dev.spent+=dev.cost/dev.duration; // money-in value rises toward cost
+  dev.yearsBuilt++;
+  // overrun risk: ~28% each remaining scheduled year while under 5y total
+  let evt=null;
+  if(dev.yearsBuilt>=dev.duration){
+    // scheduled to finish — but maybe overrun
+    if(!dev.overranChecked && dev.duration<5 && Math.random()<0.32){
+      dev.duration+=1; dev.overran=true; dev.overranChecked=false;
+      // an overrun adds extra cost
+      const extra=dev.cost*0.15; dev.cost+=extra;
+      dev.perYear=(dev.cashTotal*(dev.cost/1200000))/dev.duration; // rough re-spread
+      evt={cls:'dev',h:'Development overran',b:`Your ${dev.name.toLowerCase()} hit delays — it'll take another year and cost about ${fmt(extra)} more. This is the risk of building.`};
+    } else {
+      dev.done=true;
+      evt={cls:'dev',h:'Development finished! ',b:`Your ${dev.name.toLowerCase()} is complete and now worth around ${fmt(devCurrentValue())} — you spent ${fmt(dev.spent)}. Sell it to bank the gain (or hold and let its value ride the market).`};
+    }
+  } else {
+    evt={cls:'dev',h:'Build in progress',b:`Year ${dev.yearsBuilt} of ${dev.duration} on ${dev.name.toLowerCase()}: ${fmt(dev.perYear)} spent, still no rent coming in.`};
+  }
+  return evt;
+}
+
+/* ============ END YEAR ============ */
+function endYear(){
+  const owned=props.filter(p=>p.owned);
+  let rentIn=0, interestOut=0;
+  owned.forEach(p=>{ rentIn+=p.rent; interestOut+=p.loan*ratePath[year]; });
+  if(dev) interestOut+=dev.loan*ratePath[year];
+
+  // random market event on owned rental props
+  let evt=null;
+  if(owned.length){
+    const anyWeak=SECTOR_KEYS.some(k=>sectorYields[k][year]>=0.085);
+    const chance=anyWeak?0.5:0.38;
+    if(Math.random()<chance){
+      const kind=Math.random();
+      if(kind<0.45){ const v=owned[Math.floor(Math.random()*owned.length)]; rentIn-=v.rent;
+        evt={cls:'bad',h:'Void: '+v.name,b:`Your ${v.name.toLowerCase()} sat empty this year — no rent (−${fmt(v.rent)}).`}; }
+      else if(kind<0.75){ const v=owned[Math.floor(Math.random()*owned.length)]; const loss=v.rent*0.5; rentIn-=loss;
+        evt={cls:'bad',h:'Tenant trouble: '+v.name,b:`Arrears at your ${v.name.toLowerCase()} — lost about half a year's rent (−${fmt(loss)}).`}; }
+      else { const v=owned[Math.floor(Math.random()*owned.length)]; const gain=v.rent*0.4; rentIn+=gain;
+        evt={cls:'good',h:'Rent review: '+v.name,b:`A rent review on your ${v.name.toLowerCase()} brought an extra ${fmt(gain)} this year.`}; }
+    }
+  }
+  // PENALTY: if you START the year with negative cash, you're charged overdraft interest on it
+  let penaltyThisYear=0;
+  if(cash<0){ penaltyThisYear = -cash*PENALTY_RATE; }
+
+  cash += rentIn - interestOut - penaltyThisYear;
+  // accounting
+  acct.rent += rentIn;
+  acct.interest += interestOut;
+  acct.penalty += penaltyThisYear;
+
+  // development progresses (may generate its own event, which takes priority to show)
+  const devEvt=progressDev();
+
+  // FIRE-SALE: if still negative after the year's flows, the bank forces a discounted sale
+  let fireEvt=null;
+  if(cash<0){
+    // sell the single most valuable owned asset (incl. finished dev) at a discount to plug the hole
+    let best=null, bestVal=0, isDev=false;
+    props.forEach(p=>{ if(p.owned){ const v=priceOf(p)-p.loan; if(v>bestVal){ bestVal=v; best=p; isDev=false; } } });
+    if(dev&&dev.done){ const v=devCurrentValue()-dev.loan; if(v>bestVal){ bestVal=v; best=dev; isDev=true; } }
+    if(best){
+      const gross=isDev?devCurrentValue():priceOf(best);
+      const discounted=gross*(1-FIRE_DISCOUNT);
+      const proceeds=discounted-best.loan;
+      cash+=proceeds;
+      const basis=isDev?best.spent:(best.costBasis!=null?best.costBasis:gross);
+      const gain=discounted-basis; // realised at the fire-sale (discounted) price
+      acct.capitalBySector[best.sector]=(acct.capitalBySector[best.sector]||0)+gain;
+      acct.sales+=discounted; acct.fireSales++;
+      fireEvt={cls:'bad',h:'Forced sale!',b:`You stayed in the red, so the bank forced a sale of your ${(isDev?best.name:best.name).toLowerCase()} at a ${Math.round(FIRE_DISCOUNT*100)}% knock-down (${fmt(discounted)}) to cover the shortfall. Over-borrowing has a price.`};
+      if(isDev){ dev=null; } else { best.owned=false; best.loan=0; best.costBasis=null; }
+    }
+  }
+  // track peak debt for the summary
+  { let d=0; props.forEach(p=>{ if(p.owned) d+=p.loan; }); if(dev) d+=dev.loan; if(cash<0) d+=-cash; if(d>acct.peakDebt) acct.peakDebt=d; }
+
+  lastPrices={}; props.forEach(p=>lastPrices[p.id]=priceOf(p));
+  year++;
+  if(year>=YEARS){ finish(); return; }
+
+  const showEvt=fireEvt||devEvt||evt;
+  let html=`<div class="event ${showEvt?showEvt.cls:'good'}">`;
+  if(showEvt){ html+=`<div class="eh">${showEvt.h}</div><div>${showEvt.b}</div>`; }
+  else html+=`<div class="eh">A quiet year</div><div>Rent came in, no surprises.</div>`;
+  const extras=[];
+  if(fireEvt&&devEvt) extras.push(devEvt.h.toLowerCase());
+  if(fireEvt&&evt) extras.push(evt.h.toLowerCase());
+  else if(!fireEvt&&devEvt&&evt) extras.push(evt.h.toLowerCase());
+  if(extras.length) html+=`<div style="margin-top:6px;font-size:12px;color:var(--muted)">Also: ${extras.join('; ')}.</div>`;
+  if(penaltyThisYear>0) html+=`<div style="margin-top:6px;font-size:12px;color:var(--danger)">Overdraft penalty charged: −${fmt(penaltyThisYear)} (${Math.round(PENALTY_RATE*100)}% on your negative balance).</div>`;
+  if(owned.length){ html+=`<div style="margin-top:6px;font-size:12px;color:var(--muted)">Rent ${fmt(rentIn)} · interest ${fmt(interestOut)} · net ${fmt(rentIn-interestOut)}</div>`; }
+  if(cash<0){ html+=`<div style="margin-top:6px;font-size:12px;color:var(--danger)">⚠ Still in the red (${fmt(cash)}). You'll pay ${Math.round(PENALTY_RATE*100)}% penalty interest next year — sell something to climb out.</div>`; }
+  html+=`</div>`;
+  document.getElementById('event-area').innerHTML=html;
+  render(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============ FINISH & SCORING ============ */
+function finish(){
+  const finalNet=netWorth(); const ret=(finalNet/START_CASH-1)*100;
+  show('s-debrief');
+  document.getElementById('db-net').textContent=fmt(finalNet);
+  document.getElementById('db-net-sub').textContent=finalNet>=START_CASH?'You grew the fund.':'The fund shrank.';
+  document.getElementById('db-final').textContent=fmt(finalNet);
+  document.getElementById('db-return').textContent=(ret>=0?'+':'')+ret.toFixed(0)+'%';
+
+  // skill read: good buy = bought a sector when ITS yield was above that sector's own average (cheap for that sector)
+  // good sell = sold when its yield was below its own average (dear)
+  const secAvg={}; SECTOR_KEYS.forEach(k=>{ secAvg[k]=sectorYields[k].reduce((a,b)=>a+b,0)/YEARS; });
+  const buys=decisions.filter(d=>d.type==='buy'), sells=decisions.filter(d=>d.type==='sell');
+  let smart=0;
+  buys.forEach(d=>{ if(d.ownYield>=secAvg[d.sector]) smart++; });
+  sells.forEach(d=>{ if(d.ownYield<secAvg[d.sector]) smart++; });
+  const totalTimed=buys.length+sells.length; const skillPct=totalTimed?smart/totalTimed:0;
+  const builtOk=decisions.some(d=>d.type==='dev-sell');
+
+  let band;
+  const good=ret>=50, ok=ret>=15, bad=ret<0;
+  if(skillPct>=0.7&&ok) band=3; else if(skillPct>=0.5||good) band=2; else if(skillPct>=0.3||ok) band=1; else band=0;
+  if(bad&&band>1) band=1;
+  const grades=[
+    {t:"Speculator 🎲",s:"Big swings, shaky reasoning — more luck than judgement."},
+    {t:"Learner 📎",s:"Some sound calls, some mistimed. The instinct is forming."},
+    {t:"Sound Investor 👍",s:"Mostly bought cheap and sold dear — solid, repeatable judgement."},
+    {t:"Sharp Operator 🌟",s:"Great timing and a strong return. You read the sectors well."}
+  ];
+  document.getElementById('db-grade').textContent=grades[band].t;
+  document.getElementById('db-grade-sub').textContent=grades[band].s;
+
+  let skillTxt='';
+  if(totalTimed===0){ skillTxt="You barely traded — hard to time a market you don't act in. Next time, buy a sector when its yield is high (cheap) and sell when it's low (dear)."; }
+  else {
+    skillTxt=`You made ${buys.length} purchase${buys.length===1?'':'s'} and ${sells.length} sale${sells.length===1?'':'s'}. <b>${smart} of ${totalTimed}</b> were well-timed for that sector — buying it while cheap, or selling while dear. `;
+    if(skillPct>=0.7) skillTxt+="That's the core skill, and you've got it.";
+    else if(skillPct>=0.4) skillTxt+="A decent feel — watch each sector's own yield, not just the overall mood.";
+    else skillTxt+="Mostly mistimed: you tended to buy dear and sell cheap. High yield = cheap, low = dear, per sector.";
+  }
+  if(builtOk){ const p=decisions.find(d=>d.type==='dev-sell'); skillTxt+=` You also completed and sold a development${p&&p.profit>0?' for a '+fmt(p.profit)+' gain':''} — the highest-risk, highest-reward play.`; }
+  else if(decisions.some(d=>d.type==='dev-start')){ skillTxt+=" You started a development but didn't sell it before the end — its value counts, but you never crystallised the gain."; }
+  document.getElementById('db-skill').innerHTML=skillTxt;
+
+  // ----- CHARTS -----
+  drawValueChart(); drawYieldChart();
+
+  // market recap: name the best/worst sector
+  let best=null,worst=null;
+  SECTOR_KEYS.forEach(k=>{
+    const v0=1/sectorYields[k][0], v9=1/sectorYields[k][YEARS-1]; const chg=(v9/v0-1)*100;
+    if(best===null||chg>best.chg) best={k,chg}; if(worst===null||chg<worst.chg) worst={k,chg};
+  });
+  document.getElementById('db-market').innerHTML=`This time, <b style="color:${SECTOR_DEF[best.k].col}">${SECTOR_DEF[best.k].lbl}</b> was the strongest sector (values ${best.chg>=0?'up':'down'} ~${Math.abs(Math.round(best.chg))}% end-to-end), while <b style="color:${SECTOR_DEF[worst.k].col}">${SECTOR_DEF[worst.k].lbl}</b> was the weakest (${worst.chg>=0?'up':'down'} ~${Math.abs(Math.round(worst.chg))}%). The lesson: sectors don't move together — the same money does very differently depending which one you backed. And rents barely moved; almost all of this was <b>yield</b>.`;
+
+  // ----- FINANCIAL SUMMARY -----
+  // Realised capital already in acct.capitalBySector. Add UNREALISED gains on assets still held at close.
+  let unrealised=0;
+  const capBySector={}; SECTOR_KEYS.forEach(k=>capBySector[k]=acct.capitalBySector[k]||0);
+  props.forEach(p=>{ if(p.owned){ const g=priceOf(p)-(p.costBasis!=null?p.costBasis:priceOf(p)); capBySector[p.sector]+=g; unrealised+=g; } });
+  if(dev){ // dev still held: value vs spent
+    const g=devCurrentValue()-dev.spent; capBySector[dev.sector]=(capBySector[dev.sector]||0)+g; unrealised+=g;
+  }
+  const totalCapital=SECTOR_KEYS.reduce((a,k)=>a+capBySector[k],0);
+  const totalRent=acct.rent;
+  const totalInterest=acct.interest;
+  const totalPenalty=acct.penalty;
+  const netProfit=finalNet-START_CASH;
+
+  // end-of-game ratios
+  let endPort=0, endDebt=0;
+  props.forEach(p=>{ if(p.owned){ endPort+=priceOf(p); endDebt+=p.loan; } });
+  if(dev){ endPort+=devCurrentValue(); endDebt+=dev.loan; }
+  const endLTV = endPort>0 ? (endDebt/endPort*100) : 0;
+  const roe = (netProfit/START_CASH*100); // return on the £1m equity you started with
+  // income yield on cost: total rent / total capital deployed (purchases)
+  const yieldOnCost = acct.purchases>0 ? (totalRent/ (acct.purchases* (YEARS/ Math.max(1,YEARS)) ) /1) : 0;
+  const avgYieldOnCost = acct.purchases>0 ? (totalRent/YEARS)/ (acct.purchases/Math.max(1,(decisions.filter(d=>d.type==='buy').length||1))) : 0;
+
+  const line=(label,val,cls,hint)=>`<div class="scoreline"><span>${label}${hint?` <span style="color:var(--faint);font-size:11px">${hint}</span>`:''}</span><span class="big" ${cls?`style="color:${cls}"`:''}>${val}</span></div>`;
+  let fin=`<div style="margin-top:2px">`;
+  fin+=`<div class="section-lbl" style="margin:2px 0 4px">Where your money came from</div>`;
+  fin+=line("Rental income collected", fmt(totalRent), 'var(--up)', '(the income return)');
+  fin+=line("Capital gain / loss", (totalCapital>=0?'+':'')+fmt(totalCapital), totalCapital>=0?'var(--up)':'var(--down)', '(prices moving)');
+  fin+=line("Loan interest paid", '−'+fmt(totalInterest), 'var(--down)', '(cost of borrowing)');
+  if(totalPenalty>0) fin+=line("Overdraft penalties", '−'+fmt(totalPenalty), 'var(--down)', '(negative-cash charges)');
+  fin+=line("Net profit", (netProfit>=0?'+':'')+fmt(netProfit), netProfit>=0?'var(--up)':'var(--down)', '');
+  fin+=`<div class="section-lbl" style="margin:12px 0 4px">Key ratios</div>`;
+  fin+=line("Total return", (roe>=0?'+':'')+roe.toFixed(0)+'%', '', '(on your £1m)');
+  fin+=line("Income vs capital split", capitalIncomeSplit(totalRent,totalCapital), '', '');
+  fin+=line("Gearing at close (LTV)", endLTV.toFixed(0)+'%', endLTV>65?'var(--down)':'', '(debt ÷ property value)');
+  if(acct.fireSales>0) fin+=line("Forced sales suffered", acct.fireSales+'', 'var(--down)', '(ran out of cash)');
+  fin+=`</div>`;
+  const finEl=document.getElementById('db-financials'); if(finEl) finEl.innerHTML=fin;
+
+  // per-sector P&L
+  const sectorRows=SECTOR_KEYS.map(k=>({k, cap:capBySector[k]})).filter(r=>Math.abs(r.cap)>1);
+  let secHtml='';
+  if(sectorRows.length){
+    sectorRows.sort((a,b)=>b.cap-a.cap);
+    secHtml=sectorRows.map(r=>`<div class="scoreline"><span><span class="sw" style="display:inline-block;width:12px;height:3px;border-radius:2px;background:${SECTOR_DEF[r.k].col};margin-right:6px;vertical-align:middle"></span>${SECTOR_DEF[r.k].lbl}</span><span class="big" style="color:${r.cap>=0?'var(--up)':'var(--down)'}">${r.cap>=0?'+':''}${fmt(r.cap)}</span></div>`).join('');
+  } else {
+    secHtml=`<div class="card-sub">You didn't hold anything long enough to book sector gains or losses — try buying and riding a sector next time.</div>`;
+  }
+  const secEl=document.getElementById('db-sectors'); if(secEl) secEl.innerHTML=secHtml;
+
+  // ----- INVESTMENT STYLE CLASSIFICATION -----
+  const didDev=decisions.some(d=>d.type==='dev-start');
+  const devGeared = didDev && dev===null ? false : false; // recompute below from decisions is hard; approximate via loansTaken
+  const nBuys=decisions.filter(d=>d.type==='buy').length;
+  const nSells=decisions.filter(d=>d.type==='sell').length;
+  const trades=nBuys+nSells;
+  const avgLTV = acct.purchases>0 ? (acct.loansTaken/acct.purchases*100) : 0;
+  const capAbs=Math.abs(totalCapital), incAbs=Math.abs(totalRent);
+  const capitalShare = (capAbs+incAbs)>0 ? capAbs/(capAbs+incAbs) : 0;
+
+  let styleScore=0;
+  styleScore += Math.min(24, trades*3.4);          // trading intensity
+  styleScore += Math.min(30, avgLTV/70*30);        // leverage
+  styleScore += Math.max(0, Math.min(18, capitalShare*18)); // capital-led vs income-led
+  if(didDev) styleScore += (avgLTV>25? 34 : 26);   // development is the strong opportunistic tell
+  styleScore=Math.round(Math.min(100, styleScore));
+
+  let styleBand, styleName, styleDesc;
+  if(styleScore<30){ styleBand=0; styleName="Core"; styleDesc="You favoured steady income: buying and holding, collecting rent, keeping debt modest. Low risk, low drama — the classic passive approach."; }
+  else if(styleScore<60){ styleBand=1; styleName="Value-Add"; styleDesc="You managed actively — trading to catch sector moves and using leverage to boost returns, chasing capital growth rather than just rent. Medium risk, hands-on."; }
+  else { styleBand=2; styleName="Opportunistic"; styleDesc="You went for the big plays — heavy gearing and/or development risk, betting on capital gains. Highest risk, highest potential reward."; }
+  // genuinely uninvested only if you never bought anything at all
+  if(nBuys===0 && !didDev){ styleName="Cautious / uninvested"; styleDesc="You barely put money to work — mostly sitting in cash. Safe, but you can't grow a fund you don't invest."; styleScore=6; styleBand=0; }
+
+  document.getElementById('db-style-name').textContent=styleName;
+  const marker=document.getElementById('db-style-marker');
+  marker.style.left=Math.max(4,Math.min(96,styleScore))+'%';
+  marker.style.borderColor = styleBand===0?'var(--resi)':styleBand===1?'var(--gold)':'var(--dev)';
+  // why: list the behaviours that drove it
+  const why=[];
+  why.push(trades>=6?`traded actively (${trades} moves)`:trades>=3?`traded a little (${trades} moves)`:trades>0?`mostly bought and held`:`barely traded`);
+  why.push(avgLTV>=45?`borrowed heavily (~${Math.round(avgLTV)}% LTV)`:avgLTV>=15?`used some leverage (~${Math.round(avgLTV)}% LTV)`:`used little or no debt`);
+  why.push(capitalShare>=0.55?`leaned on capital gains`:capitalShare>=0.35?`mixed income and capital`:`leaned on rental income`);
+  if(didDev) why.push(`took on a development`);
+  document.getElementById('db-style-why').innerHTML=`<b>Why:</b> you ${why.join(', ')}. ${styleDesc}`;
+
+  // did it suit the market that turned up?
+  // measure how much the market rewarded active/risky play: spread between best and worst sector move
+  let bestChg=-1e9, worstChg=1e9;
+  SECTOR_KEYS.forEach(k=>{ const c=(1/sectorYields[k][YEARS-1])/(1/sectorYields[k][0])-1; if(c>bestChg)bestChg=c; if(c<worstChg)worstChg=c; });
+  const spread=(bestChg-worstChg); // big spread = active/opportunistic rewarded; small = core fine
+  const fitEl=document.getElementById('db-style-fit');
+  let fitCls,fitTxt;
+  const activeRewarded = spread>0.55; // sectors diverged a lot this run
+  if(styleBand===0){
+    if(activeRewarded){ fitCls='mixed'; fitTxt=`This market moved a lot between sectors — a bolder, more active style could have captured more of that swing. Your Core approach was safe but left some upside on the table.`; }
+    else { fitCls='good'; fitTxt=`This was a fairly steady market where sectors didn't diverge wildly — a good fit for your Core, income-focused style. Sometimes calm is exactly right.`; }
+  } else if(styleBand===1){
+    if(activeRewarded){ fitCls='good'; fitTxt=`Sectors diverged sharply this run — exactly the conditions where an active Value-Add style pays off. Good match, if you timed the sectors well.`; }
+    else { fitCls='mixed'; fitTxt=`The market was fairly calm this time, so your active trading and leverage added risk without a big divergence to exploit. Value-Add shines more in choppier markets.`; }
+  } else {
+    if(ret>=40){ fitCls='good'; fitTxt=`You took big risks and this market rewarded them — the Opportunistic play paid off this time. Just remember it cuts both ways.`; }
+    else if(ret<0){ fitCls='poor'; fitTxt=`You took Opportunistic-level risk but it didn't pay off this run — development and heavy gearing can turn on you fast, as your result shows.`; }
+    else { fitCls='mixed'; fitTxt=`You played it high-risk, and the reward was only modest this time — Opportunistic bets need the market to break your way to justify the danger.`; }
+  }
+  fitEl.className='style-fit '+fitCls;
+  fitEl.innerHTML=`<b>Did it suit this market?</b> ${fitTxt}`;
+}
+function capitalIncomeSplit(rent,capital){
+  const tot=Math.abs(rent)+Math.abs(capital); if(tot===0) return '—';
+  const rp=Math.round(rent/tot*100), cp=100-rp;
+  return `${rp}% income / ${cp}% capital`;
+}
+
+/* ============ NATIVE SVG CHARTS ============ */
+function drawLineChart(containerId, legendId, seriesFn, yLabel, invertNote){
+  const W=680, H=240, padL=48, padR=14, padT=14, padB=28;
+  const xs=[]; for(let y=0;y<YEARS;y++) xs.push(y);
+  // build series
+  const series=SECTOR_KEYS.map(k=>({key:k, col:SECTOR_DEF[k].col, lbl:SECTOR_DEF[k].lbl, data:seriesFn(k)}));
+  let allVals=[]; series.forEach(s=>allVals=allVals.concat(s.data));
+  let min=Math.min(...allVals), max=Math.max(...allVals);
+  const range=max-min||1; min-=range*0.08; max+=range*0.08;
+  const xAt=i=> padL + (W-padL-padR)*(i/(YEARS-1));
+  const yAt=v=> padT + (H-padT-padB)*(1-(v-min)/(max-min));
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" role="img">`;
+  // gridlines + y labels (4)
+  for(let g=0;g<=4;g++){
+    const v=min+(max-min)*g/4; const yy=yAt(v);
+    svg+=`<line x1="${padL}" y1="${yy}" x2="${W-padR}" y2="${yy}" stroke="rgba(30,45,40,0.09)" stroke-width="1"/>`;
+    svg+=`<text x="${padL-6}" y="${yy+3}" text-anchor="end" font-size="10" fill="#63706B">${yLabel(v)}</text>`;
+  }
+  // x labels (years)
+  for(let i=0;i<YEARS;i++){ svg+=`<text x="${xAt(i)}" y="${H-8}" text-anchor="middle" font-size="9.5" fill="#9AA6A1">Y${i+1}</text>`; }
+  // lines
+  series.forEach(s=>{
+    let d=''; s.data.forEach((v,i)=>{ d+=(i?'L':'M')+xAt(i).toFixed(1)+' '+yAt(v).toFixed(1)+' '; });
+    svg+=`<path d="${d}" fill="none" stroke="${s.col}" stroke-width="2.2" stroke-linejoin="round"/>`;
+    // end dot
+    const li=s.data.length-1;
+    svg+=`<circle cx="${xAt(li)}" cy="${yAt(s.data[li])}" r="3" fill="${s.col}"/>`;
+  });
+  svg+=`</svg>`;
+  document.getElementById(containerId).innerHTML=svg;
+  document.getElementById(legendId).innerHTML=series.map(s=>`<span><span class="sw" style="background:${s.col}"></span>${s.lbl}</span>`).join('');
+}
+function drawValueChart(){
+  // value of £1 invested in each sector = start_price/current_price = yield0/yieldNow... express as index vs year1
+  drawLineChart('chart-value','legend-value',
+    key=>{ const base=1/sectorYields[key][0]; return sectorYields[key].map(y=>(1/y)/base*100); },
+    v=>Math.round(v), false);
+}
+function drawYieldChart(){
+  drawLineChart('chart-yield','legend-yield',
+    key=>sectorYields[key].map(y=>y*100),
+    v=>v.toFixed(1)+'%', true);
+}
+</script>
+</body>
+</html>
