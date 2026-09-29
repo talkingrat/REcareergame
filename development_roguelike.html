@@ -64,6 +64,16 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .map-node .ico{font-size:22px;} .map-node .nm{font-size:11px;font-weight:600;margin-top:3px;}
 .map-node .ty{font-size:9px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
 .map-stage{font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);text-align:center;margin-bottom:6px;line-height:1.25;min-height:24px;}
+@media (max-width:640px){
+  .map-cols{flex-direction:column;gap:0;}
+  .map-col{flex-direction:column;gap:8px;width:100%;position:relative;padding:8px 0 18px;}
+  .map-col:not(:last-child)::after{content:'↓';position:absolute;bottom:0;left:50%;transform:translateX(-50%);color:var(--gold);font-size:16px;line-height:1;}
+  .map-node{max-width:none;display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;}
+  .map-node .ico{font-size:24px;} .map-node .nm{font-size:13px;margin-top:0;flex:1;}
+  .map-node .ty{font-size:10px;}
+  .map-stage{text-align:left;margin-bottom:4px;min-height:0;font-size:10px;}
+  .map-col:has(.map-node:nth-child(3)) { } /* multi-node stages stack naturally */
+}
 
 .casefile{background:var(--panel2);border:.5px solid var(--gold);border-radius:var(--radius);padding:14px 16px;}
 .casefile .cl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:5px;}
@@ -125,6 +135,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .lesson{background:rgba(63,181,133,.10);border:.5px solid var(--plan-dark);border-radius:var(--radius);padding:12px 14px;margin-top:12px;}
 .lesson .ll{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--plan);font-weight:700;margin-bottom:3px;}
 .reveal-item{font-size:12.5px;padding:5px 0;border-bottom:.5px solid var(--border);color:var(--muted);}
+.appr-item{font-size:12.5px;padding:7px 0 7px 22px;border-bottom:.5px solid var(--border);color:var(--muted);position:relative;}
+.appr-item:last-child{border:none;}
+.appr-item b{color:var(--text);}
+.appr-item.good::before{content:'✓';position:absolute;left:0;color:var(--success);font-weight:700;}
+.appr-item.bad::before{content:'✕';position:absolute;left:0;color:var(--danger);font-weight:700;}
+.appr-item.neutral::before{content:'•';position:absolute;left:2px;color:var(--muted);font-weight:700;}
 .reveal-item:last-child{border:none;} .reveal-item b{color:var(--text);}
 .foot{text-align:center;color:var(--faint);font-size:11px;margin-top:24px;}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel2);border:.5px solid var(--gold);color:var(--text);padding:10px 18px;border-radius:20px;font-size:13px;z-index:50;opacity:0;transition:opacity .3s;pointer-events:none;}
@@ -138,19 +154,20 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   <div class="masthead">
     <div class="masthead-tag">Career Roguelike · Development &amp; Planning</div>
     <h1>Con<em>sent</em></h1>
-    <p>A derelict site, a scheme to fight for, and someone across the table fighting back. Build a deck of tactics, read your opponent, and survive the run from acquisition to decision. The right card depends on the moment — and your rival hits back every turn.</p>
+    <p>A derelict site and a scheme worth fighting for. Build a deck of tactics, read each challenge as it comes, and get the scheme from acquisition to decision in one piece. The right card depends on the moment — and every challenge pushes back while you work.</p>
   </div>
   <div class="panel" style="border-color:var(--gold)">
     <div class="panel-title" style="font-size:17px">It's a duel, not a puzzle</div>
-    <div class="panel-sub">Each stage is a negotiation against a live opponent who <b>attacks your key metric every turn</b> — and you'll see it coming, so defend or race. Cards aren't just big numbers: the right tactic lands hard in the right situation and flops in the wrong one. Time your trump cards, chain combos, and don't let your lifeline hit zero.</div>
+    <div class="panel-title" style="font-size:17px">Read the moment, play the right lever</div>
+    <div class="panel-sub">Every stage is a real development challenge that pushes back on <b>your key metric each turn</b> — and you'll see it coming, so shield it or clear the challenge first. Cards fall into four kinds of lever: negotiation, financial, design and resilience. Each one shines in some situations and flounders in others. Learn which lever fits which challenge, time your trump cards, chain a combo or two, and keep your lifeline off the floor.</div>
   </div>
   <div class="panel seat dev" onclick="chooseSeat('dev')">
     <div class="seat-top"><div class="seat-emoji">🏗️</div><div><div class="seat-role">The Developer</div><div class="seat-title">Push the scheme through, profitably</div></div></div>
-    <div class="seat-desc">Lifeline: <b style="color:var(--via)">Viability</b>. Your rival is the <b>Planning Authority</b> — it demands affordable housing, threatens refusal, rallies objectors. Wear down each obstacle before it grinds your numbers to nothing.</div>
+    <div class="seat-desc">Lifeline: <b style="color:var(--via)">Viability</b>. You see every challenge through a developer's eyes — affordable housing asks, rising costs, a nervous lender, the committee vote. Keep the numbers standing while you wear each one down.</div>
   </div>
   <div class="panel seat plan" onclick="chooseSeat('plan')">
     <div class="seat-top"><div class="seat-emoji">🏛️</div><div><div class="seat-role">The Planner</div><div class="seat-title">Extract public value — and still deliver</div></div></div>
-    <div class="seat-desc">Lifeline: <b style="color:var(--pub)">Public value</b>. Your rival is the <b>Developer</b> — viability reports, lobbying your chair, threats to walk. Hold the public interest without strangling the scheme.</div>
+    <div class="seat-desc">Lifeline: <b style="color:var(--pub)">Public value</b>. You see the same challenges through the council's eyes — weak schemes, heritage at risk, wavering councillors. Hold the public interest while keeping the scheme deliverable enough to actually happen.</div>
   </div>
 </div>
 
@@ -160,7 +177,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="panel-title" style="font-size:17px">How a run works</div>
     <ul class="tut">
       <li><span class="tut-ico">🗺️</span><span><b>The process map:</b> move through the real stages of development — <span id="intro-stages"></span>. Each is a fight; a draft follows each win.</span></li>
-      <li><span class="tut-ico">⚔️</span><span><b>The opponent telegraphs:</b> at the top of your turn you see its next move (e.g. "−9 to your lifeline"). Shield it, or clear the obstacle first. It also <b>reacts</b> to some cards you play.</span></li>
+      <li><span class="tut-ico">⚔️</span><span><b>The challenge builds:</b> at the top of each turn you see what's coming (say, "−12 to your lifeline"). Shield it, or clear the challenge before it lands. A few challenges also react to specific cards you play.</span></li>
       <li><span class="tut-ico">🎯</span><span><b>Context matters:</b> a card can be strong here and weak there — no hints. Learn the matchups. Each obstacle has a soft spot to find.</span></li>
       <li><span class="tut-ico">✨</span><span><b>Combos &amp; trumps:</b> some card pairs chain for a bonus. Your most powerful cards work <b>once per fight</b> — time them.</span></li>
       <li><span class="tut-ico">💀</span><span><b>Permadeath:</b> lifeline to zero and the scheme collapses. Damage carries between fights — survive to the Decision.</span></li>
@@ -215,7 +232,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     </div>
     <div class="enc-log" id="enc-log"></div>
     <div class="hand" id="hand"></div>
-    <button class="btn end full" onclick="endTurn()">End turn ↻ (opponent moves, then redraw)</button>
+    <button class="btn end full" onclick="endTurn()">End turn ↻ (the challenge acts, then you redraw)</button>
     <button class="btn ghost full" style="margin-top:8px" onclick="abandonRun()">⟲ Abandon run &amp; start fresh</button>
   </div>
 </div>
@@ -249,6 +266,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="hud" id="end-meters" style="position:static;margin-top:16px"></div>
     <div class="lesson"><div class="ll">What this run taught</div><div id="end-lesson"></div></div>
   </div>
+  <div class="panel" id="end-appraisal-panel">
+    <div class="panel-title" style="font-size:16px" id="end-appraisal-title"></div>
+    <div id="end-appraisal"></div>
+  </div>
   <div class="panel" id="end-reveal-panel">
     <div class="panel-title" style="font-size:16px">What you learned about the tactics</div>
     <div id="end-reveal"></div>
@@ -257,7 +278,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <button class="btn ghost full" onclick="location.reload()">← Menu</button>
     <button class="btn full" id="end-again"></button>
   </div>
-  <div class="foot">A teaching roguelike. Cards are real development &amp; planning tactics; numbers simplified so trade-offs are visible.</div>
+  <div class="foot">A teaching roguelike. The cards are real development &amp; planning tactics and the numbers are simplified so the trade-offs stay visible — but real schemes are far messier, and no single run captures the full picture.</div>
 </div>
 
 </div>
@@ -269,72 +290,79 @@ function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.
 function clamp(x,lo,hi){ return Math.max(lo,Math.min(hi,x)); }
 
 const CARD_LIB={
-  negotiate:{name:"Negotiate",type:"attack",cost:1,prog:6,text:"Reduce Resistance 6. A reliable all-rounder.",tag:"Bread and butter."},
-  revise:{name:"Revise Scheme",type:"attack",cost:1,prog:8,pub:-3,strongVs:['viability'],text:"Reduce Resistance 8 (more in a cost crisis); Public value -3.",tag:"Trim to fit."},
-  s106:{name:"Section 106 Offer",type:"attack",cost:2,prog:11,via:-4,strongVs:['objection','councillor'],text:"Reduce 11 (strong vs community/politics); Viability -4.",tag:"Pay for consent."},
-  valueeng:{name:"Value Engineer",type:"skill",cost:1,via:+9,pub:-5,strongVs:['viability'],text:"Viability +9 (great in a cost crisis); Public value -5.",tag:"Protect the margin."},
-  communitywin:{name:"Community Benefit",type:"defend",cost:1,prog:4,blockPub:12,strongVs:['objection'],text:"Reduce 4 (more vs objections); shield Public value 12.",tag:"Give them something real."},
-  lobby:{name:"Lobby the Chair",type:"attack",cost:3,prog:20,once:true,strongVs:['committee','councillor'],text:"ONCE per fight. Reduce 20 (huge at committee).",tag:"Know the right people."},
-  standfirm:{name:"Hold the Line",type:"defend",cost:1,blockVia:14,text:"Shield Viability up to 14 this turn.",tag:"Weather the storm."},
-  viabilityrep:{name:"Viability Report",type:"attack",cost:2,prog:14,stand:-5,pub:-4,once:true,combo:{after:'valueeng',bonusProg:8,note:'stacked with value engineering'},text:"ONCE. Reduce 14; Standing -5, Public value -4. Combo after Value Engineer.",tag:"The loophole."},
-  charmoffensive:{name:"Charm Offensive",type:"skill",cost:1,stand:+10,strongVs:['councillor'],text:"Standing +10 (wins over a councillor).",tag:"A likeable developer."},
-  policycite:{name:"Cite Policy",type:"attack",cost:1,prog:6,strongVs:['heritage'],text:"Reduce 6 (strong vs heritage - the plan is clear).",tag:"Chapter and verse."},
-  condition:{name:"Attach Condition",type:"attack",cost:1,prog:7,via:-2,strongVs:['objection'],text:"Reduce 7; Viability -2. A binding obligation.",tag:"Yes, but only if..."},
-  consult:{name:"Public Consultation",type:"defend",cost:2,prog:5,blockPub:12,strongVs:['objection'],text:"Reduce 5; shield Public value 12. Combo -> Design Review.",tag:"Bring residents in."},
-  designreview:{name:"Design Review",type:"attack",cost:2,prog:11,pub:+5,strongVs:['heritage'],combo:{after:'consult',bonusProg:8,pub:+4,note:'genuine engagement'},text:"Reduce 11; Public value +5. Combo after Consultation.",tag:"Raise the bar."},
-  enablement:{name:"Enable the Scheme",type:"skill",cost:1,via:+10,strongVs:['viability'],text:"Viability +10 (keeps a wobbling scheme deliverable).",tag:"Help it work."},
-  refusethreat:{name:"Threaten Refusal",type:"attack",cost:3,prog:19,via:-5,once:true,strongVs:['committee'],text:"ONCE. Reduce 19; Viability -5. The nuclear option.",tag:"We can say no."},
-  holdpolicy:{name:"Stand on Principle",type:"defend",cost:1,blockPub:14,text:"Shield Public value up to 14 this turn.",tag:"Public interest first."},
-  independentviab:{name:"Independent Assessor",type:"skill",cost:2,stand:+6,pub:+5,strongVs:['viability'],text:"Standing +6, Public value +5 (call the viability bluff).",tag:"Do your homework."},
-  armcouncillor:{name:"Brief the Councillor",type:"skill",cost:1,stand:+10,strongVs:['councillor'],text:"Standing +10 (turn your ally into a champion).",tag:"Manage the politics."},
-  compromise:{name:"Find the Middle",type:"attack",cost:2,prog:10,stand:+4,text:"Reduce 10; Standing +4. A deal both can live with.",tag:"Grown-up negotiation."},
-  delay:{name:"Play for Time",type:"defend",cost:1,blockVia:8,blockPub:8,text:"Shield BOTH meters up to 8 this turn.",tag:"Kick it to next committee."}
+  negotiate:{name:"Negotiate",cat:"negotiation",type:"attack",cost:1,prog:6,text:"Talk it down. Resistance -6. Works anywhere, wins nowhere on its own.",tag:"Bread and butter."},
+  revise:{name:"Revise Scheme",cat:"design",type:"attack",cost:1,prog:8,pub:-3,text:"Small design tweak. Resistance -8; Public value -3 as the scheme loses a little character.",tag:"Trim to fit."},
+  s106:{name:"Section 106 Offer",cat:"financial",type:"attack",cost:2,prog:11,via:-4,text:"Fund local infrastructure to win consent. Resistance -11; Viability -4. Money buys goodwill, not cost savings.",tag:"Pay for consent."},
+  valueeng:{name:"Value Engineer",cat:"design",type:"skill",cost:1,via:+9,pub:-5,text:"Strip cost out of the design. Viability +9; Public value -5 as quality drops.",tag:"Protect the margin."},
+  designteam:{name:"Design Team",cat:"design",type:"skill",cost:2,prog:8,pub:+7,via:-4,text:"Send it back to the architects. Resistance -8, Public value +7 — but the rework costs money, Viability -4.",tag:"Draw it better."},
+  communitywin:{name:"Community Benefit",cat:"financial",type:"defend",cost:1,prog:4,blockPub:12,via:-2,text:"Fund something the neighbourhood wants. Resistance -4, shields Public value 12; Viability -2.",tag:"Give them something real."},
+  lobby:{name:"Lobby the Chair",cat:"negotiation",type:"attack",cost:3,prog:20,once:true,text:"Work the committee chair before the vote. Once per challenge. Resistance -20.",tag:"Know the right people."},
+  standfirm:{name:"Hold the Line",cat:"resilience",type:"defend",cost:1,blockVia:14,text:"Ride out the pressure on the numbers. Shields Viability up to 14 this turn.",tag:"Weather the storm."},
+  viabilityrep:{name:"Viability Report",cat:"financial",type:"attack",cost:2,prog:14,stand:-5,pub:-4,once:true,combo:{after:'valueeng',bonusProg:8,note:'the report backs up the cuts'},text:"Argue the scheme can't afford its obligations. Once. Resistance -14; Standing -5, Public value -4. Combos after Value Engineer.",tag:"The loophole."},
+  charmoffensive:{name:"Charm Offensive",cat:"negotiation",type:"skill",cost:1,stand:+10,text:"Win the room. Standing +10.",tag:"A likeable operator."},
+  policycite:{name:"Cite Policy",cat:"negotiation",type:"attack",cost:1,prog:6,text:"Quote the local plan. Resistance -6. Lands hardest where policy is clear.",tag:"Chapter and verse."},
+  condition:{name:"Attach Condition",cat:"negotiation",type:"attack",cost:1,prog:7,via:-2,text:"Approve, with strings attached. Resistance -7; Viability -2.",tag:"Yes, but only if..."},
+  consult:{name:"Public Consultation",cat:"negotiation",type:"defend",cost:2,prog:5,blockPub:12,text:"Bring residents into the room. Resistance -5, shields Public value 12. Sets up Design Review.",tag:"Listen first."},
+  designreview:{name:"Design Review",cat:"design",type:"attack",cost:2,prog:11,pub:+5,combo:{after:'consult',bonusProg:8,pub:+4,note:'you built what people asked for'},text:"Push the design quality up. Resistance -11; Public value +5. Combos after Consultation.",tag:"Raise the bar."},
+  enablement:{name:"Enable the Scheme",cat:"design",type:"skill",cost:1,via:+10,text:"Find the flex that keeps it deliverable. Viability +10.",tag:"Help it work."},
+  refusethreat:{name:"Threaten Refusal",cat:"negotiation",type:"attack",cost:3,prog:19,via:-5,once:true,text:"Put refusal on the table. Once. Resistance -19; Viability -5 as the developer wobbles.",tag:"We can say no."},
+  holdpolicy:{name:"Stand on Principle",cat:"resilience",type:"defend",cost:1,blockPub:14,text:"Refuse to trade away the public interest. Shields Public value up to 14 this turn.",tag:"Hold firm."},
+  independentviab:{name:"Independent Assessor",cat:"financial",type:"skill",cost:2,stand:+6,pub:+5,text:"Get the numbers checked properly. Standing +6, Public value +5.",tag:"Do your homework."},
+  armcouncillor:{name:"Brief the Councillor",cat:"negotiation",type:"skill",cost:1,stand:+10,text:"Turn a nervous councillor into a champion. Standing +10.",tag:"Manage the politics."},
+  compromise:{name:"Find the Middle",cat:"negotiation",type:"attack",cost:2,prog:10,stand:+4,text:"Land a deal everyone can live with. Resistance -10; Standing +4.",tag:"Grown-up negotiation."},
+  delay:{name:"Play for Time",cat:"resilience",type:"defend",cost:1,blockVia:8,blockPub:8,text:"Push it to the next committee. Shields both meters up to 8 this turn.",tag:"Buy some breathing room."}
+};
+const CAT_META={
+  negotiation:{label:"Negotiation",ico:"💬",col:"#8FB4E0"},
+  financial:{label:"Financial",ico:"💰",col:"#E0C24A"},
+  design:{label:"Design",ico:"📐",col:"#C88FD0"},
+  resilience:{label:"Resilience",ico:"🛡️",col:"#5FC08A"}
 };
 const START_DECK={
   dev:['negotiate','negotiate','revise','s106','valueeng','communitywin','standfirm','charmoffensive'],
   plan:['policycite','policycite','condition','consult','designreview','enablement','holdpolicy','armcouncillor']
 };
 const DRAFT_POOL={
-  dev:['lobby','viabilityrep','compromise','delay','communitywin','negotiate','standfirm','charmoffensive'],
-  plan:['refusethreat','independentviab','compromise','delay','designreview','enablement','holdpolicy','armcouncillor']
+  dev:['lobby','viabilityrep','designteam','enablement','compromise','delay','standfirm','charmoffensive'],
+  plan:['refusethreat','independentviab','designteam','compromise','delay','designreview','enablement','armcouncillor']
 };
 
 const ENC={
-  objection:{ emoji:'👥', name:"Community Objection", flavor:"'Not that tower! Not that traffic! And who can even afford these flats?'",
-    res:32, weakness:'defend',
-    intents:[ {ico:'📣',label:'Rally the objectors',dmg:13,target:'pub'}, {ico:'📰',label:'Bad press',dmg:10,target:'stand'} ],
-    reacts:{ viabilityrep:{ico:'😤',label:'Residents smell the loophole',dmg:6,target:'pub'} },
+  objection:{ emoji:'👥', name:"Community Objection", flavor:"The neighbourhood has found its voice, and it is not happy.",
+    res:32, catMult:{ financial:1.6, design:1.5, negotiation:0.85, resilience:1 },
+    intents:[ {ico:'📣',label:'Objectors rally',dmg:13,target:'pub'}, {ico:'📰',label:'Bad press',dmg:10,target:'stand'} ],
+    reacts:{ viabilityrep:{ico:'😤',label:'Residents spot the loophole',dmg:6,target:'pub'} },
     case:{ stage:'Stage 2 · Planning Application', title:'The Community Objects',
-      body:"Your scheme is public now, and the residents are loud: too tall, too much traffic, and 'luxury flats nobody local can afford.' Their objections can sink you at committee - you need to bring them onside or wear the pressure down.",
-      real:"Real parallel: Ouseburn Valley, Newcastle - a post-industrial brownfield regeneration where community buy-in shaped what got built. Genuine consultation, not spin, turns objectors into supporters." } },
-  viability:{ emoji:'📉', name:"Viability Crisis", flavor:"Construction costs just spiked. The numbers are wobbling.",
-    res:30, weakness:'enablement',
-    intents:[ {ico:'💸',label:'Costs climb again',dmg:12,target:'via'}, {ico:'🏦',label:'Lender gets nervous',dmg:10,target:'via'} ],
-    reacts:{ refusethreat:{ico:'🚪',label:'Developer threatens to walk',dmg:7,target:'pub'} },
+      body:"The scheme is public, and the objections are loud: too tall, too much traffic, too many flats that locals could never afford. Left to fester, this sinks you at committee. What wins people round is something real for them — a benefit they can see, or a design that answers what they actually asked for.",
+      real:"Ouseburn Valley in Newcastle is the model here — a post-industrial site where the community helped shape what got built. Real consultation, followed by real change, is what turned objectors into supporters." } },
+  viability:{ emoji:'📉', name:"Viability Crisis", flavor:"Build costs have jumped and the appraisal has slipped under water.",
+    res:30, catMult:{ financial:0.2, design:1.6, negotiation:0.25, resilience:1 },
+    intents:[ {ico:'💸',label:'Costs climb again',dmg:10,target:'via'}, {ico:'🏦',label:'The lender gets nervous',dmg:8,target:'via'} ],
+    reacts:{},
     case:{ stage:'Stage 1 · Site Acquisition / Appraisal', title:'The Numbers Wobble',
-      body:"Build costs have jumped and the appraisal is under water. If viability collapses, the scheme dies here - you must find cost savings or restore confidence without gutting what makes it worth building.",
-      real:"Real parallel: an office scheme approved pre-pandemic, delayed, arriving into a changed market - the 'ensure the financial position fits market needs' challenge from the development brief." } },
-  heritage:{ emoji:'🏛️', name:"Heritage Snag", flavor:"A conservation officer has spotted something worth protecting.",
-    res:34, weakness:'attack',
+      body:"Construction costs have spiked and the sums no longer add up. Throwing money at the problem only digs the hole deeper — obligations and contributions make a cost crisis worse. What saves a wobbling scheme is redesign and finding genuine flex in how it is built, not spending you do not have.",
+      real:"Think of an office scheme approved before the pandemic, delayed, then arriving into a market that had moved on — exactly the challenge of keeping the finances standing when the ground shifts under them." } },
+  heritage:{ emoji:'🏛️', name:"Heritage Snag", flavor:"A conservation officer has found something on the site worth protecting.",
+    res:34, catMult:{ design:1.7, negotiation:1.2, financial:0.6, resilience:1 },
     intents:[ {ico:'📜',label:'Heritage objection',dmg:11,target:'pub'}, {ico:'⏳',label:'Delay for assessment',dmg:9,target:'via'} ],
-    reacts:{ valueeng:{ico:'🏚️',label:'Cheapening a heritage setting backfires',dmg:6,target:'pub'} },
+    reacts:{ valueeng:{ico:'🏚️',label:'Cheapening a historic setting backfires',dmg:6,target:'pub'} },
     case:{ stage:'Stage 2 · Planning Application', title:'The Heritage Question',
-      body:"The site sits by something historic. Policy protections apply, and the conservation lobby is watching. Ham-fisted value-engineering will inflame it; careful design and policy literacy are your friends here.",
-      real:"Real parallel: Salford Quays / MediaCity - a brownfield transformation that respected its industrial heritage while introducing new uses. Design quality carried it." } },
-  councillor:{ emoji:'🗳️', name:"Grandstanding Councillor", flavor:"There's an election coming and he smells an easy win opposing you.",
-    res:28, weakness:'stand',
-    intents:[ {ico:'🎤',label:'Public denouncement',dmg:12,target:'stand'}, {ico:'🧨',label:'Whip up the committee',dmg:10,target:'pub'} ],
-    reacts:{ viabilityrep:{ico:'🗯️',label:'"Greedy developer!" headline',dmg:6,target:'stand'} },
+      body:"The site sits beside something historic, and the conservation lobby is paying attention. Cutting corners on quality here inflames everyone. Careful design and a good grasp of policy are what carry a scheme through a sensitive setting.",
+      real:"Salford Quays and MediaCity took a tired industrial waterside and made something new while keeping faith with its past. Design quality was what earned it consent." } },
+  councillor:{ emoji:'🗳️', name:"The Nervous Councillor", flavor:"There's an election coming, and opposing you looks like an easy win.",
+    res:28, catMult:{ negotiation:1.6, design:0.9, financial:1.1, resilience:1 },
+    intents:[ {ico:'🎤',label:'Public denouncement',dmg:12,target:'stand'}, {ico:'🧨',label:'Stirring up committee',dmg:10,target:'pub'} ],
+    reacts:{ viabilityrep:{ico:'🗯️',label:'"Greedy developer" headline',dmg:6,target:'stand'} },
     case:{ stage:'Stage 2 · Development Management', title:'The Nervous Councillor',
-      body:"A local councillor is tempted to torch your scheme for applause. You can't out-vote him - you have to give him something to champion, or manage the politics so he doesn't blow it up.",
-      real:"Real parallel: every major regeneration lives or dies on local political consent. The London Olympic scheme succeeded partly by aligning political will behind a shared vision." } },
+      body:"A local councillor is tempted to torch the scheme for the applause. You cannot out-vote them, so the way through is people, not paperwork — give them something to champion, and manage the politics so it never reaches the point of a public row.",
+      real:"Every big regeneration lives or dies on local political backing. The London Olympic scheme worked in part because the political will was lined up behind a shared vision from the start." } },
   committee:{ emoji:'⚖️', name:"The Planning Committee", flavor:"The final vote. Everything you've built comes down to this room.", boss:true,
-    res:46, weakness:'lobby',
-    intents:[ {ico:'❔',label:'Tough questioning',dmg:12,target:'via'}, {ico:'🗳️',label:'Wavering votes',dmg:14,target:'pub'}, {ico:'⚖️',label:'Objection read out',dmg:10,target:'stand'} ],
+    res:46, catMult:{ negotiation:1.15, design:1.15, financial:1.15, resilience:1 },
+    intents:[ {ico:'❔',label:'Tough questioning',dmg:12,target:'via'}, {ico:'🗳️',label:'Wavering votes',dmg:14,target:'pub'}, {ico:'⚖️',label:'Objection read aloud',dmg:10,target:'stand'} ],
     reacts:{},
     case:{ stage:'Stage 2→3 · Decision', title:'Committee Night',
-      body:"Everything comes to the vote. The package you've assembled - the concessions, the design, your standing - is on the table. Bring your strongest plays and time your trump cards; this is the toughest fight of the run.",
-      real:"Real parallel: the planning committee is where officer recommendation, political will and public opinion collide. A well-prepared scheme with genuine benefits and a credible officer gets consent." } }
+      body:"It all comes to the vote. The whole package is on the table — the concessions, the design, your standing in the room. No single tactic carries this one. A deck with a bit of everything, and a trump card saved for the right moment, is what gets you over the line.",
+      real:"The planning committee is where the officer's recommendation, the politics and the public mood all meet. A well-prepared scheme with genuine benefits and a credible case tends to get its consent." } }
 };
 
 const EVENTS=[
@@ -417,41 +445,43 @@ function drawCards(n){ for(let i=0;i<n;i++){ if(drawPile.length===0){ drawPile=s
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function log(m,cls){ encLog.push(cls?`<span class="${cls}">${m}</span>`:m); }
 
+function catMultiplier(c){ const m=curEnc.catMult||{}; return (c.cat && m[c.cat]!=null)?m[c.cat]:1; }
 function effectiveProg(c,id){ let prog=c.prog||0;
-  if(prog && c.strongVs && c.strongVs.includes(curEnc.key)){ prog=Math.round(prog*1.8); }
-  if(curEnc.weakness){ if(curEnc.weakness===c.type || curEnc.weakness===id){ prog=Math.round(prog*1.4)+2; } }
+  if(prog){ prog=Math.round(prog*catMultiplier(c)); }
   if(c.combo && c.combo.after && lastCardPlayed===c.combo.after){ prog+=(c.combo.bonusProg||0); }
   return prog;
 }
+function fitLabel(c){ const mult=catMultiplier(c); if(mult>=1.4) return ' — the right tool here!'; if(mult<=0.5) return ' — barely dents it.'; if(mult<0.9) return ' — not much use here.'; return ''; }
 function renderEncounter(){
   renderHUD('enc-hud');
   document.getElementById('enc-emoji').textContent=curEnc.emoji; document.getElementById('enc-name').textContent=curEnc.name; document.getElementById('enc-flavor').textContent=curEnc.flavor;
-  document.getElementById('foe-name').textContent = side==='dev'?'🏛️ Planning Authority (opponent)':'🏗️ Developer (opponent)';
+  document.getElementById('foe-name').textContent = '⚡ The challenge pushes back';
   document.getElementById('res-val').textContent=Math.max(0,Math.round(curEnc.res));
   document.getElementById('res-fill').style.width=clamp(curEnc.res/curEnc.maxRes*100,0,100)+'%';
   const it=currentIntent(); const tgt={via:'Viability',pub:'Public value',stand:'Standing'}[it.target];
-  document.getElementById('intent').innerHTML=`<span class="ico">${it.ico}</span><span>Next move: <b>${it.label}</b> - <b>-${it.dmg} ${tgt}</b> if you don't clear this turn. ${it.target===LIFELINE()?'⚠ hits your lifeline!':''}</span>`;
+  document.getElementById('intent').innerHTML=`<span class="ico">${it.ico}</span><span>Building next turn: <b>${it.label}</b> — <b>-${it.dmg} ${tgt}</b> unless you clear this challenge first. ${it.target===LIFELINE()?'⚠ hits your lifeline!':''}</span>`;
   const ep=document.getElementById('energy-pips'); ep.innerHTML=''; for(let i=0;i<MAX_ENERGY;i++){ const d=document.createElement('div'); d.className='epip'+(i<energy?' on':''); ep.appendChild(d); }
   document.getElementById('turn-info').textContent=`Draw ${drawPile.length} · Discard ${discard.length}`;
   const lg=document.getElementById('enc-log'); lg.innerHTML=encLog.slice(-7).map(l=>`<div>${l}</div>`).join(''); lg.scrollTop=lg.scrollHeight;
   const h=document.getElementById('hand'); h.innerHTML=''; hand.forEach((id,i)=>h.insertAdjacentHTML('beforeend',cardHTML(id,true,i,energy)));
 }
 function cardHTML(id,playable,idx,curEnergy){
-  const c=CARD_LIB[id]; const disabled=playable&&curEnergy!=null&&curEnergy<c.cost; const border=c.type==='attack'?'var(--dev)':c.type==='defend'?'var(--plan)':'var(--stand)';
-  return `<div class="pcard ${disabled?'disabled':''}" ${playable&&!disabled?`onclick="playCard(${idx})"`:''} style="border-top:2px solid ${border}">
+  const c=CARD_LIB[id]; const disabled=playable&&curEnergy!=null&&curEnergy<c.cost;
+  const cm=CAT_META[c.cat]||{label:c.cat,ico:'',col:'var(--muted)'};
+  return `<div class="pcard ${disabled?'disabled':''}" ${playable&&!disabled?`onclick="playCard(${idx})"`:''} style="border-top:2px solid ${cm.col}">
     <div class="cc-cost">${c.cost}</div>${c.once?'<div class="cc-once">1x</div>':''}
-    <div class="cc-name">${c.name}</div><div class="cc-type">${c.type}</div>
+    <div class="cc-name">${c.name}</div><div class="cc-type" style="color:${cm.col}">${cm.ico} ${cm.label}</div>
     <div class="cc-text">${c.text}</div><div class="cc-tag">${c.tag}</div></div>`;
 }
 function playCard(idx){
   const id=hand[idx]; const c=CARD_LIB[id]; if(energy<c.cost) return; energy-=c.cost;
-  const prog=effectiveProg(c,id);
-  if(prog){ curEnc.res-=prog; const strong=(c.strongVs&&c.strongVs.includes(curEnc.key))||curEnc.weakness===c.type||curEnc.weakness===id;
-    log(`▸ ${c.name}: -${prog} resistance${strong?' - a strong fit here!':''}`, strong?'good':null); if(strong)cardXP[id]=(cardXP[id]||0)+1; }
+  const prog=effectiveProg(c,id); const mult=catMultiplier(c);
+  if(prog){ curEnc.res-=prog; const fit=fitLabel(c);
+    log(`▸ ${c.name}: -${prog} resistance${fit}`, mult>=1.4?'good':(mult<=0.5?'hit':null)); if(mult>=1.4)cardXP[id]=(cardXP[id]||0)+1; }
   if(c.combo && c.combo.after && lastCardPlayed===c.combo.after){ log(`✨ COMBO: ${c.combo.note}!`,'combo'); if(c.combo.pub)M.pub=clamp(M.pub+c.combo.pub,0,100); }
   if(c.via)M.via=clamp(M.via+c.via,0,100); if(c.pub)M.pub=clamp(M.pub+c.pub,0,100); if(c.stand)M.stand=clamp(M.stand+c.stand,0,100);
   if(c.blockVia)blockVia+=c.blockVia; if(c.blockPub)blockPub+=c.blockPub; if(c.blockVia||c.blockPub) log(`▸ ${c.name}: shield up`);
-  if(curEnc.reacts && curEnc.reacts[id]){ const rc=curEnc.reacts[id]; const t={via:'Viability',pub:'Public value',stand:'Standing'}[rc.target]; M[rc.target]=clamp(M[rc.target]-rc.dmg,0,100); log(`⚡ Opponent reacts: ${rc.label} - -${rc.dmg} ${t}`,'hit'); }
+  if(curEnc.reacts && curEnc.reacts[id]){ const rc=curEnc.reacts[id]; const t={via:'Viability',pub:'Public value',stand:'Standing'}[rc.target]; M[rc.target]=clamp(M[rc.target]-rc.dmg,0,100); log(`⚡ ${rc.label}: -${rc.dmg} ${t}`,'hit'); }
   lastCardPlayed=id; hand.splice(idx,1); if(c.once) exhausted.push(id); else discard.push(id);
   if(curEnc.res<=0){ winEncounter(); return; } if(checkDeath()) return; renderEncounter();
 }
@@ -479,12 +509,51 @@ function renderHUD(cid){ const c=document.getElementById(cid); if(!c)return;
 }
 function showDeck(){ document.getElementById('deck-cards').innerHTML=deck.map(id=>cardHTML(id,false)).join(''); show('s-deck'); }
 
+function buildAppraisal(reachedDecision){
+  // Reads the final meters from the player's own seat and returns {right:[], wrong:[]} style items.
+  const V=Math.round(M.via), P=Math.round(M.pub), S=Math.round(M.stand);
+  const items=[]; // {cls:'good'|'bad'|'neutral', text}
+  const isDev = side==='dev';
+  const roleWord = isDev ? 'developer' : 'planner';
+  // Lifeline management
+  if(isDev){
+    if(V>=50) items.push({cls:'good', text:`<b>You kept the scheme viable</b> (Viability ${V}). The numbers held up — as a developer, that's the ground everything else stands on.`});
+    else if(V>=38) items.push({cls:'neutral', text:`<b>Viability survived, but only just</b> (${V}). You spent close to the bone; one more shock could have sunk it.`});
+    else items.push({cls:'bad', text:`<b>You let viability run dangerously low</b> (${V}). A developer who loses the numbers loses the scheme — watch what you give away.`});
+  } else {
+    if(P>=50) items.push({cls:'good', text:`<b>You defended the public interest</b> (Public value ${P}). The community got a real return — the heart of the planner's job.`});
+    else if(P>=38) items.push({cls:'neutral', text:`<b>Public value held, but thinly</b> (${P}). You protected some benefit; a firmer hand earlier might have won more.`});
+    else items.push({cls:'bad', text:`<b>You let public value slip</b> (${P}). As a planner, giving too much ground means the neighbourhood pays for it.`});
+  }
+  // The other meter — the discipline your seat is tempted to neglect
+  if(isDev){
+    if(P>=45) items.push({cls:'good', text:`<b>You gave the public a genuine stake</b> (Public value ${P}). Developers who do this build trust that pays off at the next site.`});
+    else if(P>=32) items.push({cls:'neutral', text:`<b>Public value was left a little light</b> (${P}). Enough to get by, but a more generous scheme would have smoothed the path.`});
+    else items.push({cls:'bad', text:`<b>You gave the neighbourhood too little</b> (${P}). A profit-first scheme invites objections and a hostile committee.`});
+  } else {
+    if(V>=45) items.push({cls:'good', text:`<b>You kept the scheme deliverable</b> (Viability ${V}). A planner who protects viability makes sure their demands actually get built.`});
+    else if(V>=32) items.push({cls:'neutral', text:`<b>You ran viability close</b> (${V}). Your asks were ambitious; push much harder and the scheme stops being built at all.`});
+    else items.push({cls:'bad', text:`<b>You squeezed viability too hard</b> (${V}). The most generous conditions deliver nothing if the scheme collapses.`});
+  }
+  // Standing — the shared career/political layer
+  if(S>=45) items.push({cls:'good', text:`<b>You kept your standing high</b> (${S}). People trusted you and doors stayed open — quiet, and decisive.`});
+  else if(S>=32) items.push({cls:'neutral', text:`<b>Your standing took some knocks</b> (${S}). You got through, but a stronger reputation buys room to manoeuvre.`});
+  else items.push({cls:'bad', text:`<b>Your standing was badly eroded</b> (${S}). Being right counts for little once the room stops listening to you.`});
+  // Lever literacy from cardXP
+  const cats={}; Object.keys(cardXP).forEach(id=>{ const c=CARD_LIB[id]; if(c){cats[c.cat]=(cats[c.cat]||0)+cardXP[id];} });
+  const usedWell=Object.keys(cats).length;
+  if(usedWell>=3) items.push({cls:'good', text:`<b>You read the challenges well</b>, matching different levers — ${Object.keys(cats).map(k=>(CAT_META[k]||{}).label||k).join(', ')} — to the moments that suited them.`});
+  else if(usedWell>=1) items.push({cls:'neutral', text:`<b>You leaned on a narrow set of levers.</b> Mixing in design, financial, negotiation and resilience tactics makes you ready for whatever the run throws up.`});
+  else items.push({cls:'bad', text:`<b>Few of your plays landed where they fit.</b> Each challenge rewards a particular lever — reading which one is the core skill.`});
+  return { roleWord, items };
+}
+
 function runOver(reachedDecision, secondary){
   let art,tag,title,verdict,lesson;
   if(!reachedDecision){ tag='fail';
     if(secondary==='via'){ art='🏚️'; title='The Site That Never Was'; verdict="You piled on so much public value the numbers stopped working. The developer walked; the site rots for another decade."; lesson="A planner's hardest lesson: the most generous scheme delivers nothing if it's never built. Protect viability, or you protect no one."; }
     else if(secondary==='pub'){ art='🏢'; title='Refused: The Greedy Scheme'; verdict="You squeezed out every ounce of public value. The community revolted, the committee refused you, and you're toxic with this authority."; lesson="Winning every negotiation and giving nothing back gets you refused - and remembered. Public value is what buys your consent."; }
-    else { const ll=LIFELINE()==='via'?'Viability':'Public value'; art='💀'; title=(LIFELINE()==='via'?'The Scheme Collapsed':'The Public Was Sold Out'); verdict=`Your ${ll.toLowerCase()} hit zero mid-fight. The opponent ground you down before you cleared the obstacle.`; lesson=`Your lifeline was ${ll}. Watch the telegraphed attack each turn - shield it or race to clear the resistance first. Survival is the precondition for everything else.`; }
+    else { const ll=LIFELINE()==='via'?'Viability':'Public value'; art='💀'; title=(LIFELINE()==='via'?'The Scheme Collapsed':'The Public Was Sold Out'); verdict=`Your ${ll.toLowerCase()} hit zero before you could clear the challenge in front of you.`; lesson=`Your lifeline was ${ll}. Keep an eye on what's building each turn — shield it, or clear the challenge before it lands. Everything else depends on staying in the game.`; }
   } else {
     const V=M.via,P=M.pub,S=M.stand;
     if(V>=45&&P>=45&&S>=35){ art='🌇'; tag='win'; title='Consent Granted - and Deserved'; verdict="Viable, valuable, and through with your standing intact. As good as development gets."; lesson="You balanced the whole system: kept the numbers working, delivered for the public, and kept the room onside. Good development is a compromise that still gets built."; }
@@ -497,11 +566,15 @@ function runOver(reachedDecision, secondary){
   document.getElementById('end-tag-top').textContent=reachedDecision?'The Decision':'Run over';
   document.getElementById('end-title').textContent=title; document.getElementById('end-verdict').textContent=verdict;
   renderHUD('end-meters'); document.getElementById('end-lesson').textContent=lesson;
+  // seat-perspective appraisal
+  const appr=buildAppraisal(reachedDecision);
+  document.getElementById('end-appraisal-title').textContent = side==='dev' ? 'From the developer\u2019s seat' : 'From the planner\u2019s seat';
+  document.getElementById('end-appraisal').innerHTML = appr.items.map(it=>`<div class="appr-item ${it.cls}">${it.text}</div>`).join('');
   const learned=Object.keys(cardXP).sort((a,b)=>cardXP[b]-cardXP[a]).slice(0,4);
   const revealPanel=document.getElementById('end-reveal-panel');
   if(learned.length){
-    document.getElementById('end-reveal').innerHTML=learned.map(id=>`<div class="reveal-item"><b>${CARD_LIB[id].name}</b> landed hard when you used it in the right situation - that's the real skill: matching the tactic to the moment.</div>`).join('')
-      + `<div class="reveal-item" style="color:var(--gold)">Tip: cards reward reading the obstacle - policy vs heritage, S106 vs community, enablement vs a viability crisis - before you play.</div>`;
+    document.getElementById('end-reveal').innerHTML=learned.map(id=>{ const c=CARD_LIB[id]; const cm=CAT_META[c.cat]||{label:c.cat,ico:''}; return `<div class="reveal-item"><b>${c.name}</b> <span style="color:var(--muted)">(${cm.ico} ${cm.label})</span> earned its keep when the situation suited it — reading the moment is the real skill.</div>`; }).join('')
+      + `<div class="reveal-item" style="color:var(--gold)">Each lever has its place: design reshapes a scheme and wins over heritage and communities, money buys consent but never fixes a cost crisis, negotiation talks people round, and resilience buys you time. Match the lever to the challenge.</div>`;
     revealPanel.style.display='';
   } else { revealPanel.style.display='none'; }
   const b=document.getElementById('end-again'); b.className='btn full '+(side==='plan'?'plan-btn':''); b.textContent=reachedDecision?'Run it again (new draw) ->':'Try again ->'; b.onclick=()=>startRun();
