@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consent — a Development Roguelike</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#15161C; --panel:#1E2029; --panel2:#252834; --border:rgba(255,255,255,0.10); --border-strong:rgba(255,255,255,0.20);
+  --text:#ECEAF0; --muted:#9A97A8; --faint:#615E70;
+  --dev:#E08A3C; --dev-dark:#B5642A; --plan:#3FB585; --plan-dark:#2E7A5E;
+  --via:#E08A3C; --pub:#3FB585; --stand:#B57FD0; --energy:#F0C94A;
+  --danger:#E0556A; --danger-bg:#3A2028; --success:#4FB56E; --gold:#F0C94A;
+  --card-bg:#2A2D3A; --card-hi:#343849;
+  --radius:10px; --radius-lg:16px; --serif:'DM Serif Display',Georgia,serif; --sans:'DM Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5;}
+.shell{max-width:840px;margin:0 auto;padding:18px 14px 50px;}
+.screen{display:none;} .screen.active{display:block;animation:fade .35s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+.masthead{text-align:center;padding:26px 0 20px;border-bottom:.5px solid var(--border);margin-bottom:20px;}
+.masthead-tag{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dev);margin-bottom:10px;}
+.masthead h1{font-family:var(--serif);font-size:42px;line-height:1.02;}
+.masthead h1 em{font-style:italic;color:var(--plan);}
+.masthead p{margin-top:12px;color:var(--muted);max-width:520px;margin-left:auto;margin-right:auto;}
+
+.panel{background:var(--panel);border:.5px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin-bottom:14px;}
+.panel-title{font-family:var(--serif);font-size:20px;margin-bottom:6px;}
+.panel-sub{color:var(--muted);font-size:13px;}
+
+.seat{cursor:pointer;transition:border-color .2s,transform .12s,background .2s;border:.5px solid var(--border);}
+.seat:hover{transform:translateY(-2px);background:var(--panel2);}
+.seat.dev:hover{border-color:var(--dev);} .seat.plan:hover{border-color:var(--plan);}
+.seat-top{display:flex;align-items:center;gap:12px;}
+.seat-emoji{font-size:32px;}
+.seat-role{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+.seat.dev .seat-role{color:var(--dev);} .seat.plan .seat-role{color:var(--plan);}
+.seat-title{font-family:var(--serif);font-size:21px;}
+.seat-desc{color:var(--muted);font-size:13px;margin-top:8px;}
+
+.tut li{margin:6px 0;color:var(--muted);font-size:13px;list-style:none;display:flex;gap:10px;}
+.tut li b{color:var(--text);} .tut-ico{flex-shrink:0;}
+
+.hud{position:sticky;top:0;z-index:20;background:var(--bg);padding:8px 0;border-bottom:.5px solid var(--border);margin-bottom:12px;}
+.hud-row{display:flex;gap:8px;flex-wrap:wrap;}
+.meter{flex:1;min-width:120px;background:var(--panel);border:.5px solid var(--border);border-radius:var(--radius);padding:7px 10px;}
+.meter-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);display:flex;justify-content:space-between;align-items:center;}
+.meter-lbl .life{font-size:8px;color:var(--danger);font-weight:700;}
+.meter-val{font-size:16px;font-weight:700;font-family:var(--serif);font-variant-numeric:tabular-nums;}
+.meter-track{height:5px;background:var(--border);border-radius:3px;margin-top:4px;overflow:hidden;}
+.meter-fill{height:100%;border-radius:3px;transition:width .4s ease;}
+.m-via .meter-fill{background:var(--via);} .m-pub .meter-fill{background:var(--pub);} .m-stand .meter-fill{background:var(--stand);}
+.meter.low .meter-fill{background:var(--danger)!important;}
+
+.map-cols{display:flex;justify-content:space-between;gap:6px;}
+.map-col{display:flex;flex-direction:column;gap:12px;flex:1;align-items:center;}
+.map-node{width:100%;max-width:140px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:10px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.map-node.reachable{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;}
+.map-node.reachable:hover{background:var(--panel2);transform:translateY(-2px);}
+.map-node.done{opacity:.4;} .map-node.locked{opacity:.3;cursor:not-allowed;}
+.map-node .ico{font-size:22px;} .map-node .nm{font-size:11px;font-weight:600;margin-top:3px;}
+.map-node .ty{font-size:9px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
+.map-stage{font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);text-align:center;margin-bottom:6px;line-height:1.25;min-height:24px;}
+
+.casefile{background:var(--panel2);border:.5px solid var(--gold);border-radius:var(--radius);padding:14px 16px;}
+.casefile .cl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:5px;}
+.casefile .real{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;border-top:.5px solid var(--border);padding-top:8px;}
+
+.enc-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+.enc-emoji{font-size:30px;} .enc-name{font-family:var(--serif);font-size:22px;}
+.enc-flavor{color:var(--muted);font-size:13px;font-style:italic;margin-bottom:10px;}
+.foe{background:var(--panel2);border:.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;}
+.foe-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.foe-name{font-size:12px;font-weight:700;}
+.res-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+.res-val{font-family:var(--serif);font-size:22px;font-variant-numeric:tabular-nums;}
+.res-track{height:8px;background:var(--danger-bg);border-radius:4px;margin-top:6px;overflow:hidden;}
+.res-fill{height:100%;background:linear-gradient(90deg,var(--danger),#c0455a);border-radius:4px;transition:width .4s;}
+.intent{margin-top:10px;padding:8px 11px;background:rgba(224,85,106,.12);border:.5px solid var(--danger);border-radius:8px;font-size:12.5px;display:flex;align-items:center;gap:8px;}
+.intent .ico{font-size:16px;} .intent b{color:var(--danger);}
+
+.turn-bar{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;}
+.energy-pips{display:flex;gap:4px;}
+.epip{width:16px;height:16px;border-radius:50%;background:var(--border);border:1px solid var(--border-strong);}
+.epip.on{background:var(--energy);border-color:var(--energy);box-shadow:0 0 6px rgba(240,201,74,.5);}
+.energy-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--energy);font-weight:700;}
+.turn-info{font-size:11px;color:var(--muted);margin-left:auto;}
+
+.enc-log{background:var(--panel2);border-radius:var(--radius);padding:8px 12px;margin:8px 0;font-size:12px;color:var(--muted);max-height:96px;overflow-y:auto;}
+.enc-log div{padding:1px 0;} .enc-log .hit{color:var(--danger);} .enc-log .good{color:var(--success);} .enc-log .combo{color:var(--gold);font-weight:600;}
+
+.hand{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;}
+.pcard{width:138px;background:var(--card-bg);border:1px solid var(--border-strong);border-radius:10px;padding:10px;cursor:pointer;transition:transform .12s,border-color .12s,box-shadow .12s;position:relative;display:flex;flex-direction:column;min-height:158px;}
+.pcard:hover:not(.disabled){transform:translateY(-6px);border-color:var(--gold);box-shadow:0 6px 20px rgba(0,0,0,.4);}
+.pcard.disabled{opacity:.4;cursor:not-allowed;}
+.pcard .cc-cost{position:absolute;top:-8px;left:-8px;width:26px;height:26px;border-radius:50%;background:var(--energy);color:#1a1a1a;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.4);}
+.pcard .cc-once{position:absolute;top:-8px;right:-6px;font-size:9px;background:var(--danger);color:#fff;padding:2px 6px;border-radius:10px;font-weight:700;}
+.pcard .cc-name{font-weight:700;font-size:13px;margin-bottom:4px;padding-left:16px;}
+.pcard .cc-type{font-size:9px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:6px;padding-left:16px;}
+.pcard .cc-text{font-size:11px;color:var(--text);flex:1;line-height:1.35;}
+.pcard .cc-tag{font-size:10px;color:var(--faint);margin-top:6px;font-style:italic;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--dev-dark);color:#fff;border:none;border-radius:var(--radius);padding:12px 18px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,opacity .2s;}
+.btn:hover{background:var(--dev);} .btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn.full{width:100%;} .btn.ghost{background:transparent;color:var(--muted);border:.5px solid var(--border);}
+.btn.ghost:hover{border-color:var(--gold);color:var(--text);}
+.btn.plan-btn{background:var(--plan-dark);} .btn.plan-btn:hover{background:var(--plan);}
+.btn.end{background:var(--panel2);border:.5px solid var(--border-strong);} .btn.end:hover{background:var(--card-hi);}
+.btn-row{display:flex;gap:10px;margin-top:10px;}
+
+.draft-cards{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:12px 0;}
+.draft-cards .pcard{cursor:pointer;}
+.event-choice{display:block;width:100%;text-align:left;background:var(--panel2);border:.5px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-bottom:9px;cursor:pointer;color:var(--text);font-family:var(--sans);font-size:13.5px;transition:border-color .15s,transform .1s;}
+.event-choice:hover{border-color:var(--gold);transform:translateX(3px);}
+
+.big-art{font-size:56px;text-align:center;margin:4px 0;}
+.end-title{font-family:var(--serif);font-size:30px;text-align:center;line-height:1.05;}
+.end-tag{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px;}
+.tag-win{background:rgba(79,181,110,.18);color:var(--success);border:.5px solid var(--success);}
+.tag-fail{background:rgba(224,85,106,.18);color:var(--danger);border:.5px solid var(--danger);}
+.tag-meh{background:rgba(240,201,74,.15);color:var(--gold);border:.5px solid var(--gold);}
+.lesson{background:rgba(63,181,133,.10);border:.5px solid var(--plan-dark);border-radius:var(--radius);padding:12px 14px;margin-top:12px;}
+.lesson .ll{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--plan);font-weight:700;margin-bottom:3px;}
+.reveal-item{font-size:12.5px;padding:5px 0;border-bottom:.5px solid var(--border);color:var(--muted);}
+.reveal-item:last-child{border:none;} .reveal-item b{color:var(--text);}
+.foot{text-align:center;color:var(--faint);font-size:11px;margin-top:24px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel2);border:.5px solid var(--gold);color:var(--text);padding:10px 18px;border-radius:20px;font-size:13px;z-index:50;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<div id="s-home" class="screen active">
+  <div class="masthead">
+    <div class="masthead-tag">Career Roguelike · Development &amp; Planning</div>
+    <h1>Con<em>sent</em></h1>
+    <p>A derelict site, a scheme to fight for, and someone across the table fighting back. Build a deck of tactics, read your opponent, and survive the run from acquisition to decision. The right card depends on the moment — and your rival hits back every turn.</p>
+  </div>
+  <div class="panel" style="border-color:var(--gold)">
+    <div class="panel-title" style="font-size:17px">It's a duel, not a puzzle</div>
+    <div class="panel-sub">Each stage is a negotiation against a live opponent who <b>attacks your key metric every turn</b> — and you'll see it coming, so defend or race. Cards aren't just big numbers: the right tactic lands hard in the right situation and flops in the wrong one. Time your trump cards, chain combos, and don't let your lifeline hit zero.</div>
+  </div>
+  <div class="panel seat dev" onclick="chooseSeat('dev')">
+    <div class="seat-top"><div class="seat-emoji">🏗️</div><div><div class="seat-role">The Developer</div><div class="seat-title">Push the scheme through, profitably</div></div></div>
+    <div class="seat-desc">Lifeline: <b style="color:var(--via)">Viability</b>. Your rival is the <b>Planning Authority</b> — it demands affordable housing, threatens refusal, rallies objectors. Wear down each obstacle before it grinds your numbers to nothing.</div>
+  </div>
+  <div class="panel seat plan" onclick="chooseSeat('plan')">
+    <div class="seat-top"><div class="seat-emoji">🏛️</div><div><div class="seat-role">The Planner</div><div class="seat-title">Extract public value — and still deliver</div></div></div>
+    <div class="seat-desc">Lifeline: <b style="color:var(--pub)">Public value</b>. Your rival is the <b>Developer</b> — viability reports, lobbying your chair, threats to walk. Hold the public interest without strangling the scheme.</div>
+  </div>
+</div>
+
+<div id="s-intro" class="screen">
+  <div class="masthead"><div class="masthead-tag" id="intro-tag"></div><h1 id="intro-title"></h1></div>
+  <div class="panel">
+    <div class="panel-title" style="font-size:17px">How a run works</div>
+    <ul class="tut">
+      <li><span class="tut-ico">🗺️</span><span><b>The process map:</b> move through the real stages of development — <span id="intro-stages"></span>. Each is a fight; a draft follows each win.</span></li>
+      <li><span class="tut-ico">⚔️</span><span><b>The opponent telegraphs:</b> at the top of your turn you see its next move (e.g. "−9 to your lifeline"). Shield it, or clear the obstacle first. It also <b>reacts</b> to some cards you play.</span></li>
+      <li><span class="tut-ico">🎯</span><span><b>Context matters:</b> a card can be strong here and weak there — no hints. Learn the matchups. Each obstacle has a soft spot to find.</span></li>
+      <li><span class="tut-ico">✨</span><span><b>Combos &amp; trumps:</b> some card pairs chain for a bonus. Your most powerful cards work <b>once per fight</b> — time them.</span></li>
+      <li><span class="tut-ico">💀</span><span><b>Permadeath:</b> lifeline to zero and the scheme collapses. Damage carries between fights — survive to the Decision.</span></li>
+    </ul>
+  </div>
+  <div class="panel" style="border-color:var(--gold)">
+    <div class="panel-title" style="font-size:16px">Your starting deck</div>
+    <div class="draft-cards" id="intro-deck"></div>
+  </div>
+  <div class="btn-row"><button class="btn ghost full" onclick="show('s-home')">← Back</button><button class="btn full" id="intro-start"></button></div>
+</div>
+
+<div id="s-map" class="screen">
+  <div class="hud" id="map-hud"></div>
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+      <div class="panel-title" style="font-size:18px" id="map-title">The development process</div>
+      <div class="panel-sub" id="map-deckcount"></div>
+    </div>
+    <div class="panel-sub" id="map-lens" style="margin-bottom:8px"></div>
+    <div class="map" id="map-render"></div>
+  </div>
+  <button class="btn ghost full" onclick="showDeck()">📇 View my deck</button>
+  <button class="btn ghost full" style="margin-top:8px" onclick="abandonRun()">⟲ Abandon run &amp; start fresh</button>
+</div>
+
+<div id="s-casefile" class="screen">
+  <div class="masthead"><div class="masthead-tag" id="cf-stage"></div><h1 id="cf-title"></h1></div>
+  <div class="panel">
+    <div class="casefile">
+      <div class="cl">📁 The situation</div>
+      <div id="cf-body" style="font-size:13.5px"></div>
+      <div class="real" id="cf-real"></div>
+    </div>
+  </div>
+  <button class="btn full" id="cf-start"></button>
+</div>
+
+<div id="s-encounter" class="screen">
+  <div class="hud" id="enc-hud"></div>
+  <div class="panel">
+    <div class="enc-head"><span class="enc-emoji" id="enc-emoji"></span><span class="enc-name" id="enc-name"></span></div>
+    <div class="enc-flavor" id="enc-flavor"></div>
+    <div class="foe">
+      <div class="foe-top"><span class="foe-name" id="foe-name"></span><span><span class="res-lbl">resistance</span> <span class="res-val" id="res-val"></span></span></div>
+      <div class="res-track"><div class="res-fill" id="res-fill"></div></div>
+      <div class="intent" id="intent"></div>
+    </div>
+    <div class="turn-bar">
+      <span class="energy-lbl">⚡ Energy</span><div class="energy-pips" id="energy-pips"></div>
+      <span class="turn-info" id="turn-info"></span>
+    </div>
+    <div class="enc-log" id="enc-log"></div>
+    <div class="hand" id="hand"></div>
+    <button class="btn end full" onclick="endTurn()">End turn ↻ (opponent moves, then redraw)</button>
+    <button class="btn ghost full" style="margin-top:8px" onclick="abandonRun()">⟲ Abandon run &amp; start fresh</button>
+  </div>
+</div>
+
+<div id="s-draft" class="screen">
+  <div class="masthead"><div class="masthead-tag">Obstacle cleared</div><h1>Add a <em>tactic</em></h1><p>Pick one card for your deck — or skip to keep it lean and reliable.</p></div>
+  <div class="panel"><div class="draft-cards" id="draft-cards"></div></div>
+  <button class="btn ghost full" onclick="skipDraft()">Skip — keep my deck focused</button>
+  <button class="btn ghost full" style="margin-top:8px" onclick="abandonRun()">⟲ Abandon run &amp; start fresh</button>
+</div>
+
+<div id="s-event" class="screen">
+  <div class="masthead"><div class="masthead-tag">An event</div><h1 id="event-title"></h1></div>
+  <div class="panel"><div class="panel-sub" id="event-body" style="font-size:14px;margin-bottom:12px"></div><div id="event-choices"></div></div>
+  <button class="btn ghost full" onclick="abandonRun()">⟲ Abandon run &amp; start fresh</button>
+</div>
+
+<div id="s-deck" class="screen">
+  <div class="masthead"><div class="masthead-tag">Your deck</div><h1>Tactics <em>in hand</em></h1></div>
+  <div class="panel"><div class="draft-cards" id="deck-cards"></div></div>
+  <button class="btn full" onclick="show('s-map')">← Back to the map</button>
+</div>
+
+<div id="s-end" class="screen">
+  <div class="masthead"><div class="masthead-tag" id="end-tag-top">Run over</div></div>
+  <div class="panel">
+    <div class="big-art" id="end-art"></div>
+    <div style="text-align:center;margin-bottom:8px"><span class="end-tag" id="end-tag"></span></div>
+    <div class="end-title" id="end-title"></div>
+    <div class="panel-sub" style="text-align:center;margin-top:8px" id="end-verdict"></div>
+    <div class="hud" id="end-meters" style="position:static;margin-top:16px"></div>
+    <div class="lesson"><div class="ll">What this run taught</div><div id="end-lesson"></div></div>
+  </div>
+  <div class="panel" id="end-reveal-panel">
+    <div class="panel-title" style="font-size:16px">What you learned about the tactics</div>
+    <div id="end-reveal"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn ghost full" onclick="location.reload()">← Menu</button>
+    <button class="btn full" id="end-again"></button>
+  </div>
+  <div class="foot">A teaching roguelike. Cards are real development &amp; planning tactics; numbers simplified so trade-offs are visible.</div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo({top:0}); }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); }
+function clamp(x,lo,hi){ return Math.max(lo,Math.min(hi,x)); }
+
+const CARD_LIB={
+  negotiate:{name:"Negotiate",type:"attack",cost:1,prog:6,text:"Reduce Resistance 6. A reliable all-rounder.",tag:"Bread and butter."},
+  revise:{name:"Revise Scheme",type:"attack",cost:1,prog:8,pub:-3,strongVs:['viability'],text:"Reduce Resistance 8 (more in a cost crisis); Public value -3.",tag:"Trim to fit."},
+  s106:{name:"Section 106 Offer",type:"attack",cost:2,prog:11,via:-4,strongVs:['objection','councillor'],text:"Reduce 11 (strong vs community/politics); Viability -4.",tag:"Pay for consent."},
+  valueeng:{name:"Value Engineer",type:"skill",cost:1,via:+9,pub:-5,strongVs:['viability'],text:"Viability +9 (great in a cost crisis); Public value -5.",tag:"Protect the margin."},
+  communitywin:{name:"Community Benefit",type:"defend",cost:1,prog:4,blockPub:12,strongVs:['objection'],text:"Reduce 4 (more vs objections); shield Public value 12.",tag:"Give them something real."},
+  lobby:{name:"Lobby the Chair",type:"attack",cost:3,prog:20,once:true,strongVs:['committee','councillor'],text:"ONCE per fight. Reduce 20 (huge at committee).",tag:"Know the right people."},
+  standfirm:{name:"Hold the Line",type:"defend",cost:1,blockVia:14,text:"Shield Viability up to 14 this turn.",tag:"Weather the storm."},
+  viabilityrep:{name:"Viability Report",type:"attack",cost:2,prog:14,stand:-5,pub:-4,once:true,combo:{after:'valueeng',bonusProg:8,note:'stacked with value engineering'},text:"ONCE. Reduce 14; Standing -5, Public value -4. Combo after Value Engineer.",tag:"The loophole."},
+  charmoffensive:{name:"Charm Offensive",type:"skill",cost:1,stand:+10,strongVs:['councillor'],text:"Standing +10 (wins over a councillor).",tag:"A likeable developer."},
+  policycite:{name:"Cite Policy",type:"attack",cost:1,prog:6,strongVs:['heritage'],text:"Reduce 6 (strong vs heritage - the plan is clear).",tag:"Chapter and verse."},
+  condition:{name:"Attach Condition",type:"attack",cost:1,prog:7,via:-2,strongVs:['objection'],text:"Reduce 7; Viability -2. A binding obligation.",tag:"Yes, but only if..."},
+  consult:{name:"Public Consultation",type:"defend",cost:2,prog:5,blockPub:12,strongVs:['objection'],text:"Reduce 5; shield Public value 12. Combo -> Design Review.",tag:"Bring residents in."},
+  designreview:{name:"Design Review",type:"attack",cost:2,prog:11,pub:+5,strongVs:['heritage'],combo:{after:'consult',bonusProg:8,pub:+4,note:'genuine engagement'},text:"Reduce 11; Public value +5. Combo after Consultation.",tag:"Raise the bar."},
+  enablement:{name:"Enable the Scheme",type:"skill",cost:1,via:+10,strongVs:['viability'],text:"Viability +10 (keeps a wobbling scheme deliverable).",tag:"Help it work."},
+  refusethreat:{name:"Threaten Refusal",type:"attack",cost:3,prog:19,via:-5,once:true,strongVs:['committee'],text:"ONCE. Reduce 19; Viability -5. The nuclear option.",tag:"We can say no."},
+  holdpolicy:{name:"Stand on Principle",type:"defend",cost:1,blockPub:14,text:"Shield Public value up to 14 this turn.",tag:"Public interest first."},
+  independentviab:{name:"Independent Assessor",type:"skill",cost:2,stand:+6,pub:+5,strongVs:['viability'],text:"Standing +6, Public value +5 (call the viability bluff).",tag:"Do your homework."},
+  armcouncillor:{name:"Brief the Councillor",type:"skill",cost:1,stand:+10,strongVs:['councillor'],text:"Standing +10 (turn your ally into a champion).",tag:"Manage the politics."},
+  compromise:{name:"Find the Middle",type:"attack",cost:2,prog:10,stand:+4,text:"Reduce 10; Standing +4. A deal both can live with.",tag:"Grown-up negotiation."},
+  delay:{name:"Play for Time",type:"defend",cost:1,blockVia:8,blockPub:8,text:"Shield BOTH meters up to 8 this turn.",tag:"Kick it to next committee."}
+};
+const START_DECK={
+  dev:['negotiate','negotiate','revise','s106','valueeng','communitywin','standfirm','charmoffensive'],
+  plan:['policycite','policycite','condition','consult','designreview','enablement','holdpolicy','armcouncillor']
+};
+const DRAFT_POOL={
+  dev:['lobby','viabilityrep','compromise','delay','communitywin','negotiate','standfirm','charmoffensive'],
+  plan:['refusethreat','independentviab','compromise','delay','designreview','enablement','holdpolicy','armcouncillor']
+};
+
+const ENC={
+  objection:{ emoji:'👥', name:"Community Objection", flavor:"'Not that tower! Not that traffic! And who can even afford these flats?'",
+    res:32, weakness:'defend',
+    intents:[ {ico:'📣',label:'Rally the objectors',dmg:13,target:'pub'}, {ico:'📰',label:'Bad press',dmg:10,target:'stand'} ],
+    reacts:{ viabilityrep:{ico:'😤',label:'Residents smell the loophole',dmg:6,target:'pub'} },
+    case:{ stage:'Stage 2 · Planning Application', title:'The Community Objects',
+      body:"Your scheme is public now, and the residents are loud: too tall, too much traffic, and 'luxury flats nobody local can afford.' Their objections can sink you at committee - you need to bring them onside or wear the pressure down.",
+      real:"Real parallel: Ouseburn Valley, Newcastle - a post-industrial brownfield regeneration where community buy-in shaped what got built. Genuine consultation, not spin, turns objectors into supporters." } },
+  viability:{ emoji:'📉', name:"Viability Crisis", flavor:"Construction costs just spiked. The numbers are wobbling.",
+    res:30, weakness:'enablement',
+    intents:[ {ico:'💸',label:'Costs climb again',dmg:12,target:'via'}, {ico:'🏦',label:'Lender gets nervous',dmg:10,target:'via'} ],
+    reacts:{ refusethreat:{ico:'🚪',label:'Developer threatens to walk',dmg:7,target:'pub'} },
+    case:{ stage:'Stage 1 · Site Acquisition / Appraisal', title:'The Numbers Wobble',
+      body:"Build costs have jumped and the appraisal is under water. If viability collapses, the scheme dies here - you must find cost savings or restore confidence without gutting what makes it worth building.",
+      real:"Real parallel: an office scheme approved pre-pandemic, delayed, arriving into a changed market - the 'ensure the financial position fits market needs' challenge from the development brief." } },
+  heritage:{ emoji:'🏛️', name:"Heritage Snag", flavor:"A conservation officer has spotted something worth protecting.",
+    res:34, weakness:'attack',
+    intents:[ {ico:'📜',label:'Heritage objection',dmg:11,target:'pub'}, {ico:'⏳',label:'Delay for assessment',dmg:9,target:'via'} ],
+    reacts:{ valueeng:{ico:'🏚️',label:'Cheapening a heritage setting backfires',dmg:6,target:'pub'} },
+    case:{ stage:'Stage 2 · Planning Application', title:'The Heritage Question',
+      body:"The site sits by something historic. Policy protections apply, and the conservation lobby is watching. Ham-fisted value-engineering will inflame it; careful design and policy literacy are your friends here.",
+      real:"Real parallel: Salford Quays / MediaCity - a brownfield transformation that respected its industrial heritage while introducing new uses. Design quality carried it." } },
+  councillor:{ emoji:'🗳️', name:"Grandstanding Councillor", flavor:"There's an election coming and he smells an easy win opposing you.",
+    res:28, weakness:'stand',
+    intents:[ {ico:'🎤',label:'Public denouncement',dmg:12,target:'stand'}, {ico:'🧨',label:'Whip up the committee',dmg:10,target:'pub'} ],
+    reacts:{ viabilityrep:{ico:'🗯️',label:'"Greedy developer!" headline',dmg:6,target:'stand'} },
+    case:{ stage:'Stage 2 · Development Management', title:'The Nervous Councillor',
+      body:"A local councillor is tempted to torch your scheme for applause. You can't out-vote him - you have to give him something to champion, or manage the politics so he doesn't blow it up.",
+      real:"Real parallel: every major regeneration lives or dies on local political consent. The London Olympic scheme succeeded partly by aligning political will behind a shared vision." } },
+  committee:{ emoji:'⚖️', name:"The Planning Committee", flavor:"The final vote. Everything you've built comes down to this room.", boss:true,
+    res:46, weakness:'lobby',
+    intents:[ {ico:'❔',label:'Tough questioning',dmg:12,target:'via'}, {ico:'🗳️',label:'Wavering votes',dmg:14,target:'pub'}, {ico:'⚖️',label:'Objection read out',dmg:10,target:'stand'} ],
+    reacts:{},
+    case:{ stage:'Stage 2→3 · Decision', title:'Committee Night',
+      body:"Everything comes to the vote. The package you've assembled - the concessions, the design, your standing - is on the table. Bring your strongest plays and time your trump cards; this is the toughest fight of the run.",
+      real:"Real parallel: the planning committee is where officer recommendation, political will and public opinion collide. A well-prepared scheme with genuine benefits and a credible officer gets consent." } }
+};
+
+const EVENTS=[
+  { title:"A Market Upswing", body:"Prices are rising - the scheme's suddenly worth more.",
+    choices:[ {t:"Bank the uplift (Viability +14).",fx:{via:+14}}, {t:"Reinvest into quality (Public value +12, Viability +4).",fx:{via:+4,pub:+12}} ] },
+  { title:"A Windfall Contact", body:"An old contact offers to smooth things over - for a price.",
+    choices:[ {t:"Take the favour (Standing +12).",fx:{stand:+12}}, {t:"Decline, do it clean (Standing +5, Public value +6).",fx:{stand:+5,pub:+6}} ] },
+  { title:"A Damaging Leak", body:"A draft viability report leaked to the press. Awkward.",
+    choices:[ {t:"Weather it honestly (Standing -5, Public value +8).",fx:{stand:-5,pub:+8}}, {t:"Spin hard (Standing +8, Public value -8).",fx:{stand:+8,pub:-8}} ] }
+];
+
+let side=null, M={via:55,pub:55,stand:50};
+let deck=[], drawPile=[], hand=[], discard=[], exhausted=[];
+let energy=0, MAX_ENERGY=3, blockVia=0, blockPub=0, blockStand=0;
+let curEnc=null, encLog=[], turnNum=0, lastCardPlayed=null;
+let mapNodes=[], mapCol=0, curNodeId=null, pendingNode=null, cardXP={};
+const LIFELINE=()=> side==='dev'?'via':'pub';
+
+function chooseSeat(s){
+  side=s;
+  document.getElementById('intro-tag').textContent = s==='dev'?'You are the Developer':'You are the Planner';
+  document.getElementById('intro-title').innerHTML = s==='dev'?'The <em>Developer</em>\u2019s Run':'The <em>Planner</em>\u2019s Run';
+  document.getElementById('intro-stages').textContent = s==='dev'
+    ? 'Site Acquisition -> Planning Application -> Construction -> Disposal'
+    : 'Site appraisal -> Development management -> Viability -> Decision';
+  document.getElementById('intro-deck').innerHTML = START_DECK[s].map(id=>cardHTML(id,false)).join('');
+  const b=document.getElementById('intro-start'); b.className='btn full '+(s==='plan'?'plan-btn':''); b.textContent='Begin the run ->'; b.onclick=startRun;
+  show('s-intro');
+}
+function startRun(){ M={via:55,pub:55,stand:50}; deck=[...START_DECK[side]]; cardXP={}; buildMap(); show('s-map'); renderMap(); }
+function buildMap(){
+  const stages=[ ['start'], ['objection','viability'], ['heritage','councillor'], ['objection','viability','event'], ['committee'] ];
+  mapNodes=[]; let uid=0;
+  stages.forEach((stage,ci)=>{ const col=[]; stage.forEach(type=>{ let node={id:'n'+(uid++),col:ci,type,done:false}; if(type==='event') node.event=EVENTS[Math.floor(Math.random()*EVENTS.length)]; col.push(node); }); mapNodes.push(col); });
+  mapCol=1; mapNodes[0][0].done=true;
+}
+function reachable(node){ return node.col===mapCol && !node.done; }
+function renderMap(){
+  renderHUD('map-hud');
+  document.getElementById('map-title').textContent = side==='dev'?'The development process':'The planning process';
+  document.getElementById('map-lens').innerHTML = side==='dev'
+    ? '<b style="color:var(--dev)">Developer\u2019s lens:</b> take the scheme from land to disposal - each stage a hurdle to clear.'
+    : '<b style="color:var(--plan)">Council\u2019s lens:</b> shepherd the scheme through the system, banking public value at each stage.';
+  document.getElementById('map-deckcount').textContent=deck.length+' cards';
+  const wrap=document.getElementById('map-render');
+  const stageNames = side==='dev'
+    ? ['Site Acquisition','Planning Application','Development Mgmt','Pre-Committee','Decision']
+    : ['Site appraisal','Development mgmt','Policy & design','Viability review','Decision'];
+  let html='<div class="map-cols">';
+  mapNodes.forEach((col,ci)=>{
+    html+='<div class="map-col"><div class="map-stage">'+stageNames[ci]+'</div>';
+    col.forEach(node=>{ const r=reachable(node); const cls=node.done?'done':r?'reachable':(node.col<mapCol?'done':'locked'); const info=nodeInfo(node);
+      html+=`<div class="map-node ${cls}" ${r?`onclick="enterNode('${node.id}')"`:''}><div class="ico">${info.ico}</div><div class="nm">${info.nm}</div><div class="ty">${info.ty}</div></div>`; });
+    html+='</div>';
+  });
+  html+='</div>'; wrap.innerHTML=html;
+}
+function nodeInfo(node){ if(node.type==='start')return{ico:'🚩',nm:'Site optioned',ty:'start'}; if(node.type==='event')return{ico:'❓',nm:'Event',ty:'chance'}; const e=ENC[node.type]; return{ico:e.emoji,nm:e.name,ty:e.boss?'boss':'obstacle'}; }
+function enterNode(id){ let node=null; mapNodes.forEach(c=>c.forEach(n=>{if(n.id===id)node=n;})); if(!node||!reachable(node))return; curNodeId=id; if(node.type==='event'){ startEvent(node); } else { showCaseFile(node); } }
+function completeNode(){ let node=null; mapNodes.forEach(c=>c.forEach(n=>{if(n.id===curNodeId)node=n;})); if(node){ node.done=true; mapCol=node.col+1; } }
+
+function showCaseFile(node){ pendingNode=node; const cf=ENC[node.type].case;
+  document.getElementById('cf-stage').textContent=cf.stage; document.getElementById('cf-title').textContent=cf.title;
+  document.getElementById('cf-body').textContent=cf.body; document.getElementById('cf-real').textContent=cf.real;
+  const b=document.getElementById('cf-start'); b.className='btn full '+(side==='plan'?'plan-btn':''); b.textContent='Enter the negotiation ->'; b.onclick=()=>startEncounter(pendingNode);
+  show('s-casefile');
+}
+function startEvent(node){ const ev=node.event;
+  document.getElementById('event-title').textContent=ev.title; document.getElementById('event-body').textContent=ev.body;
+  const wrap=document.getElementById('event-choices'); wrap.innerHTML='';
+  ev.choices.forEach(ch=>{ const b=document.createElement('button'); b.className='event-choice'; b.textContent=ch.t; b.onclick=()=>{ applyMeterFx(ch.fx); completeNode(); toast('Applied.'); show('s-map'); renderMap(); }; wrap.appendChild(b); });
+  show('s-event');
+}
+function startEncounter(node){ const base=ENC[node.type]; curEnc={ ...base, res:base.res+node.col*2, maxRes:base.res+node.col*2, key:node.type };
+  encLog=[]; turnNum=0; lastCardPlayed=null; drawPile=shuffle([...deck]); hand=[]; discard=[]; exhausted=[]; startTurn(true); show('s-encounter'); renderEncounter();
+}
+function currentIntent(){ return curEnc.intents[(turnNum-1)%curEnc.intents.length]; }
+function startTurn(first){ turnNum++; energy=MAX_ENERGY; blockVia=0; blockPub=0; blockStand=0; drawCards(5); if(!first) log('- Turn '+turnNum+' -'); }
+function drawCards(n){ for(let i=0;i<n;i++){ if(drawPile.length===0){ drawPile=shuffle([...discard]); discard=[]; if(drawPile.length===0)break; } hand.push(drawPile.pop()); } }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function log(m,cls){ encLog.push(cls?`<span class="${cls}">${m}</span>`:m); }
+
+function effectiveProg(c,id){ let prog=c.prog||0;
+  if(prog && c.strongVs && c.strongVs.includes(curEnc.key)){ prog=Math.round(prog*1.8); }
+  if(curEnc.weakness){ if(curEnc.weakness===c.type || curEnc.weakness===id){ prog=Math.round(prog*1.4)+2; } }
+  if(c.combo && c.combo.after && lastCardPlayed===c.combo.after){ prog+=(c.combo.bonusProg||0); }
+  return prog;
+}
+function renderEncounter(){
+  renderHUD('enc-hud');
+  document.getElementById('enc-emoji').textContent=curEnc.emoji; document.getElementById('enc-name').textContent=curEnc.name; document.getElementById('enc-flavor').textContent=curEnc.flavor;
+  document.getElementById('foe-name').textContent = side==='dev'?'🏛️ Planning Authority (opponent)':'🏗️ Developer (opponent)';
+  document.getElementById('res-val').textContent=Math.max(0,Math.round(curEnc.res));
+  document.getElementById('res-fill').style.width=clamp(curEnc.res/curEnc.maxRes*100,0,100)+'%';
+  const it=currentIntent(); const tgt={via:'Viability',pub:'Public value',stand:'Standing'}[it.target];
+  document.getElementById('intent').innerHTML=`<span class="ico">${it.ico}</span><span>Next move: <b>${it.label}</b> - <b>-${it.dmg} ${tgt}</b> if you don't clear this turn. ${it.target===LIFELINE()?'⚠ hits your lifeline!':''}</span>`;
+  const ep=document.getElementById('energy-pips'); ep.innerHTML=''; for(let i=0;i<MAX_ENERGY;i++){ const d=document.createElement('div'); d.className='epip'+(i<energy?' on':''); ep.appendChild(d); }
+  document.getElementById('turn-info').textContent=`Draw ${drawPile.length} · Discard ${discard.length}`;
+  const lg=document.getElementById('enc-log'); lg.innerHTML=encLog.slice(-7).map(l=>`<div>${l}</div>`).join(''); lg.scrollTop=lg.scrollHeight;
+  const h=document.getElementById('hand'); h.innerHTML=''; hand.forEach((id,i)=>h.insertAdjacentHTML('beforeend',cardHTML(id,true,i,energy)));
+}
+function cardHTML(id,playable,idx,curEnergy){
+  const c=CARD_LIB[id]; const disabled=playable&&curEnergy!=null&&curEnergy<c.cost; const border=c.type==='attack'?'var(--dev)':c.type==='defend'?'var(--plan)':'var(--stand)';
+  return `<div class="pcard ${disabled?'disabled':''}" ${playable&&!disabled?`onclick="playCard(${idx})"`:''} style="border-top:2px solid ${border}">
+    <div class="cc-cost">${c.cost}</div>${c.once?'<div class="cc-once">1x</div>':''}
+    <div class="cc-name">${c.name}</div><div class="cc-type">${c.type}</div>
+    <div class="cc-text">${c.text}</div><div class="cc-tag">${c.tag}</div></div>`;
+}
+function playCard(idx){
+  const id=hand[idx]; const c=CARD_LIB[id]; if(energy<c.cost) return; energy-=c.cost;
+  const prog=effectiveProg(c,id);
+  if(prog){ curEnc.res-=prog; const strong=(c.strongVs&&c.strongVs.includes(curEnc.key))||curEnc.weakness===c.type||curEnc.weakness===id;
+    log(`▸ ${c.name}: -${prog} resistance${strong?' - a strong fit here!':''}`, strong?'good':null); if(strong)cardXP[id]=(cardXP[id]||0)+1; }
+  if(c.combo && c.combo.after && lastCardPlayed===c.combo.after){ log(`✨ COMBO: ${c.combo.note}!`,'combo'); if(c.combo.pub)M.pub=clamp(M.pub+c.combo.pub,0,100); }
+  if(c.via)M.via=clamp(M.via+c.via,0,100); if(c.pub)M.pub=clamp(M.pub+c.pub,0,100); if(c.stand)M.stand=clamp(M.stand+c.stand,0,100);
+  if(c.blockVia)blockVia+=c.blockVia; if(c.blockPub)blockPub+=c.blockPub; if(c.blockVia||c.blockPub) log(`▸ ${c.name}: shield up`);
+  if(curEnc.reacts && curEnc.reacts[id]){ const rc=curEnc.reacts[id]; const t={via:'Viability',pub:'Public value',stand:'Standing'}[rc.target]; M[rc.target]=clamp(M[rc.target]-rc.dmg,0,100); log(`⚡ Opponent reacts: ${rc.label} - -${rc.dmg} ${t}`,'hit'); }
+  lastCardPlayed=id; hand.splice(idx,1); if(c.once) exhausted.push(id); else discard.push(id);
+  if(curEnc.res<=0){ winEncounter(); return; } if(checkDeath()) return; renderEncounter();
+}
+function endTurn(){
+  if(curEnc.res>0){ const it=currentIntent(); let dmg=it.dmg, blk=0; if(it.target==='via')blk=blockVia; else if(it.target==='pub')blk=blockPub; else blk=blockStand;
+    dmg=Math.max(0,dmg-blk); const t={via:'Viability',pub:'Public value',stand:'Standing'}[it.target]; M[it.target]=clamp(M[it.target]-dmg,0,100);
+    log(dmg>0?`⚔ ${it.label}: -${dmg} ${t}`:`🛡 ${it.label} fully blocked`, dmg>0?'hit':'good'); }
+  if(checkDeath()) return; discard.push(...hand); hand=[]; startTurn(false); renderEncounter();
+}
+function checkDeath(){ if(M[LIFELINE()]<=0){ runOver(false); return true; } if(side==='plan'&&M.via<=0){ runOver(false,'via'); return true; } if(side==='dev'&&M.pub<=0){ runOver(false,'pub'); return true; } return false; }
+function winEncounter(){ log('✔ Cleared!','good'); const boss=curEnc.key==='committee'; completeNode(); if(boss){ runOver(true); return; }
+  M.via=clamp(M.via+1,0,100); M.pub=clamp(M.pub+1,0,100); M.stand=clamp(M.stand+1,0,100); offerDraft();
+}
+function offerDraft(){ const picks=shuffle([...DRAFT_POOL[side]]).slice(0,3); const wrap=document.getElementById('draft-cards'); wrap.innerHTML='';
+  picks.forEach(id=>{ const div=document.createElement('div'); div.innerHTML=cardHTML(id,false); const el=div.firstElementChild; el.style.cursor='pointer'; el.onclick=()=>{ deck.push(id); toast(CARD_LIB[id].name+' added'); show('s-map'); renderMap(); }; wrap.appendChild(el); });
+  show('s-draft');
+}
+function skipDraft(){ show('s-map'); renderMap(); }
+function abandonRun(){ if(confirm('Abandon this run and return to the menu?\n\nThe current draw and your progress this run cannot be recovered.')){ curEnc=null; show('s-home'); } }
+function applyMeterFx(fx){ if(fx.via)M.via=clamp(M.via+fx.via,0,100); if(fx.pub)M.pub=clamp(M.pub+fx.pub,0,100); if(fx.stand)M.stand=clamp(M.stand+fx.stand,0,100); }
+function renderHUD(cid){ const c=document.getElementById(cid); if(!c)return;
+  const defs=[['via','Viability','m-via'],['pub','Public value','m-pub'],['stand','Standing','m-stand']];
+  c.innerHTML='<div class="hud-row">'+defs.map(([k,name,cls])=>{ const life=k===LIFELINE(); const low=M[k]<25;
+    return `<div class="meter ${cls} ${low?'low':''}"><div class="meter-lbl"><span>${name}${life?' <span class="life">♥ lifeline</span>':''}</span><span class="meter-val">${Math.round(M[k])}</span></div><div class="meter-track"><div class="meter-fill" style="width:${M[k]}%"></div></div></div>`; }).join('')+'</div>';
+}
+function showDeck(){ document.getElementById('deck-cards').innerHTML=deck.map(id=>cardHTML(id,false)).join(''); show('s-deck'); }
+
+function runOver(reachedDecision, secondary){
+  let art,tag,title,verdict,lesson;
+  if(!reachedDecision){ tag='fail';
+    if(secondary==='via'){ art='🏚️'; title='The Site That Never Was'; verdict="You piled on so much public value the numbers stopped working. The developer walked; the site rots for another decade."; lesson="A planner's hardest lesson: the most generous scheme delivers nothing if it's never built. Protect viability, or you protect no one."; }
+    else if(secondary==='pub'){ art='🏢'; title='Refused: The Greedy Scheme'; verdict="You squeezed out every ounce of public value. The community revolted, the committee refused you, and you're toxic with this authority."; lesson="Winning every negotiation and giving nothing back gets you refused - and remembered. Public value is what buys your consent."; }
+    else { const ll=LIFELINE()==='via'?'Viability':'Public value'; art='💀'; title=(LIFELINE()==='via'?'The Scheme Collapsed':'The Public Was Sold Out'); verdict=`Your ${ll.toLowerCase()} hit zero mid-fight. The opponent ground you down before you cleared the obstacle.`; lesson=`Your lifeline was ${ll}. Watch the telegraphed attack each turn - shield it or race to clear the resistance first. Survival is the precondition for everything else.`; }
+  } else {
+    const V=M.via,P=M.pub,S=M.stand;
+    if(V>=45&&P>=45&&S>=35){ art='🌇'; tag='win'; title='Consent Granted - and Deserved'; verdict="Viable, valuable, and through with your standing intact. As good as development gets."; lesson="You balanced the whole system: kept the numbers working, delivered for the public, and kept the room onside. Good development is a compromise that still gets built."; }
+    else if(V>=P+22){ art='💰'; tag='meh'; title='Built, but Profit-Led'; verdict="It got consent and it'll make money - but the neighbourhood got less than it might have."; lesson="You leaned hard toward viability. Deliverable, yes - but you left public value on the table, and authorities remember a developer who squeezes."; }
+    else if(P>=V+22){ art='🌳'; tag='meh'; title='Generous, but Wafer-Thin'; verdict="Rich in public benefit - but it only just scraped over the viability line."; lesson="You won big for the public but ran viability close to collapse. A touch less pressure and you'd lose nothing, and sleep easier."; }
+    else { art='🏙️'; tag='meh'; title='Consent Granted'; verdict="After a hard run, a workable compromise gets built. Nobody's ecstatic, but the site's alive."; lesson="You survived and delivered. The sharpest players tune their deck and timing to hit the sweet spot - but getting it built is no small thing."; }
+  }
+  document.getElementById('end-art').textContent=art;
+  const tg=document.getElementById('end-tag'); tg.className='end-tag '+(tag==='win'?'tag-win':tag==='fail'?'tag-fail':'tag-meh'); tg.textContent=tag==='win'?'Success':tag==='fail'?'Run ended':'Mixed result';
+  document.getElementById('end-tag-top').textContent=reachedDecision?'The Decision':'Run over';
+  document.getElementById('end-title').textContent=title; document.getElementById('end-verdict').textContent=verdict;
+  renderHUD('end-meters'); document.getElementById('end-lesson').textContent=lesson;
+  const learned=Object.keys(cardXP).sort((a,b)=>cardXP[b]-cardXP[a]).slice(0,4);
+  const revealPanel=document.getElementById('end-reveal-panel');
+  if(learned.length){
+    document.getElementById('end-reveal').innerHTML=learned.map(id=>`<div class="reveal-item"><b>${CARD_LIB[id].name}</b> landed hard when you used it in the right situation - that's the real skill: matching the tactic to the moment.</div>`).join('')
+      + `<div class="reveal-item" style="color:var(--gold)">Tip: cards reward reading the obstacle - policy vs heritage, S106 vs community, enablement vs a viability crisis - before you play.</div>`;
+    revealPanel.style.display='';
+  } else { revealPanel.style.display='none'; }
+  const b=document.getElementById('end-again'); b.className='btn full '+(side==='plan'?'plan-btn':''); b.textContent=reachedDecision?'Run it again (new draw) ->':'Try again ->'; b.onclick=()=>startRun();
+  show('s-end');
+}
+</script>
+</body>
+</html>
