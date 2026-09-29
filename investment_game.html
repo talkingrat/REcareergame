@@ -216,6 +216,11 @@ svg text{font-family:var(--sans);}
       <div class="scoreline"><span>Total return</span><span class="big" id="db-return"></span></div>
     </div>
   </div>
+  <div class="card" id="db-exit-card" style="display:none;border-color:var(--accent)">
+    <div class="card-title" style="font-size:16px">🚪 The fund exited</div>
+    <div class="card-sub" style="margin-bottom:6px">A fund like this has a fixed life. At the end of Year 10 it closes, so anything you were still holding was sold at that year's market and turned into cash — ready or not. That final sale is baked into your result below.</div>
+    <div id="db-exit-list"></div>
+  </div>
   <div class="card">
     <div class="card-title" style="font-size:17px" id="db-grade"></div>
     <div class="card-sub" id="db-grade-sub"></div>
@@ -390,6 +395,7 @@ function startGame(){
   lastPrices={}; props.forEach(p=>lastPrices[p.id]=priceOf(p));
   decisions=[];
   acct={ rent:0, interest:0, penalty:0, capitalBySector:{}, purchases:0, sales:0, peakDebt:0, fireSales:0, loansTaken:0, geared:0 };
+  exitReport=null;
   SECTOR_KEYS.forEach(k=>acct.capitalBySector[k]=0);
   dev=null;
   document.getElementById('event-area').innerHTML='';
@@ -698,9 +704,51 @@ function endYear(){
 }
 
 /* ============ FINISH & SCORING ============ */
+// At the end of Year 10 the fund's life ends: any assets still held are sold at
+// the final (Year 9) market and converted to cash. This both fixes out-of-range
+// valuation and teaches that a closed-ended fund must exit — you realise whatever
+// the market gives you at the deadline, ready or not.
+let exitReport=null;
+function autoExit(){
+  const valYear=YEARS-1; // Year 10 valuation uses the last modelled market (index 9)
+  const savedYear=year; year=valYear; // temporarily point valuation at a valid index
+  const sold=[]; let proceedsTotal=0, loansCleared=0;
+  props.forEach(p=>{ if(p.owned){
+    const gross=priceOf(p); const net=gross-p.loan;
+    const basis=(p.costBasis!=null?p.costBasis:gross);
+    acct.capitalBySector[p.sector]=(acct.capitalBySector[p.sector]||0)+(gross-basis);
+    acct.sales+=gross; proceedsTotal+=net; loansCleared+=p.loan;
+    cash+=net; sold.push({name:p.name, gross, loan:p.loan, net});
+    p.owned=false; p.loan=0; p.costBasis=null;
+  }});
+  if(dev){
+    const gross=devCurrentValue(); const net=gross-dev.loan;
+    const basis=dev.spent||gross;
+    acct.capitalBySector[dev.sector||'development']=(acct.capitalBySector[dev.sector||'development']||0)+(gross-basis);
+    acct.sales+=gross; proceedsTotal+=net; loansCleared+=dev.loan;
+    cash+=net; sold.push({name:dev.name||'Development project', gross, loan:dev.loan, net});
+    dev=null;
+  }
+  year=savedYear;
+  exitReport = sold.length ? {sold, proceedsTotal, loansCleared} : null;
+}
 function finish(){
+  autoExit(); // convert everything still held into cash at the Year 10 market
   const finalNet=netWorth(); const ret=(finalNet/START_CASH-1)*100;
   show('s-debrief');
+  // exit notice — only if the player was still holding assets at the deadline
+  const exitCard=document.getElementById('db-exit-card');
+  if(exitReport){
+    exitCard.style.display='';
+    const rows=exitReport.sold.map(s=>{
+      const loanBit = s.loan>0 ? ` − ${fmt(s.loan)} loan` : '';
+      return `<div class="scoreline"><span>${s.name} <span style="color:var(--muted);font-size:12px">(sold ${fmt(s.gross)}${loanBit})</span></span><span class="big">${fmt(s.net)}</span></div>`;
+    }).join('');
+    document.getElementById('db-exit-list').innerHTML = rows +
+      `<div class="scoreline" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px"><span><b>Cash released at exit</b></span><span class="big">${fmt(exitReport.proceedsTotal)}</span></div>`;
+  } else {
+    exitCard.style.display='none';
+  }
   document.getElementById('db-net').textContent=fmt(finalNet);
   document.getElementById('db-net-sub').textContent=finalNet>=START_CASH?'You grew the fund.':'The fund shrank.';
   document.getElementById('db-final').textContent=fmt(finalNet);
