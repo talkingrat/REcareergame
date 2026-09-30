@@ -178,7 +178,27 @@ svg text{font-family:var(--sans);}
     <div class="tut-step"><div class="tut-ico">🏗️</div><div class="tut-body"><div class="h">You can build (development)</div><div class="d">Start a development: it costs cash for ~3 years with no rent while it's built, and might overrun. If it finishes, it's worth far more than it cost — the biggest prize, and the biggest risk.</div></div></div>
     <div class="tut-step"><div class="tut-ico">🏆</div><div class="tut-body"><div class="h">Goal: biggest net worth after 10 years</div><div class="d">Cash + property value − debt. We'll also grade how smart your timing was, and show you charts of what every sector did.</div></div></div>
   </div>
-  <div class="btn-row"><button class="btn ghost full" onclick="show('s-home')">← Back</button><button class="btn full" onclick="startGame()">Start investing →</button></div>
+  <div class="btn-row"><button class="btn ghost full" onclick="show('s-home')">← Back</button><button class="btn full" onclick="startWalkthrough()">Next: a quick walkthrough →</button></div>
+</div>
+
+<!-- WALKTHROUGH -->
+<div id="s-walk" class="screen">
+  <div class="masthead"><div class="masthead-tag">Before you start · a 60-second try</div><h1>One <em>deal</em>, start to finish</h1><p>Watch how a single property moves your money: buy it, collect rent, sell it. These same three things drive the whole game — and the final breakdown at the end.</p></div>
+
+  <div class="card" style="position:sticky;top:8px;z-index:10">
+    <div class="card-title" style="font-size:14px">Your money</div>
+    <div class="scoreline"><span>💷 Cash</span><span class="big" id="w-cash"></span></div>
+    <div class="scoreline"><span>🏦 Debt (mortgage owed)</span><span class="big" id="w-debt"></span></div>
+    <div class="scoreline" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px"><span><b>📊 Net worth</b> <span style="color:var(--muted);font-size:11px">cash + property − debt</span></span><span class="big" id="w-net"></span></div>
+    <div id="w-owned" style="margin-top:8px;font-size:12px;color:var(--muted)"></div>
+  </div>
+
+  <div class="card">
+    <div id="w-narr"></div>
+    <div id="w-detail" style="margin-top:8px"></div>
+    <div class="btn-row"><button class="btn full" id="w-next"></button></div>
+    <div style="text-align:center;margin-top:8px"><button class="btn ghost" style="font-size:12px;padding:6px 12px" onclick="startGame()">Skip the walkthrough — just play →</button></div>
+  </div>
 </div>
 
 <!-- GAME -->
@@ -370,6 +390,86 @@ function buildYieldPath(s,seed){
     path.push(Math.round(yld*1000)/1000);
   }
   return path;
+}
+
+/* ============ WALKTHROUGH (guided demo before the real game) ============ */
+// A small, self-contained teaching sequence. It does NOT touch the real game state —
+// it uses its own w{} numbers so students can see how buy / rent / sell move cash,
+// debt and net worth, which is exactly how the final breakdown is built.
+let wStep=0;
+const wDemo={
+  price:1000000, rent:70000, deposit:400000, loan:600000, interest:0.05,
+  sellPrice:1150000 // yields tightened, so it's worth more when sold
+};
+let w={ cash:0, debt:0, propValue:0, owned:false, name:'City Shop' };
+function wNet(){ return w.cash + w.propValue - w.debt; }
+function renderWalk(){
+  document.getElementById('w-cash').textContent=fmt(w.cash);
+  document.getElementById('w-debt').textContent=fmt(w.debt);
+  document.getElementById('w-net').textContent=fmt(wNet());
+  document.getElementById('w-owned').innerHTML = w.owned
+    ? `🏬 You own: <b>${w.name}</b> — worth <b>${fmt(w.propValue)}</b> right now.`
+    : `You don't own anything yet — it's all cash.`;
+}
+const wSteps=[
+  { // 0 — intro / starting position
+    narr:`<b>You start with £1,000,000 in cash.</b> Net worth is just your cash for now — you haven't bought anything. Let's do one deal.`,
+    detail:`<div class="demo-row"><span>Cash</span><b>£1,000,000</b></div><div class="demo-row"><span>Everything else</span><b>£0</b></div>`,
+    btn:`Buy the ${'City Shop'} →`,
+    apply:()=>{ /* set the starting position */ w={cash:1000000,debt:0,propValue:0,owned:false,name:'City Shop'}; }
+  },
+  { // 1 — buy
+    narr:`<b>You buy the City Shop for ${'£1,000,000'}.</b> You don't pay all cash — you put down a <b>${'£400,000'}</b> deposit and borrow the rest as a mortgage.`,
+    detail:`<div class="demo-row"><span>Deposit paid from cash</span><b style="color:var(--down)">− £400,000</b></div>
+      <div class="demo-row"><span>Mortgage borrowed (now debt)</span><b>£600,000</b></div>
+      <div class="demo-row"><span>Property you now own</span><b>£1,000,000</b></div>
+      <div class="card-sub" style="margin-top:8px">Notice your <b>net worth barely moves</b> when you buy — you swapped £400k of cash for £400k of equity in a building. Buying isn't spending money; it's <i>moving</i> it.</div>`,
+    btn:`Collect a year's rent →`,
+    apply:()=>{ w.cash-=wDemo.deposit; w.debt=wDemo.loan; w.propValue=wDemo.price; w.owned=true; }
+  },
+  { // 2 — rent (and interest)
+    narr:`<b>A year passes. The shop earns ${'£70,000'} rent.</b> But you owe interest on the £600,000 mortgage (5% = £30,000), so your <b>profit this year is the difference</b>.`,
+    detail:`<div class="demo-row"><span>Rent received</span><b style="color:var(--up)">+ £70,000</b></div>
+      <div class="demo-row"><span>Mortgage interest paid</span><b style="color:var(--down)">− £30,000</b></div>
+      <div class="demo-row" style="border-top:1px solid var(--border);margin-top:2px;padding-top:4px"><span>Net income into cash</span><b style="color:var(--up)">+ £40,000</b></div>
+      <div class="card-sub" style="margin-top:8px">This is the steady drip of owning property: rent in, interest out, the rest is yours. Over ten years it adds up — but it's also why a bad year (an empty shop, no rent) can sting.</div>`,
+    btn:`Sell the shop →`,
+    apply:()=>{ w.cash+=wDemo.rent - wDemo.loan*wDemo.interest; }
+  },
+  { // 3 — sell
+    narr:`<b>The market warms up, so the shop is now worth ${'£1,150,000'}.</b> You sell: the buyer's money pays off your mortgage, and the rest lands in your cash.`,
+    detail:`<div class="demo-row"><span>Sale price</span><b style="color:var(--up)">+ £1,150,000</b></div>
+      <div class="demo-row"><span>Mortgage repaid</span><b style="color:var(--down)">− £600,000</b></div>
+      <div class="demo-row" style="border-top:1px solid var(--border);margin-top:2px;padding-top:4px"><span>Cash released by the sale</span><b>£550,000</b></div>
+      <div class="card-sub" style="margin-top:8px">You bought at £1,000,000 and sold at £1,150,000 — that <b>£150,000 gain is your capital profit</b>, on top of the rent you banked. The final breakdown at the end of the game splits your result exactly this way: rent income vs. capital gains.</div>`,
+    btn:`See where you landed →`,
+    apply:()=>{ w.cash+=wDemo.sellPrice - wDemo.loan; w.debt=0; w.propValue=0; w.owned=false; }
+  },
+  { // 4 — recap
+    narr:`<b>That's the whole game in one deal.</b> You started with £1,000,000 and finished with <b id="w-final-inline"></b> — earned from <b>£40,000 rent</b> plus a <b>£150,000 capital gain</b>. The real game is ten years of these choices across many properties, sectors and a build option.`,
+    detail:`<div class="card-sub"><b>Three things to remember:</b></div>
+      <div class="demo-row"><span>💷 Buying moves cash into property</span><b>net worth ~ steady</b></div>
+      <div class="demo-row"><span>📈 Rent minus interest</span><b style="color:var(--up)">your yearly income</b></div>
+      <div class="demo-row"><span>🔁 Sell high vs. buy price</span><b style="color:var(--up)">capital gain</b></div>
+      <div class="card-sub" style="margin-top:10px;color:var(--info)">💡 Don't panic if net worth dips in the early years — property values swing, and a paper loss often recovers. The skill is timing: buy when a sector is cheap (high yield), sell when it's dear (low yield).</div>`,
+    btn:`Start the 10-year game →`,
+    apply:()=>{}
+  }
+];
+function startWalkthrough(){ wStep=0; wSteps[0].apply(); renderWalk(); showWalkStep(); show('s-walk'); }
+function showWalkStep(){
+  const s=wSteps[wStep];
+  document.getElementById('w-narr').innerHTML=s.narr;
+  document.getElementById('w-detail').innerHTML=s.detail;
+  const b=document.getElementById('w-next'); b.textContent=s.btn;
+  b.onclick=()=>{
+    if(wStep>=wSteps.length-1){ startGame(); return; }
+    wStep++; wSteps[wStep].apply(); renderWalk(); showWalkStep();
+    if(wStep===wSteps.length-1){ const fi=document.getElementById('w-final-inline'); if(fi) fi.textContent=fmt(wNet()); }
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+  renderWalk();
+  if(wStep===wSteps.length-1){ const fi=document.getElementById('w-final-inline'); if(fi) fi.textContent=fmt(wNet()); }
 }
 
 /* ============ GAME FLOW ============ */
