@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real estate career games</title>
+<meta name="description" content="Game simulations for real estate and built environment career types.">
+<style>
+:root{--desk:#24363c;--panel:#2f464e;--line:#4d6a74;--text:#ecf2f1;--mute:#a9bcc2;--manila:#d8b36a;--pink:#ff5fa8;--cyan:#5be7ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--desk);background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 2px,transparent 2px 6px);
+  color:var(--text);font:17px/1.55 "Gill Sans","Gill Sans MT","Segoe UI",Calibri,system-ui,sans-serif;min-height:100vh}
+.wrap{max-width:980px;margin:0 auto;padding:28px 18px 60px}
+h1{margin:0;font:700 clamp(30px,6vw,50px)/1.05 "Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;color:#ffd5ea;
+  text-shadow:0 0 4px #ff5fa8,0 0 14px #ff5fa8,0 0 30px rgba(255,95,168,.6)}
+h1 .dim{color:#7a4a62;text-shadow:none;animation:flick 5s infinite}
+@keyframes flick{0%,6%,9%,48%,52%,100%{color:#ffd5ea;text-shadow:0 0 4px #ff5fa8,0 0 14px #ff5fa8}7%,8%,50%{color:#7a4a62;text-shadow:none}}
+@media (prefers-reduced-motion:reduce){h1 .dim{animation:none;color:#b98aa3}}
+.lead{color:var(--mute);margin:10px 0 28px;max-width:62ch}
+h2{font:700 13px/1 "Trebuchet MS",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--manila);margin:30px 0 12px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+a.card{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--text);background:var(--panel);border:1px solid var(--line);
+  border-left:6px solid var(--accent,var(--manila));border-radius:4px;padding:16px 16px 14px;min-height:170px}
+a.card:hover,a.card:focus-visible{background:#38535c;border-color:var(--accent,var(--manila))}
+a.card:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+.tag{font-size:13px;color:var(--mute);letter-spacing:.04em}
+.card h3{margin:0;font:700 20px/1.25 "Trebuchet MS",sans-serif}
+.card p{margin:0;color:#d5e1e0;flex:1}
+.go{font-weight:700;color:var(--accent,var(--manila))}
+.feature{--accent:var(--pink);grid-column:1/-1;min-height:0}
+@media (min-width:700px){.feature{flex-direction:row;align-items:center;gap:20px}.feature .txt{flex:1}}
+.foot{margin-top:34px;color:var(--mute);font-size:15px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>RE <span class="dim">C</span>areer Games</h1>
+  <p class="lead">Short game simulations for real estate and built environment career types. Each one puts you in a first-job decision. Play on a phone, tablet or laptop. Nothing is saved, so you can replay as often as you like.</p>
+
+  <h2>Career scenarios</h2>
+  <div class="grid">
+    <a class="card" style="--accent:#5be7ff" href="agent_scenario.html">
+      <span class="tag">Property agent</span>
+      <h3>A Day at NE1 Estate Agents</h3>
+      <p>You are the new agent. Pick a case, such as letting a student flat or selling a family home, and find out what "good communication" and "market knowledge" really mean.</p>
+      <span class="go">Play &rarr;</span>
+    </a>
+    <a class="card" style="--accent:#5fbf8a" href="asset_manager_scenario.html">
+      <span class="tag">Property and asset management</span>
+      <h3>The Assistant Asset Manager</h3>
+      <p>Your first job in property. Look into problems, weigh the options and bring your manager good advice, starting with a rented flats building or something harder.</p>
+      <span class="go">Play &rarr;</span>
+    </a>
+    <a class="card" style="--accent:#e8a838" href="valuer_detectivegame.html">
+      <span class="tag">Valuation</span>
+      <h3>The Valuer: a Property Detective Game</h3>
+      <p>What is it actually worth? Choose which sources to chase in limited time, use comparables or the investment method, and avoid biased evidence.</p>
+      <span class="go">Play &rarr;</span>
+    </a>
+    <a class="card" style="--accent:#f27a7a" href="investment_game.html">
+      <span class="tag">Investment and valuation</span>
+      <h3>Yield! A Property Investment Game</h3>
+      <p>One million pounds, ten years, and sectors that move in different directions. Read the yields, spot the sectors on the rise and build the biggest fortune.</p>
+      <span class="go">Play &rarr;</span>
+    </a>
+    <a class="card" style="--accent:#b79cf2" href="development_roguelike.html">
+      <span class="tag">Development and planning</span>
+      <h3>Consent: a Development Roguelike</h3>
+      <p>A derelict site and a scheme worth fighting for. Build a deck of tactics and get the scheme from acquisition to a planning decision in one piece.</p>
+      <span class="go">Play &rarr;</span>
+    </a>
+  </div>
+
+  <h2>Group activity</h2>
+  <div class="grid">
+    <a class="card feature" href="match_desk.html">
+      <div class="txt">
+        <span class="tag">Careers and recruitment &middot; groups of 2 to 5</span>
+        <h3>The Match Desk</h3>
+        <p>Play HR at the Gnawtown Employment Bureau. Draft the job post, read the candidate dossiers on your own device, then decide together who to hire and why. Reflect on how the candidates' paths compare with your own.</p>
+      </div>
+      <span class="go">Open the game &rarr;</span>
+    </a>
+  </div>
+
+  <p class="foot">Game simulation for RE/BE career types. All people and organisations in the games are fictional.</p>
+</div>
+</body>
+</html>

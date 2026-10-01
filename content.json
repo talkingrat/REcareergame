@@ -1,0 +1,2721 @@
+{
+ "name": "Built-in sample pack",
+ "version": "1.0",
+ "defaultHelp": "keys",
+ "candidates": [
+  {
+   "id": 1,
+   "name": "Jane Doe",
+   "first": "Jane",
+   "headline": "Final-year BSc Economics student, York",
+   "secs": [
+    {
+     "cls": "cv1 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "JANE DOE"
+      },
+      {
+       "t": "c",
+       "x": "123 Street Name, City, Postcode"
+      },
+      {
+       "t": "c",
+       "x": "Mobile: +44 XXXX XXXXXX     Email: jane.doe@email.com"
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL STATEMENT"
+      },
+      {
+       "t": "p",
+       "x": "Final-year BSc Economics candidate from York University with a strong academic background, a passion for financial markets, and a keen interest in real estate investment. Proficient at quantitative analysis, financial modelling, and market research. Seeking an Investment Analyst position to apply my analytical skills and contribute to effective investment decision-making."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "r",
+       "x": "BSc (Hons) Economics, York University, UK",
+       "d": "September 2023 - June 2025 (exp)",
+       "chk": "Ask Jane to talk through her degree timeline and what she has studied so far."
+      },
+      {
+       "t": "b",
+       "x": "Expected Second-Upper Class Honours."
+      },
+      {
+       "t": "b",
+       "x": "Dissertation Topic: \"The Impact of Brexit on UK Regional Housing Markets\""
+      },
+      {
+       "t": "b",
+       "x": "Relevant Modules: Housing Economics, Advanced Microeconomics, Investment and Portfolio Management."
+      },
+      {
+       "t": "r",
+       "x": "A-Levels, College XYZ",
+       "d": "September 2021 - June 2023"
+      },
+      {
+       "t": "b",
+       "x": "Economics (A), Mathematics (B), Business Studies (A)."
+      },
+      {
+       "t": "h",
+       "x": "EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Intern, Market Research and Consultancy, Marketing Co., Leeds",
+       "d": "June 2024 - August 2024"
+      },
+      {
+       "t": "b",
+       "x": "Conducted market analysis on retailing market trends and consumer online spending behaviour, identifying potential business opportunities for executive decision-making."
+      },
+      {
+       "t": "b",
+       "x": "Presented findings to the team, enhancing the department's understanding of current market conditions."
+      },
+      {
+       "t": "r",
+       "x": "Part-Time Assistant (volunteer), Oxfam Harrogate",
+       "d": "October 2021 - May 2023"
+      },
+      {
+       "t": "b",
+       "x": "Weekly shop inventory tracking and updates with supervisors"
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with student volunteers to manage and allocate funds for various events"
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Financial Modelling: Proficient modelling skills in corporate valuation and financial analysis using Excel."
+      },
+      {
+       "t": "b",
+       "x": "Data Analysis: Econometrics knowledge with Stata. Dissertation project uses panel regression model."
+      },
+      {
+       "t": "b",
+       "x": "Market Research: Capable of interpreting market dynamics and identifying opportunities."
+      },
+      {
+       "t": "b",
+       "x": "Communication: Effective at presenting findings and collaborating with cross-functional teams."
+      },
+      {
+       "t": "h",
+       "x": "EXTRA-CURRICULAR ACTIVITIES"
+      },
+      {
+       "t": "r",
+       "x": "Founder and Associate President, University Book Club",
+       "d": "September 2023 - Now"
+      },
+      {
+       "t": "b",
+       "x": "Start the society in a leading role. Organised guest speaker events and monthly book recommendation activities, facilitating interactions between students and public."
+      },
+      {
+       "t": "h",
+       "x": "LANGUAGES"
+      },
+      {
+       "t": "b",
+       "x": "English (Fluent), German (Intermediate), Latin (basic)"
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "Excel valuation modelling and Stata econometrics",
+    "Housing-market dissertation and a market-research internship",
+    "Numerate, quick-learning graduate profile"
+   ],
+   "gaps": [
+    "No professional property valuation exposure",
+    "Little client-facing experience",
+    "Degree not yet awarded"
+   ],
+   "grow": [
+    "Year 1: shadow valuation reports and learn Land Registry data handling",
+    "Year 3: start a valuation pathway and own part of the model",
+    "Year 5: lead development of the valuation app"
+   ],
+   "attr": {
+    "ready": 2,
+    "pot": 3,
+    "client": 1,
+    "cred": 1,
+    "cost": 1
+   }
+  },
+  {
+   "id": 2,
+   "name": "Dr Kwame Adjei",
+   "first": "Kwame",
+   "headline": "Civil engineer, PhD, 15+ years; teaches real estate valuation",
+   "secs": [
+    {
+     "cls": "letter",
+     "b": [
+      {
+       "t": "p",
+       "x": "To Whom It May Concern,"
+      },
+      {
+       "t": "p",
+       "x": "Pray permit me to introduce myself. I am a distinguished engineer with a career spanning over fifteen years, dedicated to infrastructure and civil engineering undertakings across the African continent. In the recent past, I have obtained a doctoral degree in sustainable urban evolution."
+      },
+      {
+       "t": "p",
+       "x": "I have also established my career expertise in real estate for three years.",
+       "chk": "Ask Kwame about the practical real estate work behind the three years mentioned in the letter, beyond teaching."
+      },
+      {
+       "t": "p",
+       "x": "With the expertise I've garnered, it is my ardent desire to champion both innovative and sustainable stratagems within the esteemed real estate sector of the United Kingdom. I am seeking to broaden my affiliations within the UK market. Furthermore, I would be profoundly gratified to harness my engineering pedigree in the realm of commerce."
+      },
+      {
+       "t": "p",
+       "x": "You shall find my curriculum vitae enclosed. Should you require any additional particulars, I am at your disposal."
+      },
+      {
+       "t": "p",
+       "x": "I am eagerly anticipating your correspondence,"
+      },
+      {
+       "t": "p",
+       "x": "Kwame Adjei"
+      }
+     ]
+    },
+    {
+     "cls": "cv2 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "DR. KWAME ADJEI, PhD, CEng, IStructE"
+      },
+      {
+       "t": "c",
+       "x": "76 Park Lane, City, Postcode, UK"
+      },
+      {
+       "t": "c",
+       "x": "Mobile: +44 XXXX XXXXXX     Email: kwame.adjei@email.com"
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "r",
+       "x": "PhD in Civil Engineering - Birmingham City University, Birmingham, UK",
+       "d": "2017-2020"
+      },
+      {
+       "t": "b",
+       "x": "Thesis: \"Sustainable Urban Development: Leveraging Modern Engineering Techniques in African Metropolises\"."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with renowned experts in the field of sustainable architecture and urban planning."
+      },
+      {
+       "t": "r",
+       "x": "MSc in Civil Engineering - The University of Ghana, Acca, Ghana",
+       "d": "2004-2006"
+      },
+      {
+       "t": "r",
+       "x": "BEng in Civil Engineering - The University of Ghana, Acca, Ghana",
+       "d": "September 1999 - June 2003",
+       "nj": "Dates reveal approximate age"
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Teaching Fellow in Real Estate 0.6FTE - HE Education Ins.",
+       "d": "2020 - Now"
+      },
+      {
+       "t": "b",
+       "x": "Lecturer in real estate valuation. Familiar with RICS valuation standards and valuation models."
+      },
+      {
+       "t": "b",
+       "x": "Coaching professional students according to University's Teaching Excellence Framework and RICS standards."
+      },
+      {
+       "t": "r",
+       "x": "Chief Civil Engineer - Engineering Co., Acca, Ghana",
+       "d": "June 2006 - August 2017"
+      },
+      {
+       "t": "b",
+       "x": "Managed a team of 20 engineers on large-scale infrastructure projects worth over $50 million."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with government bodies and private developers to ensure projects met sustainability and quality benchmarks."
+      },
+      {
+       "t": "b",
+       "x": "Pioneered the use of local materials, reducing project costs by 15%."
+      },
+      {
+       "t": "r",
+       "x": "Founder, Engineers for Sustainable Development Ghana",
+       "d": "January 2010 - Present"
+      },
+      {
+       "t": "b",
+       "x": "Led community projects focused on developing sustainable housing for underprivileged communities."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with international NGOs to source funding and expertise."
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Project Management: Proven track record of completing projects on time and within budget."
+      },
+      {
+       "t": "b",
+       "x": "Sustainable Engineering: Expertise in sustainable materials and methods."
+      },
+      {
+       "t": "b",
+       "x": "Collaboration: Experienced in working with cross-functional teams, including architects, planners, and government officials."
+      },
+      {
+       "t": "b",
+       "x": "Software Proficiency: Skilled in AutoCAD, Revit, Civil 3D; Excel valuation modelling"
+      },
+      {
+       "t": "b",
+       "x": "Multilingual: English (Fluent), Akan (Native), French (Intermediate)"
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "PhD in sustainable urban development; chartered engineer",
+    "Led 20 engineers on projects worth over $50 million",
+    "Teaches valuation to RICS standards and builds Excel valuation models"
+   ],
+   "gaps": [
+    "No UK commercial valuation practice (teaching only)",
+    "Seniority and pay expectations may exceed a junior brief",
+    "No hotel- or data-centre-specific experience"
+   ],
+   "grow": [
+    "Year 1: UK market practice and RICS standards with a mentor",
+    "Year 3: publish guidance on valuing energy-efficient retrofits",
+    "Year 5: lead a specialist research and advisory team"
+   ],
+   "attr": {
+    "ready": 2,
+    "pot": 2,
+    "client": 2,
+    "cred": 3,
+    "cost": 3
+   }
+  },
+  {
+   "id": 3,
+   "name": "Lucas Montague",
+   "first": "Lucas",
+   "headline": "AssocRICS, assistant surveyor in Glasgow",
+   "secs": [
+    {
+     "cls": "letter",
+     "b": [
+      {
+       "t": "p",
+       "x": "Dear sir/madam,"
+      },
+      {
+       "t": "p",
+       "x": "I hope this letter finds you well. I am writing to express my keen interest in transitioning more deeply into the real estate investment sector with your team, drawing from my experiences in real estate surveying and inspection."
+      },
+      {
+       "t": "p",
+       "x": "My tenure as a Trainee Real Estate Surveyor in the current job provided me with a robust understanding of the UK property landscape. I've had the privilege to conduct numerous property inspections, gaining an intimate knowledge of buildings, their structures, and potential value points that often go unnoticed. This hands-on experience has given me a unique perspective on property valuation, understanding the potential of an asset beyond its current state.",
+       "chk": "Invite Lucas to describe his current role and day-to-day responsibilities."
+      },
+      {
+       "t": "p",
+       "x": "Having been extensively involved in data collection, analysis, and reporting, I've developed a keen eye for identifying business opportunities and risks. I've come to appreciate the intricate balance between current property conditions, market trends, and future projections. My skills, I believe, align perfectly with the analytical demands of real estate investment and strategic consulting."
+      },
+      {
+       "t": "p",
+       "x": "Moreover, I have cultivated strong relationships within the real estate community, which I believe can be beneficial in terms of sourcing and validating potential investment opportunities. My background in inspection has taught me the importance of due diligence, a principle I am eager to carry into the investment domain."
+      },
+      {
+       "t": "p",
+       "x": "Joining the esteemed team would be a significant step in my professional journey. I am keen to leverage my foundational knowledge in real estate, combined with my passion for investment, to contribute meaningfully to your team's ongoing and future projects."
+      },
+      {
+       "t": "p",
+       "x": "Thank you for considering my application. I am eager to discuss how my background and your team's needs can align to create mutual value. Please find my CV attached for your reference. I look forward to the possibility of discussing my application further."
+      },
+      {
+       "t": "p",
+       "x": "Warm regards,"
+      },
+      {
+       "t": "p",
+       "x": "Lucas Montague"
+      }
+     ]
+    },
+    {
+     "cls": "cv3 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "LUCAS MONTAGUE, BSc (Hon), AssoRICS"
+      },
+      {
+       "t": "c",
+       "x": "Mobile: +44 XXXX XXXXXX     Email: lucas.monty@email.com"
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Assistant Real Estate Surveyor - Property Consultancy Co., Glasgow",
+       "d": "July 2023 - Present"
+      },
+      {
+       "t": "b",
+       "x": "Conducted over 150 property inspections, ensuring compliance with regulatory standards and identifying potential issues for clients."
+      },
+      {
+       "t": "b",
+       "x": "Assisted senior surveyors in preparing detailed property reports, highlighting valuation metrics and potential investment opportunities."
+      },
+      {
+       "t": "b",
+       "x": "Liaised with estate agents, property developers, and other professionals to facilitate seamless property transactions."
+      },
+      {
+       "t": "b",
+       "x": "Attended workshops and training sessions to stay updated with industry trends, tools, and best practices."
+      },
+      {
+       "t": "r",
+       "x": "Intern, Office Agency and Consultant - Real Estate Agency & Partners., Glasgow",
+       "d": "June 2021 - August 2022",
+       "chk": "Ask Lucas how his long internship fitted around his studies and what he learned from it."
+      },
+      {
+       "t": "b",
+       "x": "Conducted research on local property markets, analysing trends and prices."
+      },
+      {
+       "t": "b",
+       "x": "Supported the agency team in preparing promotional materials for property listings."
+      },
+      {
+       "t": "b",
+       "x": "Assisted in organising property viewings and liaising with potential buyers."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION AND PROFESSIONAL MEMBERSHIPS"
+      },
+      {
+       "t": "b",
+       "x": "BSc (Hons) Real Estate Surveying with High 2:1 final grade (67), University of West Scotland, Paisley, Scotland; September 2019 - June 2023"
+      },
+      {
+       "t": "b",
+       "x": "Associate Member of Royal Institution of Chartered Surveyors (RICS); Jan 2024"
+      },
+      {
+       "t": "b",
+       "x": "Applying Chartered Member of RICS (Jan 2025 exp.)"
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Property Surveying: Proficient in conducting thorough and systematic property inspections."
+      },
+      {
+       "t": "b",
+       "x": "Valuation: Skilled in using a variety of valuation methods to estimate property value (DCF, T&R, residual)"
+      },
+      {
+       "t": "b",
+       "x": "Report Writing: Capable of preparing detailed and comprehensive property reports. Proficient with MS Office."
+      },
+      {
+       "t": "b",
+       "x": "Communication: Effective in liaising with clients, stakeholders, and professionals in the property sector."
+      },
+      {
+       "t": "b",
+       "x": "Software Proficiency: Proficient in property management software and tools e.g. CoStar."
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL INTERESTS"
+      },
+      {
+       "t": "b",
+       "x": "Triathlon; Mountaineering"
+      },
+      {
+       "t": "p",
+       "x": "References from the current employer are available upon request."
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "AssocRICS with 150+ property inspections",
+    "DCF, T&R and residual valuation methods",
+    "Report writing and CoStar experience"
+   ],
+   "gaps": [
+    "About two years of post-graduation experience",
+    "Letter claims more relationship-building than the CV supports",
+    "Based in Glasgow; relocation unclear"
+   ],
+   "grow": [
+    "Year 1: complete the chartered pathway",
+    "Year 3: specialise (hotel, student or digital assets)",
+    "Year 5: lead a valuation team"
+   ],
+   "attr": {
+    "ready": 3,
+    "pot": 2,
+    "client": 2,
+    "cred": 3,
+    "cost": 1
+   }
+  },
+  {
+   "id": 4,
+   "name": "Siriya Jirapat",
+   "first": "Siriya",
+   "headline": "MSc Real Estate (Reading); hospitality background in Thailand",
+   "secs": [
+    {
+     "cls": "letter",
+     "b": [
+      {
+       "t": "p",
+       "x": "Siriya Jirapat"
+      },
+      {
+       "t": "p",
+       "x": "12 Shinfield Road, Reading, [Postcode], UK"
+      },
+      {
+       "t": "p",
+       "x": "[Email Address]   [Phone Number]   [Date]   [Recruiter's info TBU]"
+      },
+      {
+       "t": "p",
+       "x": "Dear sir/madam,"
+      },
+      {
+       "t": "p",
+       "x": "I wish to tell you of my interest to work at your company. I study MSc in Real Estate at the University of Reading and before, I study BSc in Hospitality at Kasetsart University. I think my experience can contribute to the role posted in several aspects."
+      },
+      {
+       "t": "p",
+       "x": "In Thailand, I worked at an international resort, InterContinental Chiang Mai. It teaches me how to give good service and understand what customer wants. I believe in real estate job, I must also bring customers the best experience, like in hospitality. I want to use my experience to help people find good property that they like."
+      },
+      {
+       "t": "p",
+       "x": "I learn many things in UK about real estate market. In my master study, I know about how to track property value and understand the market drivers. This knowledge can be useful for the international clients. UK property market is different from Thailand, but I learn fast and want to help both UK people and people from other countries."
+      },
+      {
+       "t": "p",
+       "x": "I also think using technology is very important. In Thailand, many hotels use online promotion and social media to make customers interested. It has help my previous company improving the business, so I hope to bring this idea to the UK real estate too."
+      },
+      {
+       "t": "p",
+       "x": "I hope you will consider my letter and CV attached. I am excited to join the group and show how I can help. Please let me know if you have questions or want to talk more."
+      },
+      {
+       "t": "p",
+       "x": "Thank you for your time. I am looking forward to hear from you."
+      },
+      {
+       "t": "p",
+       "x": "Best regards,"
+      },
+      {
+       "t": "p",
+       "x": "Siriya Jirapat"
+      }
+     ]
+    },
+    {
+     "cls": "cv4 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "SIRIYA JIRAPAT"
+      },
+      {
+       "t": "c",
+       "x": "12 Shinfield Road, Reading, Postcode, UK"
+      },
+      {
+       "t": "c",
+       "x": "Mobile: +44 XXXX XXXXXX     Email: siriyajirapat@email.com"
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL HIGHLIGHTS"
+      },
+      {
+       "t": "p",
+       "x": "Currently studying MSc Real Estate in UK. Knowledge about real estate valuation and investment, development etc. With T4 Post Study Working visa valid till 2027.",
+       "nj": "Visa / right-to-work status (check legally, but it is not a judgement of ability)"
+      },
+      {
+       "t": "p",
+       "x": "Working experience in international hotel in Thailand; good knowledge about hotel service industry and international client care."
+      },
+      {
+       "t": "p",
+       "x": "Proficient in English (IELTs 6.5), Thai (Native), Teochew (Native)."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "r",
+       "x": "MSc in Real Estate, University of Reading, UK",
+       "d": "Sep 2024 - Jun 2025"
+      },
+      {
+       "t": "b",
+       "x": "Merit Degree 2024",
+       "chk": "Ask Siriya whether her MSc result is confirmed or expected, and when she completes it."
+      },
+      {
+       "t": "b",
+       "x": "Modules: Real Estate Development, Property Valuation, International Real Estate Markets, Real Estate Investment and Finance."
+      },
+      {
+       "t": "b",
+       "x": "International Fieldtrip to European countries."
+      },
+      {
+       "t": "b",
+       "x": "Final Project: \"Impact of International Tourism on Local Real Estate Markets: A Case Study of Phuket.\""
+      },
+      {
+       "t": "r",
+       "x": "BSc in Hospitality Management, Kasetsart University, Bankok, Thailand",
+       "d": "May 2016 - Apr 2020"
+      },
+      {
+       "t": "b",
+       "x": "GPA 3.7/4 (first-degree equivalent)"
+      },
+      {
+       "t": "b",
+       "x": "Programme Focus: Hotel Management, Service Excellence, and International Hospitality Operations."
+      },
+      {
+       "t": "h",
+       "x": "WORKING EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Guest Relations Officer, InterContinental Chiang Mai the Mae Ping, Thailand",
+       "d": "Jul 2020 - Jul 2023"
+      },
+      {
+       "t": "b",
+       "x": "Managed guest experiences, ensuring top-tier service standards and addressing client requests with promptness."
+      },
+      {
+       "t": "b",
+       "x": "Liaised with international clients, offering tailored services based on cultural nuances and preferences."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with the marketing team to strategise promotional activities targeting international travellers."
+      },
+      {
+       "t": "b",
+       "x": "Analysed guest feedback to drive continuous improvements in service quality."
+      },
+      {
+       "t": "r",
+       "x": "Associate, Property Management, Hotel Family Co., Pattaya City, Thailand",
+       "d": "May 2017 - Aug 2019",
+       "chk": "Ask Siriya how she combined her property work with her studies and what she took from it."
+      },
+      {
+       "t": "b",
+       "x": "Marketing and leasing plan of premium properties to both local and international clients."
+      },
+      {
+       "t": "b",
+       "x": "Conducted market research to gauge property trends and investment opportunities in popular tourist destinations."
+      },
+      {
+       "t": "b",
+       "x": "Facilitated property viewings and collaborated with legal teams to ensure smooth transaction processes."
+      },
+      {
+       "t": "h",
+       "x": "SKILLS AND SOFTWARE"
+      },
+      {
+       "t": "b",
+       "x": "Real Estate Modelling: valuation, investment and development model with Excel and Altus"
+      },
+      {
+       "t": "b",
+       "x": "Client Relationship Management: Proficient in building and maintaining rapport with an international clientele."
+      },
+      {
+       "t": "b",
+       "x": "Market Analysis: Skilled in assessing real estate market trends and investment opportunities. Familiar with Booking.com, TripAdvisor, Ctrip.com with business contacts in Thailand"
+      },
+      {
+       "t": "b",
+       "x": "Cultural Diversity: Adept at catering to a diverse client base, understanding and respecting cultural intricacies."
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "International client care and hospitality operations",
+    "MSc Real Estate with a tourism-market dissertation",
+    "Excel and Altus modelling; Southeast Asian business contacts"
+   ],
+   "gaps": [
+    "Limited UK market, tax and legal knowledge",
+    "Written English in the letter needs polish (IELTS 6.5)",
+    "Gap from July 2023 to September 2024; sponsorship needed later"
+   ],
+   "grow": [
+    "Year 1: UK transactions, tax and leasing training",
+    "Year 3: own a client portfolio",
+    "Year 5: lead the Southeast Asia to UK desk"
+   ],
+   "attr": {
+    "ready": 2,
+    "pot": 3,
+    "client": 3,
+    "cred": 1,
+    "cost": 1
+   }
+  },
+  {
+   "id": 5,
+   "name": "Layla Al-Hashem",
+   "first": "Layla",
+   "headline": "Architect from Aleppo, urban design focus",
+   "secs": [
+    {
+     "cls": "cv5 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "LAYLA AL-HASHEM"
+      },
+      {
+       "t": "c",
+       "x": "27 Rose Lane, City, Postcode, UK"
+      },
+      {
+       "t": "c",
+       "x": "Email: layla.alhashem@email.com     Instagram: @laylanewlifeuk"
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL STATEMENT"
+      },
+      {
+       "t": "p",
+       "x": "I am a driven and innovative architect with a rich background in Syrian architectural design and urban planning. Offering over six years of experience in conceptualising and executing diverse architectural projects.",
+       "chk": "Ask Layla to walk through the projects behind her six years of experience."
+      },
+      {
+       "t": "p",
+       "x": "As a mother, I possess a unique perspective on family-centric spaces and their importance in today's life.",
+       "nj": "Parental status"
+      },
+      {
+       "t": "p",
+       "x": "As an architect with a deep-rooted passion for urban design, I am driven by the interplay of form, function, and the human experience. Despite of the disturbance of the war in Syria, since my arrival in the UK, I've harnessed the power of visual storytelling through my Instagram account, using it as a platform to showcase my sketches and works, and simultaneously creating a communal space for those sharing a similar journey. This digital window has not only amplified my designs but also underscored the significance of inclusive spaces in the area I am living. I am determined to contribute to the UK's urban landscape by infusing it with designs that are both aesthetically pleasing and socially resonant."
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Architectural Designer, Architecture Firm, Aleppo, Syria",
+       "d": "2018 - 2019"
+      },
+      {
+       "t": "b",
+       "x": "Led a team of five in the design and execution of residential projects and public facilities, ensuring integration of traditional Syrian elements with contemporary requirements."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with clients to develop design briefs, ensuring their visions were realised while adhering to safety standards and budget constraints."
+      },
+      {
+       "t": "b",
+       "x": "Utilised CAD, SketchUp, and Revit for detailed architectural drawings and 3D visualisations."
+      },
+      {
+       "t": "b",
+       "x": "Regularly liaised with builders, contractors, and suppliers to guarantee timely project completion."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "r",
+       "x": "Bachelor of Architecture, Dokuz Eylul University, Izmir, Turkey",
+       "d": "2013 - 2016"
+      },
+      {
+       "t": "b",
+       "x": "Thesis: \" Traditional Ottoman Elements in Modern Architecture\"."
+      },
+      {
+       "t": "b",
+       "x": "Relevant Courses: Sustainable Design, Urban Planning, Interior Design."
+      },
+      {
+       "t": "r",
+       "x": "Bachelor of Architecture, University of Aleppo, Syria",
+       "d": "2010 - 2012"
+      },
+      {
+       "t": "h",
+       "x": "CERTIFICATES"
+      },
+      {
+       "t": "b",
+       "x": "IELTS (Academic) overall 6.5"
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Architectural Design: Proficient in creating designs that blend traditional elements with modern requirements."
+      },
+      {
+       "t": "b",
+       "x": "Software: Adept at CAD, SketchUp, Revit, and other architectural design tools."
+      },
+      {
+       "t": "b",
+       "x": "Project Management: Experienced in leading teams, coordinating with clients, and ensuring project delivery within set parameters."
+      },
+      {
+       "t": "b",
+       "x": "Cultural Insight: Deep understanding of Syrian cultural elements and their potential appeal in the global property market."
+      },
+      {
+       "t": "b",
+       "x": "Language: Arabic (Native), English (Intermediate), Turkish (conversation)"
+      },
+      {
+       "t": "b",
+       "x": "Personal Interests: Family-centred activities, Syrian art and culture, Sustainable design.",
+       "nj": "Family status"
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "Team-lead experience in residential and public-facility design",
+    "Urban design training with sustainability focus",
+    "Lived experience that informs inclusive design; strong visual communication"
+   ],
+   "gaps": [
+    "No UK registration or UK planning experience",
+    "English still developing (IELTS 6.5)",
+    "Only one role listed since 2019"
+   ],
+   "grow": [
+    "Year 1: UK planning system course and registration advice",
+    "Year 3: lead community-based design projects",
+    "Year 5: head an inclusive-design programme"
+   ],
+   "attr": {
+    "ready": 1,
+    "pot": 3,
+    "client": 2,
+    "cred": 1,
+    "cost": 1
+   }
+  },
+  {
+   "id": 6,
+   "name": "Lorenzo Bianchi",
+   "first": "Lorenzo",
+   "headline": "Lead software developer at a rental PropTech",
+   "secs": [
+    {
+     "cls": "cv6 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "LORENZO BIANCHI"
+      },
+      {
+       "t": "c",
+       "x": "49 Digital Avenue, City, Postcode, UK"
+      },
+      {
+       "t": "c",
+       "x": "Mobile: +39 XXXX XXXXXX     Email: lorenzo.bianchi@email.com"
+      },
+      {
+       "t": "c",
+       "x": "GitHub: https://github.com/bianchihelps     LinkedIn: www.linkedin.com/in/lorenzobianchi"
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL STATEMENT"
+      },
+      {
+       "t": "p",
+       "x": "I am a results-driven computer scientist with over 7 years of programming and software development experience. Combines deep technical expertise with a keen understanding of user-centric design, making tech solutions both intuitive and efficient. With a passion for leveraging technology to revolutionise industries, I'm enthusiastic about applying my skills to the PropTech sector, driving innovation in property and real estate solutions."
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Lead Software Developer - FlatmateMatch, Milton Keynes, UK",
+       "d": "July 2018 - Present"
+      },
+      {
+       "t": "b",
+       "x": "Spearheaded a team of 10 developers, coordinating efforts to design, develop, and optimise smart rent platforms."
+      },
+      {
+       "t": "b",
+       "x": "Implemented machine learning algorithms to personalise user experiences and reference function, resulting in a 20% increase in platform engagement."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with UX designers to create user-friendly interfaces, ensuring easy navigation and functionality."
+      },
+      {
+       "t": "r",
+       "x": "Assistant Software Developer - Rent.com, Milan, Italy",
+       "d": "April 2014 - September 2016"
+      },
+      {
+       "t": "b",
+       "x": "Developed modular software components for the company's main app, contributing to its swift market launch."
+      },
+      {
+       "t": "b",
+       "x": "Assisted in troubleshooting and debugging software issues, ensuring optimal performance and user satisfaction."
+      },
+      {
+       "t": "r",
+       "x": "Part-time IT Technitian, the Student Union, University of Perugia",
+       "d": "2011-2014"
+      },
+      {
+       "t": "b",
+       "x": "Supporting students IT queries. Website development and daily management for the student union."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "b",
+       "x": "MSc in Computer Science - Politecnico di Milano, Milan, Italy - 2016 - 2018"
+      },
+      {
+       "t": "b",
+       "x": "BSc in Computer Science - University of Perugia, Italy - 2010-2014"
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Programming: Proficient in Java, Python, C++, SQL, and JavaScript."
+      },
+      {
+       "t": "b",
+       "x": "Database Management: Adept at MySQL, PostgreSQL, and MongoDB."
+      },
+      {
+       "t": "b",
+       "x": "Machine Learning: Experienced in using AI to enhance user experiences and system efficiency."
+      },
+      {
+       "t": "b",
+       "x": "UX/UI Design: Knowledgeable in creating and optimising user interfaces for diverse applications."
+      },
+      {
+       "t": "h",
+       "x": "LANGUAGES"
+      },
+      {
+       "t": "b",
+       "x": "Italian (Native); English (Fluent)"
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL INTERESTS"
+      },
+      {
+       "t": "b",
+       "x": "Smart home technologies, Augmented Reality (AR) solutions, Travelling."
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "Lead developer with smart-rent platform experience",
+    "Machine learning and UX design",
+    "Managed a team of ten"
+   ],
+   "gaps": [
+    "No real-estate operations or user-research experience",
+    "Duplicates skills the existing team already has",
+    "Salary expectations likely high"
+   ],
+   "grow": [
+    "Year 1: spend time in the field with property teams",
+    "Year 3: product owner for a PropTech product",
+    "Year 5: head of product"
+   ],
+   "attr": {
+    "ready": 3,
+    "pot": 2,
+    "client": 1,
+    "cred": 2,
+    "cost": 3
+   }
+  },
+  {
+   "id": 7,
+   "name": "Aoife O'Sullivan",
+   "first": "Aoife",
+   "headline": "Care-home caregiver, studying Business at the Open University",
+   "secs": [
+    {
+     "cls": "cv7 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "AOIFE O'SULLIVAN"
+      },
+      {
+       "t": "c",
+       "x": "[Address] | [Phone Number] | [Email Address]"
+      },
+      {
+       "t": "h",
+       "x": "SUMMARY"
+      },
+      {
+       "t": "p",
+       "x": "Dedicated and diligent professional with a diverse background in caregiving and a keen interest in the property sector. Passionate about continuous learning, as evidenced by self-taught programming skills and ongoing property business studies with the Open University. Motivated and resilient, looking to bring my unique blend of experience and education to a role in the real estate sector. I am willing to adapt to required qualifications in the property sector."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "r",
+       "x": "BSc in Business Management, Open University",
+       "d": "2021 - Present"
+      },
+      {
+       "t": "b",
+       "x": "Engaging in comprehensive studies with projects the intricacies of the property business in the UK."
+      },
+      {
+       "t": "r",
+       "x": "St. Brigid's College, Co. Galway, Ireland",
+       "d": "2012"
+      },
+      {
+       "t": "b",
+       "x": "NVQ Level 3 in Health and Social Care. Secondary education with humanities and social science topics. Achieved passing grades in core subjects."
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Caregiver | St Mary's Apartment, CareHome Group | Belfast, NI",
+       "d": "2015 - Now"
+      },
+      {
+       "t": "b",
+       "x": "Cooperating with facility manager in the apartment on regular check and maintenance."
+      },
+      {
+       "t": "b",
+       "x": "Provided compassionate and dedicated care to individuals, ensuring their comfort and well-being."
+      },
+      {
+       "t": "b",
+       "x": "Managed schedules, medications, and coordinated with medical professionals to ensure optimal care."
+      },
+      {
+       "t": "b",
+       "x": "Developed strong interpersonal skills, understanding the importance of patience and effective communication."
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Basic Python Programming: Self-taught through online resources, with an ability to understand and modify simple scripts."
+      },
+      {
+       "t": "b",
+       "x": "Property Business Fundamentals: Acquired foundational knowledge through Open University studies."
+      },
+      {
+       "t": "b",
+       "x": "Caretaking: long-term engagement with vulnerable people, professional knowledge about physical and mental healthcare.",
+       "chk": "Ask Aoife for examples of how she applies her caregiving knowledge day to day."
+      },
+      {
+       "t": "b",
+       "x": "Communication: Skilled in interacting with diverse individuals, both in the caregiving realm and in day-to-day interactions."
+      },
+      {
+       "t": "h",
+       "x": "ACTIVITIES AND PERSONAL INTERESTS"
+      },
+      {
+       "t": "b",
+       "x": "Continuous learning, particularly in the realms of technology and real estate."
+      },
+      {
+       "t": "b",
+       "x": "Volunteering with senior groups in the community, fostering intergenerational connections. Have organised several community events with local church."
+      },
+      {
+       "t": "b",
+       "x": "Family-oriented activities, spending quality time with my child and the neighbourhood.",
+       "nj": "Parental status"
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "Years of day-to-day work with vulnerable older people",
+    "Works with the facility manager on maintenance checks",
+    "Self-taught Python; studying business at the Open University"
+   ],
+   "gaps": [
+    "No formal property or software-development qualifications",
+    "Limited exposure to commercial settings",
+    "Part-time study limits how quickly she can upskill"
+   ],
+   "grow": [
+    "Year 1: user-research training and shadowing the developers",
+    "Year 3: lead user research on the product",
+    "Year 5: head of accessibility and ageing-tech programme"
+   ],
+   "attr": {
+    "ready": 1,
+    "pot": 3,
+    "client": 3,
+    "cred": 1,
+    "cost": 1
+   }
+  },
+  {
+   "id": 8,
+   "name": "Jack Taylor",
+   "first": "Jack",
+   "headline": "Building surveyor, ten years in a family construction firm",
+   "secs": [
+    {
+     "cls": "cv8 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "JACK TAYLOR"
+      },
+      {
+       "t": "c",
+       "x": "37 Builder's Lane, City, Postcode, UK     Mobile: +44 XXXX XXXXXX"
+      },
+      {
+       "t": "c",
+       "x": "Email: jack.taylor@email.com     LinkedIn: www.linkedin.com/in/jacktaylor"
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL STATEMENT"
+      },
+      {
+       "t": "p",
+       "x": "A dedicated building surveyor with over 5 years of hands-on experience in the independent business, I possess in-depth knowledge of construction processes, building regulations, and survey methodologies. With a genuine passion for the industry and a track record of delivering accurate and efficient surveys, I am eager to bring my expertise to a larger platform and contribute to the growth of an established organisation.",
+       "chk": "Ask Jack to walk through the timeline of his roles and projects."
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Building Surveyor - Taylor & Sons Construction, City",
+       "d": "March 2016 - Present",
+       "chk": "Ask Jack who else could speak to his work, such as clients or contractors."
+      },
+      {
+       "t": "b",
+       "x": "Led building surveys for over 200 projects, ranging from residential properties to small commercial buildings."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated closely with architects, builders, and property buyers to provide detailed feedback and actionable recommendations."
+      },
+      {
+       "t": "b",
+       "x": "Conducted in-depth analysis of structures, identified potential issues, and suggested preventive measures."
+      },
+      {
+       "t": "b",
+       "x": "Assisted in business development, contributing to a 30% increase in project acquisition over a two-year span."
+      },
+      {
+       "t": "r",
+       "x": "Junior Surveyor (Apprenticeship) - Taylor & Sons Construction, City",
+       "d": "January 2014 - February 2016"
+      },
+      {
+       "t": "b",
+       "x": "Supported senior surveyors in fieldwork, including measurements, data recording, and report preparation."
+      },
+      {
+       "t": "b",
+       "x": "Learned hands-on about construction materials, quality control, and structural integrity checks."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "b",
+       "x": "BTEC Level 3 National Diploma in Construction and the Built Environment - Local College, September 2011 - June 2013; Grade: Distinction* Distinction* Merit"
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Surveying Tools: Proficient in using modern surveying equipment including total stations, GPS devices, and laser scanners."
+      },
+      {
+       "t": "b",
+       "x": "Software Proficiency: Competent in AutoCAD, Revit, and other surveying software."
+      },
+      {
+       "t": "b",
+       "x": "Analytical Skills: Strong ability to analyse structural integrity, detect faults, and offer solutions."
+      },
+      {
+       "t": "b",
+       "x": "Communication: Excellent verbal and written skills, with a track record of working seamlessly with construction teams and clients."
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL INTERESTS"
+      },
+      {
+       "t": "b",
+       "x": "Local history, Architectural design, DIY projects."
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "200+ building surveys and strong technical diagnosis",
+    "Laser scanners, total stations, CAD and Revit",
+    "Good at working with contractors; contributed to business growth"
+   ],
+   "gaps": [
+    "No degree or RICS route yet",
+    "Experience only in a family firm",
+    "No financial or asset-management background"
+   ],
+   "grow": [
+    "Year 1: part-time degree or RICS pathway",
+    "Year 3: lead retrofit and energy audits",
+    "Year 5: head of technical due diligence"
+   ],
+   "attr": {
+    "ready": 3,
+    "pot": 1,
+    "client": 2,
+    "cred": 1,
+    "cost": 2
+   }
+  },
+  {
+   "id": 9,
+   "name": "Jordan Rivers",
+   "first": "Jordan",
+   "headline": "Urban planning researcher, MPhil Manchester",
+   "secs": [
+    {
+     "cls": "cv9 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "JORDAN RIVERS (They/Them)",
+       "nj": "Pronouns"
+      },
+      {
+       "t": "c",
+       "x": "45 Urban Street, City, Postcode, UK     Mobile: +44 XXXX XXXXXX"
+      },
+      {
+       "t": "c",
+       "x": "Email: jordan.rivers@email.com     LinkedIn: www.linkedin.com/in/jordanrivers"
+      },
+      {
+       "t": "h",
+       "x": "SUMMARY"
+      },
+      {
+       "t": "p",
+       "x": "An enthusiastic researcher with a robust academic foundation in geography and planning. With over 3 years of dedicated research experience and a deep interest in public policy development, I am keen to contribute towards shaping the urban and rural landscapes of tomorrow. My analytical skills, combined with my passion for community-centric development, drive my ambition to influence policy that is both sustainable and inclusive."
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Research Assistant, Manchester University Research Institute, Manchester",
+       "d": "September 2020 - Present"
+      },
+      {
+       "t": "b",
+       "x": "Assisted in the research of urban planning models, resulting in 3 published papers in peer-reviewed journals."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with a team to conduct extensive field studies, gathering and analysing data to inform sustainable development initiatives."
+      },
+      {
+       "t": "b",
+       "x": "Presented findings at 2 international conferences, fostering collaborations with global experts."
+      },
+      {
+       "t": "r",
+       "x": "Intern, Urban Development Team, Urban Development Firm, Bolton",
+       "d": "June 2019 - August 2019"
+      },
+      {
+       "t": "b",
+       "x": "Participated in policy drafting and revision based on extensive data analysis and geographical considerations."
+      },
+      {
+       "t": "b",
+       "x": "Conducted spatial analysis using GIS tools to provide visual representations of urban growth patterns."
+      },
+      {
+       "t": "b",
+       "x": "Engaged with community stakeholders to gather feedback on proposed planning initiatives."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "r",
+       "x": "MPhil in Urban and Regional Planning, The University of Manchester, UK",
+       "d": "2018 - 2020"
+      },
+      {
+       "t": "b",
+       "x": "Focus: Sustainable Development and Geographic Information Systems (GIS)."
+      },
+      {
+       "t": "b",
+       "x": "Dissertation: \"Public Participation in Urban Development: A Case Study of Prescot.\""
+      },
+      {
+       "t": "r",
+       "x": "BSc (Hons) in Geography - The University of Manchester, UK",
+       "d": "2015-2018"
+      },
+      {
+       "t": "b",
+       "x": "Achieved: First Class Honours"
+      },
+      {
+       "t": "b",
+       "x": "Undertook modules on public policy, environmental planning, and urban sociology."
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Research: Proficient in both qualitative and quantitative research methodologies."
+      },
+      {
+       "t": "b",
+       "x": "GIS Tools: Experienced in ArcGIS, QGIS, and other spatial analysis software."
+      },
+      {
+       "t": "b",
+       "x": "Policy Analysis: Capable of assessing and crafting policy recommendations based on thorough research."
+      },
+      {
+       "t": "b",
+       "x": "Team Collaboration: Effective in interdisciplinary team settings, contributing diverse expertise and perspectives."
+      },
+      {
+       "t": "h",
+       "x": "OTHER EXPERIENCE"
+      },
+      {
+       "t": "p",
+       "x": "I am an urban photographer interested in post-industrial city and life. See my exhibition Young Wanderers in Gallery ABC."
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "MPhil in Urban and Regional Planning; first-class BSc",
+    "GIS and public-participation research experience",
+    "Published and presented internationally"
+   ],
+   "gaps": [
+    "Academic rather than practitioner experience",
+    "No budget or delivery management yet",
+    "Limited exposure to property markets"
+   ],
+   "grow": [
+    "Year 1: shadow council planners and delivery teams",
+    "Year 3: work towards chartered planner status",
+    "Year 5: lead strategic regeneration"
+   ],
+   "attr": {
+    "ready": 2,
+    "pot": 3,
+    "client": 2,
+    "cred": 2,
+    "cost": 1
+   }
+  },
+  {
+   "id": 10,
+   "name": "Jiamei (Rita) Lee",
+   "first": "Jiamei",
+   "headline": "Accountancy and Law graduate, Singapore; real estate podcaster",
+   "secs": [
+    {
+     "cls": "cv10 hdr",
+     "b": [
+      {
+       "t": "n",
+       "x": "JIAMEI (RITA) LEE"
+      },
+      {
+       "t": "c",
+       "x": "52 Marina View, City, Postcode, Singapore     Mobile: +65 XXXX XXXX     Email: jm.r.lee@email.sg"
+      },
+      {
+       "t": "c",
+       "x": "LinkedIn: www.linkedin.com/in/jamielee     Podcast: Drunkonomics"
+      },
+      {
+       "t": "p",
+       "x": "Hi! I am a meticulous and dedicated professional with a major in Real Estate related subject and a minor in Law. With a solid foundation in both financial and legal frameworks, I am keen to leverage this unique combination in the real estate asset management and investment sector. Fluent in multiple Asian languages, I can bring a diverse and multifaceted approach to international real estate investment opportunities.",
+       "chk": "Ask Jiamei how her accountancy and law degree connects to the real estate coursework she mentions."
+      },
+      {
+       "t": "p",
+       "x": "I can adapt to the new trends even working under pressure - this can be shown by the podcast I started to run during my maternity leave.",
+       "nj": "Maternity leave"
+      },
+      {
+       "t": "h",
+       "x": "PROFESSIONAL EXPERIENCE"
+      },
+      {
+       "t": "r",
+       "x": "Freelance Writer and Podcaster, Drunkonomics",
+       "d": "January 2023 - till now"
+      },
+      {
+       "t": "b",
+       "x": "Podcast updated on weekly basis on real estate investment market insights and commentary. Episodes being reposted by major market media."
+      },
+      {
+       "t": "b",
+       "x": "Multitasking on topic selection and drafting, podcast recording, editing and marketing."
+      },
+      {
+       "t": "r",
+       "x": "Finance Analyst Intern - Real Estate Investment Firm, London, UK",
+       "d": "June 2021 - December 2021"
+      },
+      {
+       "t": "b",
+       "x": "Assisted in the analysis and valuation of potential real estate investments across Southeast Asia."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with the legal team to ensure compliance with local property laws and regulations."
+      },
+      {
+       "t": "b",
+       "x": "Utilised multilingual skills to facilitate communication with foreign partners and stakeholders."
+      },
+      {
+       "t": "r",
+       "x": "Assistant Surveyor - Deloitte Real Estate, Singapore",
+       "d": "January 2020 - May 2021",
+       "chk": "Ask Jiamei to describe a typical week in her Assistant Surveyor role and how she fitted it around her studies."
+      },
+      {
+       "t": "b",
+       "x": "Managed financial records for a diverse clientele, including several local real estate developers and investors."
+      },
+      {
+       "t": "b",
+       "x": "Collaborated with the firm's legal department to address potential tax implications related to property acquisitions."
+      },
+      {
+       "t": "b",
+       "x": "Conducted financial audits, ensuring accuracy and adherence to established regulations."
+      },
+      {
+       "t": "h",
+       "x": "EDUCATION"
+      },
+      {
+       "t": "r",
+       "x": "Bachelor of Accountancy with Minor in Law; Singapore Institute of Management and University of Manchester",
+       "d": "August 2017 - July 2021"
+      },
+      {
+       "t": "b",
+       "x": "Engaged in coursework on real estate finance, property valuation, and contract law."
+      },
+      {
+       "t": "b",
+       "x": "Completed a dissertation on \"On the Cost of Tax Relief: Impact of 90% distribution rule to REITs financing strategies\""
+      },
+      {
+       "t": "b",
+       "x": "Active member of the university's Real Estate Investment Club."
+      },
+      {
+       "t": "h",
+       "x": "SKILLS"
+      },
+      {
+       "t": "b",
+       "x": "Financial Analysis: Proficient in evaluating the viability and potential returns of real estate investments."
+      },
+      {
+       "t": "b",
+       "x": "Legal Compliance: Well-versed in property laws and regulations across various Asian jurisdictions."
+      },
+      {
+       "t": "b",
+       "x": "Multilingual: Native in Mandarin and Hindi, Fluent in English, and conversational in Thai and Bahasa Indonesia."
+      },
+      {
+       "t": "b",
+       "x": "Software Proficiency: Competent in accounting software such as QuickBooks and financial modelling tools."
+      },
+      {
+       "t": "b",
+       "x": "Podcast and social media: good sense in new topics and market insights"
+      },
+      {
+       "t": "h",
+       "x": "PERSONAL INTERESTS"
+      },
+      {
+       "t": "b",
+       "x": "Cross-border real estate trends, Asian art and culture, Financial technology."
+      }
+     ]
+    }
+   ],
+   "strengths": [
+    "Accountancy and law grounding; REIT-finance dissertation",
+    "Multilingual with Southeast Asian investment exposure",
+    "Started and runs a weekly market podcast"
+   ],
+   "gaps": [
+    "Job titles do not match the listed duties",
+    "UK experience limited to a six-month internship",
+    "Singapore-based: relocation and right to work to resolve"
+   ],
+   "grow": [
+    "Year 1: UK tax and property law upskilling",
+    "Year 3: own a client portfolio",
+    "Year 5: lead cross-border advisory"
+   ],
+   "attr": {
+    "ready": 2,
+    "pot": 3,
+    "client": 3,
+    "cred": 2,
+    "cost": 2
+   }
+  }
+ ],
+ "vacancies": [
+  {
+   "id": "A",
+   "org": "Company A",
+   "role": "Junior valuation-data support",
+   "sector": "Leading residential agency in the North East",
+   "gem": null,
+   "decoys": [
+    6,
+    2
+   ],
+   "text": "Your company is a leading residential agency in the North East. As part of a strategic change, the company aims to offer online housing valuation consultancy services. This includes managing a housing price valuation and forecasting app. The team is looking for a junior-level individual to support data collection, specifically focusing on housing listings and transaction information in the local area. Aside from the typical agency works, the new member will collect data from the Land Registry and comparing it with information from other regional agency competitors. The ideal candidate should possess decent numerical skills and have a basic understanding of property valuation, as their duties will include entering client housing details into the model to produce results and then explaining these outcomes to clients. The person should be a fast learner. While programming skills are not required, the candidate should be capable of maintaining regular contact with the tech support team of the valuation model.",
+   "keys": [
+    [
+     "junior-level",
+     "c"
+    ],
+    [
+     "support data collection",
+     "t"
+    ],
+    [
+     "housing listings and transaction information",
+     "t"
+    ],
+    [
+     "collect data from the Land Registry",
+     "t"
+    ],
+    [
+     "comparing it with information from other regional agency competitors",
+     "t"
+    ],
+    [
+     "decent numerical skills",
+     "s"
+    ],
+    [
+     "basic understanding of property valuation",
+     "s"
+    ],
+    [
+     "entering client housing details into the model",
+     "t"
+    ],
+    [
+     "explaining these outcomes to clients",
+     "t"
+    ],
+    [
+     "fast learner",
+     "s"
+    ],
+    [
+     "programming skills are not required",
+     "c"
+    ],
+    [
+     "regular contact with the tech support team",
+     "t"
+    ]
+   ],
+   "gist": [
+    "The job: help an estate agency collect house-price data and run its new online valuation tool.",
+    "Who they want: a junior, quick learner who is good with numbers and knows the basics of property valuation.",
+    "Watch out: no programming is needed, but you will talk to the tech support team."
+   ],
+   "gloss": [
+    [
+     "Valuation",
+     "Estimating what a property is worth."
+    ],
+    [
+     "Land Registry",
+     "The official record of who owns property and what it sold for."
+    ],
+    [
+     "Transaction data",
+     "Records of properties that have been sold, and at what price."
+    ]
+   ]
+  },
+  {
+   "id": "B",
+   "org": "Company B",
+   "role": "Asset manager, new student-accommodation submarket",
+   "sector": "Student accommodation company listed on the Irish Stock Exchange",
+   "gem": 2,
+   "decoys": [
+    1,
+    5
+   ],
+   "text": "You work in the asset management department in a student accommodation company that listed on Irish Stock Exchange. As the company's portfolio expands in a few major university towns, the team looks for an asset manager to cover one new submarket with some accommodations acquired from another brand, and a few newly innovated blocks. The asset manager would regularly engage with the property managers in respective buildings for operational updates. He/she will also collect the leasing information and financial performance reports for the finance team regularly. Addressing the energy efficiency goal has become one key strategy of the company recently, not only for the shareholders' expectation but also for the purpose of cutting property operating costs. The company has also been discussing installing sensor facilities in the flat shared area to monitor the electricity and water usage, where the new submarket will be a test field to evaluate the cost and benefits. The new asset manager will also be involved with the sensor facility project.",
+   "keys": [
+    [
+     "cover one new submarket",
+     "t"
+    ],
+    [
+     "regularly engage with the property managers",
+     "t"
+    ],
+    [
+     "collect the leasing information and financial performance reports",
+     "t"
+    ],
+    [
+     "energy efficiency goal",
+     "c"
+    ],
+    [
+     "cutting property operating costs",
+     "c"
+    ],
+    [
+     "sensor facilities",
+     "c"
+    ],
+    [
+     "evaluate the cost and benefits",
+     "t"
+    ],
+    [
+     "involved with the sensor facility project",
+     "t"
+    ],
+    [
+     "listed on Irish Stock Exchange",
+     "c"
+    ]
+   ],
+   "gist": [
+    "The job: look after one new group of student buildings and check how well they are doing.",
+    "Who they want: someone who works well with building managers and understands leasing and finance reports.",
+    "Watch out: the company wants to cut energy use and will test sensors in your buildings."
+   ],
+   "gloss": [
+    [
+     "Asset manager",
+     "Someone who looks after how a group of buildings performs as an investment."
+    ],
+    [
+     "Submarket",
+     "A smaller local area within a larger property market."
+    ],
+    [
+     "Leasing information",
+     "Details of who rents what, for how long and at what rent."
+    ],
+    [
+     "Energy efficiency",
+     "Using less energy to do the same job."
+    ]
+   ]
+  },
+  {
+   "id": "C",
+   "org": "Company C",
+   "role": "Entry-level adviser for Southeast Asian investors in UK property",
+   "sector": "Financial adviser for high-net-worth clients",
+   "gem": 4,
+   "decoys": [
+    1,
+    3
+   ],
+   "text": "Your company work as a financial advisor that helps High Net Worth clients from Southeast Asia invest in the UK. With more clients going overseas into the UK, your team need someone who understands both UK and Southeast Asian markets. The clients need advisory not only on where to invest a house, but usually it would involve with leasing property management, as some clients wouldn't be based in the UK. Someone at the entry-level can assist the senior manager with the daily role and client care. Travelling between countries would be common. In some cases the clients could also be interested in immigration, children's education and legal consultancy in the UK. It will be an advantage if the person knows a bit about immigration law and tax regulations, and contacts the solicitor partners when suits.",
+   "keys": [
+    [
+     "High Net Worth clients from Southeast Asia",
+     "c"
+    ],
+    [
+     "understands both UK and Southeast Asian markets",
+     "s"
+    ],
+    [
+     "where to invest a house",
+     "t"
+    ],
+    [
+     "leasing property management",
+     "t"
+    ],
+    [
+     "entry-level",
+     "c"
+    ],
+    [
+     "assist the senior manager with the daily role and client care",
+     "t"
+    ],
+    [
+     "Travelling between countries would be common",
+     "s"
+    ],
+    [
+     "immigration law and tax regulations",
+     "n"
+    ],
+    [
+     "contacts the solicitor partners",
+     "t"
+    ]
+   ],
+   "gist": [
+    "The job: help a senior adviser look after wealthy clients from Southeast Asia who invest in UK property.",
+    "Who they want: an entry-level person who understands both the UK and Southeast Asian markets and enjoys client care.",
+    "Watch out: lots of travel, and knowing a bit about immigration law and tax helps."
+   ],
+   "gloss": [
+    [
+     "High Net Worth",
+     "People with a lot of money to invest."
+    ],
+    [
+     "Leasing and property management",
+     "Finding tenants and looking after a rented property."
+    ],
+    [
+     "Entry-level",
+     "A first job in the field, little experience needed."
+    ]
+   ]
+  },
+  {
+   "id": "D",
+   "org": "Institution D",
+   "role": "Town-centre planner",
+   "sector": "Gnawtown local council",
+   "gem": 5,
+   "decoys": [
+    2,
+    8
+   ],
+   "text": "The Gnawtown local council is grappling with a few challenges regarding its town centre. After the COVID-19 pandemic, there has been a noticeable drop in the number of people working or just strolling on the high street. Then there's the issue of the overpowering neon lights, which used to be what the council promoted in the late 90s to attract people to the public space. But many facilities have not been appropriately maintained, and it seems they are more off-putting than inviting the local residents. The rundown buildings and the high street look even depressed with many shops closed down since the pandemic. On top of all that, the town has started to accommodate an influx of refugees in recent years, and there's a pressing need to create spaces to make both locals and the new residents feel at home. The council plans to establish a strategic team for town centre renovation. The board is seeking a planner who can help navigate these issues, transforming the town centre into an inclusive and welcoming space for all.",
+   "keys": [
+    [
+     "a noticeable drop in the number of people",
+     "c"
+    ],
+    [
+     "overpowering neon lights",
+     "c"
+    ],
+    [
+     "not been appropriately maintained",
+     "c"
+    ],
+    [
+     "rundown buildings",
+     "c"
+    ],
+    [
+     "many shops closed down",
+     "c"
+    ],
+    [
+     "influx of refugees",
+     "c"
+    ],
+    [
+     "create spaces to make both locals and the new residents feel at home",
+     "t"
+    ],
+    [
+     "strategic team for town centre renovation",
+     "t"
+    ],
+    [
+     "seeking a planner",
+     "s"
+    ],
+    [
+     "inclusive and welcoming space for all",
+     "t"
+    ]
+   ],
+   "gist": [
+    "The job: plan how to bring life back to a run-down town centre.",
+    "Who they want: a planner who can make spaces work for long-term residents and for newly arrived refugees.",
+    "Watch out: the old neon lights and empty shops are both the problem and the opportunity."
+   ],
+   "gloss": [
+    [
+     "Town centre renovation",
+     "Improving the main shopping and public areas of a town."
+    ],
+    [
+     "Inclusive space",
+     "A place where different groups feel welcome and can use it."
+    ],
+    [
+     "Planner",
+     "A professional who guides how land and buildings are used."
+    ],
+    [
+     "Refugee",
+     "A person who had to leave their country for safety."
+    ]
+   ]
+  },
+  {
+   "id": "E",
+   "org": "Company E",
+   "role": "Hospitality valuer (senior level)",
+   "sector": "Top-notch property consultancy, valuation team",
+   "gem": 2,
+   "decoys": [
+    3,
+    6
+   ],
+   "text": "The valuation team of a top-notch property consultancy firm is in a bit of a pickle. They are looking for a valuer for the hospitality branch - from swanky ones to hostels and even remote resorts. Many of these spots are in some remote areas so driving for inspection is essential. The person needs to know hotel valuation practice, but would also be able to be innovative: the recent question the team faces very often is how to value old hotel buildings that have been renovated and reach a higher energy efficiency, especially since there aren't many industry standards to lean on. So they're really hoping to find someone who's not only comfortable with the general routine, but has that spark of \"research spirit\". The company is willing to pay for a senior-level salary or even an associate director if the candidate is really competitive. They hope the new member not just \"go by the book\", but to help the team come up with guidance that could set the tone as an industry lead in hotel valuation practice in the future.",
+   "keys": [
+    [
+     "valuer for the hospitality branch",
+     "t"
+    ],
+    [
+     "driving for inspection is essential",
+     "s"
+    ],
+    [
+     "know hotel valuation practice",
+     "s"
+    ],
+    [
+     "innovative",
+     "s"
+    ],
+    [
+     "how to value old hotel buildings that have been renovated",
+     "t"
+    ],
+    [
+     "higher energy efficiency",
+     "c"
+    ],
+    [
+     "research spirit",
+     "s"
+    ],
+    [
+     "senior-level salary",
+     "c"
+    ],
+    [
+     "help the team come up with guidance",
+     "t"
+    ]
+   ],
+   "gist": [
+    "The job: value hotels, hostels and resorts, many in remote places you have to drive to.",
+    "Who they want: an experienced person who knows hotel valuation and likes to research new methods.",
+    "Watch out: the team needs new guidance for valuing old hotels that were renovated to save energy."
+   ],
+   "gloss": [
+    [
+     "Hospitality valuation",
+     "Working out the value of hotels and similar properties."
+    ],
+    [
+     "Energy efficiency",
+     "Using less energy. It can change what a building is worth."
+    ],
+    [
+     "Associate director",
+     "A senior job level in a consultancy."
+    ],
+    [
+     "Industry standard",
+     "An agreed way of doing something that most firms follow."
+    ]
+   ]
+  },
+  {
+   "id": "F",
+   "org": "Company F",
+   "role": "User-needs liaison for an elderly smart-home app",
+   "sector": "PropTech start-up",
+   "gem": 7,
+   "decoys": [
+    6,
+    5
+   ],
+   "text": "You are one of the founders of a PropTech startup. A recent project you are planning with the team is to develop a smart home app specially designed for vulnerable elderly people to monitor their indoor activities in their homes. It could provide convenience on remote control, indoor safety, pet feeding etc. You've been engaging a with few senior housing sites and care homes to learn the features and design, but still need to understand the real-life needs of elderly and vulnerable groups. Your colleagues, as a group of programmers, reckon there should be someone with a different background to help out, rather than all of you staying indoors brainstorming. The team hopes to find someone who can work with the property management team, have a close connection with the senior residents, and really get to the bottom of what they need. It will be great if this person also knows a bit about app development so he/she can pass it on to the programmers in a way that makes sense to them.",
+   "keys": [
+    [
+     "smart home app",
+     "c"
+    ],
+    [
+     "vulnerable elderly people",
+     "c"
+    ],
+    [
+     "understand the real-life needs of elderly and vulnerable groups",
+     "t"
+    ],
+    [
+     "a group of programmers",
+     "c"
+    ],
+    [
+     "someone with a different background",
+     "s"
+    ],
+    [
+     "work with the property management team",
+     "t"
+    ],
+    [
+     "a close connection with the senior residents",
+     "s"
+    ],
+    [
+     "get to the bottom of what they need",
+     "t"
+    ],
+    [
+     "knows a bit about app development",
+     "n"
+    ],
+    [
+     "pass it on to the programmers",
+     "t"
+    ]
+   ],
+   "gist": [
+    "The job: find out what older and vulnerable people really need from a smart-home app.",
+    "Who they want: someone close to older people who can work with building managers, and explain needs to programmers.",
+    "Watch out: the programmers already exist, so this is not a coding job."
+   ],
+   "gloss": [
+    [
+     "PropTech",
+     "Technology that helps with property and housing."
+    ],
+    [
+     "Smart home",
+     "A home with connected devices you can control or monitor remotely."
+    ],
+    [
+     "Vulnerable",
+     "People who may need extra care or support."
+    ],
+    [
+     "Care home",
+     "A place where people live and are looked after."
+    ]
+   ]
+  },
+  {
+   "id": "G",
+   "org": "Company G",
+   "role": "Asset manager, data-centre portfolio",
+   "sector": "Global real estate investment fund",
+   "gem": 2,
+   "decoys": [
+    1,
+    8
+   ],
+   "text": "Your company is a global real estate investment fund that has recently completed the acquisition of a mid-sized data centre portfolio across the UK. The fund has traditionally focused on office and logistics assets, so this is its first foray into digital infrastructure. A dedicated asset management team is being formed to oversee the performance of these facilities and to work closely with the fund's technical partners and tenants, ranging from cloud-service providers to AI computing firms. As the fund explores a \"green digital\" investment strategy, the asset manager will contribute to identifying and evaluating efficiency technologies (e.g. liquid cooling or renewable-powered systems) and translating technical outcomes into financial impacts. A main challenge is to get someone who understands the \"business\": existing members from the investment and real estate background don't know much beyond tenancy structures and service-charge budgets, while the key performance indicators like power usage effectiveness (PUE), uptime, and other sustainability compliance remain crucial when liaising with the fund's ESG and investment teams on retrofit opportunities. The team is looking for someone who has the capacities to bridge real-estate and infrastructure knowledge -- ideally with experience in high-spec commercial or industrial buildings, solid financial modelling skills, and curiosity about the fast-changing digital economy.",
+   "keys": [
+    [
+     "data centre portfolio",
+     "c"
+    ],
+    [
+     "first foray into digital infrastructure",
+     "c"
+    ],
+    [
+     "oversee the performance of these facilities",
+     "t"
+    ],
+    [
+     "work closely with the fund's technical partners and tenants",
+     "t"
+    ],
+    [
+     "identifying and evaluating efficiency technologies",
+     "t"
+    ],
+    [
+     "translating technical outcomes into financial impacts",
+     "t"
+    ],
+    [
+     "power usage effectiveness (PUE), uptime",
+     "s"
+    ],
+    [
+     "liaising with the fund's ESG and investment teams",
+     "t"
+    ],
+    [
+     "bridge real-estate and infrastructure knowledge",
+     "s"
+    ],
+    [
+     "high-spec commercial or industrial buildings",
+     "n"
+    ],
+    [
+     "solid financial modelling skills",
+     "s"
+    ],
+    [
+     "curiosity about the fast-changing digital economy",
+     "n"
+    ]
+   ],
+   "gist": [
+    "The job: manage a new portfolio of data centres for an investment fund.",
+    "Who they want: someone who can link property with technology and turn technical results into money terms.",
+    "Watch out: you must understand data-centre measures such as PUE and uptime."
+   ],
+   "gloss": [
+    [
+     "Data centre",
+     "A building full of computers that store and process data."
+    ],
+    [
+     "PUE (power usage effectiveness)",
+     "A score of how efficiently a data centre uses electricity. Closer to 1 is better."
+    ],
+    [
+     "Uptime",
+     "How much of the time the system is running without failure."
+    ],
+    [
+     "ESG",
+     "Environmental, social and governance: ways to judge how responsibly a company behaves."
+    ],
+    [
+     "Retrofit",
+     "Upgrading an existing building with new equipment."
+    ]
+   ]
+  }
+ ],
+ "fit": {
+  "A": {
+   "1": 5,
+   "2": 1,
+   "3": 4,
+   "4": 2,
+   "5": 0,
+   "6": 2,
+   "7": 1,
+   "8": 1,
+   "9": 2,
+   "10": 3
+  },
+  "B": {
+   "1": 2,
+   "2": 4,
+   "3": 2,
+   "4": 1,
+   "5": 0,
+   "6": 2,
+   "7": 1,
+   "8": 3,
+   "9": 1,
+   "10": 4
+  },
+  "C": {
+   "1": 1,
+   "2": 1,
+   "3": 2,
+   "4": 4,
+   "5": 0,
+   "6": 0,
+   "7": 0,
+   "8": 0,
+   "9": 1,
+   "10": 5
+  },
+  "D": {
+   "1": 0,
+   "2": 3,
+   "3": 0,
+   "4": 0,
+   "5": 4,
+   "6": 0,
+   "7": 2,
+   "8": 1,
+   "9": 5,
+   "10": 0
+  },
+  "E": {
+   "1": 0,
+   "2": 4,
+   "3": 3,
+   "4": 3,
+   "5": 0,
+   "6": 0,
+   "7": 0,
+   "8": 2,
+   "9": 1,
+   "10": 1
+  },
+  "F": {
+   "1": 0,
+   "2": 1,
+   "3": 0,
+   "4": 1,
+   "5": 2,
+   "6": 2,
+   "7": 5,
+   "8": 1,
+   "9": 3,
+   "10": 0
+  },
+  "G": {
+   "1": 2,
+   "2": 4,
+   "3": 3,
+   "4": 1,
+   "5": 0,
+   "6": 3,
+   "7": 0,
+   "8": 2,
+   "9": 1,
+   "10": 3
+  }
+ },
+ "why": {
+  "A1": "Numerate, with Excel modelling and housing-market research. A fast-learning junior profile that matches the brief closely.",
+  "A3": "Real valuation methods and report writing, so productive quickly. The role is more data-led than inspection-led.",
+  "A10": "Strong numbers and finance, but this is junior data work. Likely overqualified and a flight risk.",
+  "A6": "Excellent technical skills, but programming is explicitly not required and the role may bore a lead developer.",
+  "A2": "Valuation knowledge, but too senior for a junior data role. A flight risk.",
+  "B2": "Sustainability and large-project management fit the energy-efficiency pilot. No asset-management track record.",
+  "B10": "Finance and reporting strengths match the asset-manager duties. No sensor or energy experience.",
+  "B8": "Understands buildings, retrofit and technical systems. Needs finance and reporting upskilling.",
+  "B1": "Good with numbers but little operational or property-management exposure.",
+  "B5": "Design skills, but a weak match to operations, reporting and finance duties.",
+  "C4": "Service mindset from hospitality, Southeast Asian contacts, Excel/Altus modelling and a real-estate MSc. Lacks UK legal and tax knowledge.",
+  "C10": "Finance, a law minor, tax exposure and Southeast Asian languages match the brief. UK presence needs resolving.",
+  "C1": "UK housing research, but no cross-border or client-facing experience.",
+  "C3": "Useful inspection experience, but this role is advisory and cross-border.",
+  "D9": "Planning research, public-participation focus and GIS are directly on brief. Lacks delivery experience.",
+  "D5": "Inclusive design and lived experience of displacement are valuable. UK planning credentials are missing.",
+  "D2": "Sustainable urban development expertise, but a senior engineer rather than a town-centre planner.",
+  "D8": "Strong on buildings, little on public space, policy or inclusion.",
+  "E2": "Valuation teaching plus sustainability research suits the retrofit-valuation puzzle. Lacks hotel practice.",
+  "E3": "Valuation methods and inspections, but junior against a senior-level post.",
+  "E4": "Hospitality knowledge plus valuation training. Lacks seniority and inspection track record.",
+  "E6": "Technically excellent, but nothing to do with valuation.",
+  "F7": "Daily contact with vulnerable older people, works with facility managers, and has basic Python. Everything on the brief.",
+  "F9": "Field research and stakeholder engagement help understand users. No property-management link.",
+  "F6": "Great app skills, but the team already has programmers and asked for a different background.",
+  "F5": "User-centred design instincts, but no contact with elderly users or property teams.",
+  "G2": "Infrastructure engineering plus Excel valuation models bridge real estate and technical assets. Needs data-centre KPIs.",
+  "G3": "Property valuation and reporting. Limited technical or infrastructure grounding.",
+  "G6": "Understands technology and ML, but not leases, funds or financial modelling.",
+  "G10": "Financial modelling and REIT knowledge fit. No infrastructure exposure.",
+  "G1": "Modelling skills, but no asset-management or infrastructure background.",
+  "G8": "Strong building knowledge, weak on financial modelling and fund reporting."
+ },
+ "draft": {
+  "A": {
+   "titles": [
+    "Junior Valuation Data Assistant",
+    "Senior Surveyor",
+    "Software Support Analyst"
+   ],
+   "level": [
+    0
+   ],
+   "chips": [
+    [
+     "Collect housing listing and transaction data in the local area",
+     "d"
+    ],
+    [
+     "Gather Land Registry data and compare it with regional competitor agencies",
+     "d"
+    ],
+    [
+     "Enter client housing details into the valuation model to produce results",
+     "d"
+    ],
+    [
+     "Explain valuation results to clients",
+     "d"
+    ],
+    [
+     "Keep regular contact with the valuation model's tech support team",
+     "d"
+    ],
+    [
+     "Decent numerical skills",
+     "m"
+    ],
+    [
+     "Basic understanding of property valuation",
+     "m"
+    ],
+    [
+     "Fast learner",
+     "m"
+    ],
+    [
+     "Comfortable working with spreadsheets or data tools",
+     "n"
+    ],
+    [
+     "Programming skills",
+     "x",
+     "The brief says programming skills are not required."
+    ],
+    [
+     "Several years of valuation experience",
+     "x",
+     "This is a junior role."
+    ]
+   ]
+  },
+  "B": {
+   "titles": [
+    "Asset Manager, Student Accommodation",
+    "Property Manager (single building)",
+    "Energy Systems Engineer"
+   ],
+   "level": [
+    1
+   ],
+   "chips": [
+    [
+     "Cover the new submarket, including acquired and newly renovated blocks",
+     "d"
+    ],
+    [
+     "Engage regularly with property managers on operational updates",
+     "d"
+    ],
+    [
+     "Collect leasing information and financial performance reports for the finance team",
+     "d"
+    ],
+    [
+     "Contribute to the company's energy-efficiency strategy",
+     "d"
+    ],
+    [
+     "Take part in the sensor project and evaluate its costs and benefits",
+     "d"
+    ],
+    [
+     "Asset management or property management knowledge",
+     "m"
+    ],
+    [
+     "Able to build working relationships with on-site property managers",
+     "m"
+    ],
+    [
+     "Able to read leasing and financial performance reports",
+     "m"
+    ],
+    [
+     "Familiarity with building sensors or smart metering",
+     "n"
+    ],
+    [
+     "Experience in student accommodation or purpose-built housing",
+     "n"
+    ],
+    [
+     "Qualified electrical engineer",
+     "x",
+     "The sensor project is something to take part in, not a technical qualification the job needs."
+    ],
+    [
+     "Experience preparing stock exchange filings",
+     "x",
+     "The company is listed, but this role collects reports for the finance team."
+    ]
+   ]
+  },
+  "C": {
+   "titles": [
+    "Investment Adviser (Entry Level)",
+    "Immigration Solicitor",
+    "Estate Agent"
+   ],
+   "level": [
+    0
+   ],
+   "chips": [
+    [
+     "Assist the senior manager with daily work and client care",
+     "d"
+    ],
+    [
+     "Advise clients on where to invest in UK property",
+     "d"
+    ],
+    [
+     "Coordinate leasing and property management for clients based overseas",
+     "d"
+    ],
+    [
+     "Travel between countries",
+     "d"
+    ],
+    [
+     "Contact solicitor partners when needed",
+     "d"
+    ],
+    [
+     "Understanding of both UK and Southeast Asian markets",
+     "m"
+    ],
+    [
+     "Client-care and relationship skills",
+     "m"
+    ],
+    [
+     "Willing to travel internationally",
+     "m"
+    ],
+    [
+     "Basic knowledge of immigration law and tax regulations",
+     "n"
+    ],
+    [
+     "Awareness of UK education and legal needs of overseas families",
+     "n"
+    ],
+    [
+     "Qualified immigration solicitor",
+     "x",
+     "Far too senior. The brief asks for entry level and says legal knowledge is an advantage, not a requirement."
+    ],
+    [
+     "Ten years of advisory experience",
+     "x",
+     "This is an entry-level role."
+    ]
+   ]
+  },
+  "D": {
+   "titles": [
+    "Town Centre Planner",
+    "Highways Engineer",
+    "Council Press Officer"
+   ],
+   "level": [
+    1
+   ],
+   "chips": [
+    [
+     "Develop a strategy to bring people back to the high street after the pandemic",
+     "d"
+    ],
+    [
+     "Review the neon lighting and poorly maintained public facilities",
+     "d"
+    ],
+    [
+     "Address empty shops and run-down buildings",
+     "d"
+    ],
+    [
+     "Create spaces where locals and new refugee residents feel at home",
+     "d"
+    ],
+    [
+     "Work in the new town-centre renovation strategic team",
+     "d"
+    ],
+    [
+     "Knowledge of town or urban planning",
+     "m"
+    ],
+    [
+     "Able to engage communities and understand different needs",
+     "m"
+    ],
+    [
+     "Commitment to inclusive public space",
+     "m"
+    ],
+    [
+     "Experience with GIS or spatial analysis",
+     "n"
+    ],
+    [
+     "Experience drafting policy",
+     "n"
+    ],
+    [
+     "Must have lived in Gnawtown for ten years",
+     "x",
+     "Residency length is not related to doing the job and could exclude the new residents the council wants to serve."
+    ],
+    [
+     "Registered architect",
+     "x",
+     "The brief asks for a planner, not a registered architect."
+    ]
+   ]
+  },
+  "E": {
+   "titles": [
+    "Hospitality Valuer",
+    "Hotel General Manager",
+    "Facilities Manager"
+   ],
+   "level": [
+    2
+   ],
+   "chips": [
+    [
+     "Value hospitality assets, from luxury hotels to hostels and remote resorts",
+     "d"
+    ],
+    [
+     "Drive to remote sites for inspections",
+     "d"
+    ],
+    [
+     "Work out how to value renovated, energy-efficient older hotels",
+     "d"
+    ],
+    [
+     "Help the team write guidance that sets industry practice",
+     "d"
+    ],
+    [
+     "Knowledge of hotel valuation practice",
+     "m"
+    ],
+    [
+     "Able to drive to remote locations",
+     "m"
+    ],
+    [
+     "Innovative, with a research mindset",
+     "m"
+    ],
+    [
+     "Experience at senior level",
+     "m"
+    ],
+    [
+     "Knowledge of energy efficiency and sustainability in buildings",
+     "n"
+    ],
+    [
+     "Published research or guidance",
+     "n"
+    ],
+    [
+     "Follows standard methods only",
+     "x",
+     "The brief wants someone who does not just \"go by the book\"."
+    ],
+    [
+     "No experience necessary",
+     "x",
+     "This is a senior post, paid at senior or associate director level."
+    ]
+   ]
+  },
+  "F": {
+   "titles": [
+    "User Research Liaison, Elderly Smart Home",
+    "Senior Software Developer",
+    "Care Home Manager"
+   ],
+   "level": [
+    1
+   ],
+   "chips": [
+    [
+     "Work with the property management team at senior housing sites and care homes",
+     "d"
+    ],
+    [
+     "Build close contact with senior residents to learn their real needs",
+     "d"
+    ],
+    [
+     "Pass user needs to the programmers in a way that makes sense to them",
+     "d"
+    ],
+    [
+     "Contribute to features such as remote control, indoor safety and pet feeding",
+     "d"
+    ],
+    [
+     "Close connection with older and vulnerable people",
+     "m"
+    ],
+    [
+     "Able to work with property managers",
+     "m"
+    ],
+    [
+     "Clear communication with technical colleagues",
+     "m"
+    ],
+    [
+     "Basic knowledge of app development",
+     "n"
+    ],
+    [
+     "Experience in user research",
+     "n"
+    ],
+    [
+     "Understanding of care settings",
+     "n"
+    ],
+    [
+     "Senior software engineering experience",
+     "x",
+     "The team already has programmers and asked for someone with a different background."
+    ],
+    [
+     "Machine-learning expertise",
+     "x",
+     "Not in the brief. The gap is user insight, not more engineering."
+    ]
+   ]
+  },
+  "G": {
+   "titles": [
+    "Asset Manager, Digital Infrastructure",
+    "Data Centre Technician",
+    "Retail Property Surveyor"
+   ],
+   "level": [
+    1,
+    2
+   ],
+   "chips": [
+    [
+     "Oversee the performance of the data-centre portfolio",
+     "d"
+    ],
+    [
+     "Work with technical partners and tenants such as cloud and AI computing firms",
+     "d"
+    ],
+    [
+     "Identify and evaluate efficiency technologies such as liquid cooling and renewable power",
+     "d"
+    ],
+    [
+     "Translate technical outcomes into financial impacts",
+     "d"
+    ],
+    [
+     "Liaise with ESG and investment teams on retrofit opportunities",
+     "d"
+    ],
+    [
+     "Solid financial modelling skills",
+     "m"
+    ],
+    [
+     "Able to bridge real estate and infrastructure knowledge",
+     "m"
+    ],
+    [
+     "Understanding of KPIs such as PUE and uptime",
+     "m"
+    ],
+    [
+     "Experience in high-spec commercial or industrial buildings",
+     "n"
+    ],
+    [
+     "Curiosity about the fast-changing digital economy",
+     "n"
+    ],
+    [
+     "Knowledge of sustainability compliance",
+     "n"
+    ],
+    [
+     "Certified data-centre electrical engineer",
+     "x",
+     "The role translates technical outcomes into finance. It is not a hands-on engineering post."
+    ],
+    [
+     "Experience only in retail property",
+     "x",
+     "The fund needs someone to bridge into infrastructure."
+    ]
+   ]
+  }
+ }
+}

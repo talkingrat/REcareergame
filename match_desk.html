@@ -97,14 +97,19 @@ th{color:var(--mute);font-weight:600}
 .paper h4{margin:calc(16px*var(--z)) 0 calc(6px*var(--z));font-size:1em;letter-spacing:.04em;color:var(--pa,#244a9a);border-bottom:2px solid var(--pa,#244a9a);padding-bottom:2px}
 .paper .nm{font-size:1.7em;font-weight:700;margin:0 0 4px;color:var(--pn,#1c2428);line-height:1.2}
 .paper .ct{font-size:.92em;color:#4a5558}
-.paper .ln{cursor:pointer;border-radius:2px;padding:0 1px;display:inline}
-.paper .ln:hover{background:rgba(36,74,154,.12)}
-.paper .t-for{background:rgba(95,191,138,.45);box-shadow:inset 0 -2px 0 #2e9561}
-.paper .t-against{background:rgba(232,168,56,.5);box-shadow:inset 0 -2px 0 #b97d12}
-.paper .t-verify{background:rgba(91,231,255,.4);box-shadow:inset 0 -2px 0 #1b9fb8;text-decoration:underline dotted}
-.paper .t-for::after{content:" \2713";font-weight:700;color:#1d7a4c}
-.paper .t-against::after{content:" !";font-weight:700;color:#8a5a06}
-.paper .t-verify::after{content:" ?";font-weight:700;color:#0f7a90}
+.paper .ln{display:inline;border-radius:2px}
+.paper .ln:focus-visible{outline:3px solid #244a9a;outline-offset:2px}
+.paper .w{cursor:pointer;border-radius:2px}
+.paper .w:hover{background:rgba(36,74,154,.14)}
+.paper .rb{font-weight:700}
+.paper .rd{font-style:italic;color:#5b676a}
+.paper .w.t-for{background:rgba(95,191,138,.5);box-shadow:inset 0 -2px 0 #2e9561}
+.paper .w.t-against{background:rgba(232,168,56,.55);box-shadow:inset 0 -2px 0 #b97d12}
+.paper .w.t-verify{background:rgba(91,231,255,.45);box-shadow:inset 0 -2px 0 #1b9fb8}
+.paper .w.t-for.t-e::after{content:"\2713";font-weight:700;color:#1d7a4c;margin-left:2px}
+.paper .w.t-against.t-e::after{content:"!";font-weight:700;color:#8a5a06;margin-left:2px}
+.paper .w.t-verify.t-e::after{content:"?";font-weight:700;color:#0f7a90;margin-left:2px}
+.paper .w.anch{outline:2px dashed #244a9a;background:rgba(36,74,154,.2)}
 .paper ul{margin:0;padding-left:1.2em}
 .paper li{margin:2px 0}
 .paper p{margin:0 0 .7em}
@@ -125,6 +130,25 @@ th{color:var(--mute);font-weight:600}
 .cv9{--pf:"Helvetica Neue",Helvetica,Arial,sans-serif;--pa:#222;--pn:#222}
 .cv10{--pf:Tahoma,sans-serif;--pa:#b3261e}
 .hint{font-size:14px;color:var(--mute)}
+textarea.mono{font-family:Consolas,"Courier New",monospace;font-size:14px;min-height:200px;line-height:1.45}
+pre.guide{background:#1b2a2f;border:1px solid var(--line);border-radius:6px;padding:10px 12px;overflow:auto;font-size:13px;line-height:1.5;margin:6px 0}
+.filebtn{display:inline-block;margin:0;cursor:pointer;line-height:28px}
+.vh{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.bsok{color:var(--green)} .bswarn{color:var(--amber)}
+.bsfit select{min-height:36px;padding:2px 6px;width:64px}
+.helpbar{gap:6px;margin-bottom:10px}
+.hb{min-height:36px;padding:2px 12px;border:2px solid #7a5f22;background:transparent;border-radius:999px;cursor:pointer;font-weight:700;color:#3b2c0a}
+.hb.on{background:#3b2c0a;color:#f6e8c5}
+mark.k{padding:1px 3px;border-radius:3px;color:#1c2428;font-weight:600}
+mark.k-t{background:#a8c8f5;box-shadow:inset 0 -2px 0 #3b78c4}
+mark.k-s{background:#a8e3ba;box-shadow:inset 0 -2px 0 #2e9561}
+mark.k-n{background:#d9c4f2;box-shadow:inset 0 -2px 0 #7c52b8}
+mark.k-c{background:#f6b3ab;box-shadow:inset 0 -2px 0 #c0392b}
+.legend{font-size:14px;line-height:2.1}
+.gist{background:rgba(255,255,255,.6);border-radius:6px;padding:8px 12px;margin:8px 0}
+.gist ul{margin:4px 0 0;padding-left:1.2em}
+.gloss{margin-top:8px}.gloss dt{font-weight:700;margin-top:6px}.gloss dd{margin:0}
+.vtext{line-height:1.85}
 .chipb{display:block;width:100%;text-align:left;min-height:44px;padding:8px 12px;margin:6px 0;border:2px solid var(--line);background:transparent;border-radius:6px;cursor:pointer;font:inherit;color:var(--text)}
 .chipb .cb{display:inline-block;min-width:104px;margin-right:8px;font-weight:700;font-size:13px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mute);text-align:center}
 .chipb.s-d{border-color:#6aa6ff;background:rgba(106,166,255,.12)} .chipb.s-d .cb{border-color:#6aa6ff;color:#bcd8ff}
@@ -146,14 +170,14 @@ th{color:var(--mute);font-weight:600}
 const N=(x,o)=>({t:'n',x,...o}), CT=(x,o)=>({t:'c',x,...o}), H=(x)=>({t:'h',x}),
       P=(x,o)=>({t:'p',x,...o}), B=(x,o)=>({t:'b',x,...o}), R=(x,d,o)=>({t:'r',x,d,...o});
 
-const CANDS=[
+const CANDS0=[
 {id:1,name:'Jane Doe',first:'Jane',headline:'Final-year BSc Economics student, York',
  secs:[{cls:'cv1 hdr',b:[
   N('JANE DOE'),CT('123 Street Name, City, Postcode'),CT('Mobile: +44 XXXX XXXXXX     Email: jane.doe@email.com'),
   H('PERSONAL STATEMENT'),
   P('Final-year BSc Economics candidate from York University with a strong academic background, a passion for financial markets, and a keen interest in real estate investment. Proficient at quantitative analysis, financial modelling, and market research. Seeking an Investment Analyst position to apply my analytical skills and contribute to effective investment decision-making.'),
   H('EDUCATION'),
-  R('BSc (Hons) Economics, York University, UK','September 2023 - June 2025 (exp)',{chk:'A BSc that runs only two years (Sept 2023 to June 2025) is unusual for a UK honours degree. Worth asking.'}),
+  R('BSc (Hons) Economics, York University, UK','September 2023 - June 2025 (exp)',{chk:'Ask Jane to talk through her degree timeline and what she has studied so far.'}),
   B('Expected Second-Upper Class Honours.'),
   B('Dissertation Topic: "The Impact of Brexit on UK Regional Housing Markets"'),
   B('Relevant Modules: Housing Economics, Advanced Microeconomics, Investment and Portfolio Management.'),
@@ -185,7 +209,7 @@ const CANDS=[
  secs:[{cls:'letter',b:[
   P('To Whom It May Concern,'),
   P('Pray permit me to introduce myself. I am a distinguished engineer with a career spanning over fifteen years, dedicated to infrastructure and civil engineering undertakings across the African continent. In the recent past, I have obtained a doctoral degree in sustainable urban evolution.'),
-  P('I have also established my career expertise in real estate for three years.',{chk:'The letter claims three years of real estate expertise; the CV shows a part-time (0.6 FTE) teaching post, not practice.'}),
+  P('I have also established my career expertise in real estate for three years.',{chk:'Ask Kwame about the practical real estate work behind the three years mentioned in the letter, beyond teaching.'}),
   P('With the expertise I\'ve garnered, it is my ardent desire to champion both innovative and sustainable stratagems within the esteemed real estate sector of the United Kingdom. I am seeking to broaden my affiliations within the UK market. Furthermore, I would be profoundly gratified to harness my engineering pedigree in the realm of commerce.'),
   P('You shall find my curriculum vitae enclosed. Should you require any additional particulars, I am at your disposal.'),
   P('I am eagerly anticipating your correspondence,'),
@@ -224,7 +248,7 @@ const CANDS=[
  secs:[{cls:'letter',b:[
   P('Dear sir/madam,'),
   P('I hope this letter finds you well. I am writing to express my keen interest in transitioning more deeply into the real estate investment sector with your team, drawing from my experiences in real estate surveying and inspection.'),
-  P('My tenure as a Trainee Real Estate Surveyor in the current job provided me with a robust understanding of the UK property landscape. I\'ve had the privilege to conduct numerous property inspections, gaining an intimate knowledge of buildings, their structures, and potential value points that often go unnoticed. This hands-on experience has given me a unique perspective on property valuation, understanding the potential of an asset beyond its current state.',{chk:'The letter says "Trainee" surveyor; the CV title is "Assistant Real Estate Surveyor".'}),
+  P('My tenure as a Trainee Real Estate Surveyor in the current job provided me with a robust understanding of the UK property landscape. I\'ve had the privilege to conduct numerous property inspections, gaining an intimate knowledge of buildings, their structures, and potential value points that often go unnoticed. This hands-on experience has given me a unique perspective on property valuation, understanding the potential of an asset beyond its current state.',{chk:'Invite Lucas to describe his current role and day-to-day responsibilities.'}),
   P('Having been extensively involved in data collection, analysis, and reporting, I\'ve developed a keen eye for identifying business opportunities and risks. I\'ve come to appreciate the intricate balance between current property conditions, market trends, and future projections. My skills, I believe, align perfectly with the analytical demands of real estate investment and strategic consulting.'),
   P('Moreover, I have cultivated strong relationships within the real estate community, which I believe can be beneficial in terms of sourcing and validating potential investment opportunities. My background in inspection has taught me the importance of due diligence, a principle I am eager to carry into the investment domain.'),
   P('Joining the esteemed team would be a significant step in my professional journey. I am keen to leverage my foundational knowledge in real estate, combined with my passion for investment, to contribute meaningfully to your team\'s ongoing and future projects.'),
@@ -238,7 +262,7 @@ const CANDS=[
   B('Assisted senior surveyors in preparing detailed property reports, highlighting valuation metrics and potential investment opportunities.'),
   B('Liaised with estate agents, property developers, and other professionals to facilitate seamless property transactions.'),
   B('Attended workshops and training sessions to stay updated with industry trends, tools, and best practices.'),
-  R('Intern, Office Agency and Consultant - Real Estate Agency & Partners., Glasgow','June 2021 - August 2022',{chk:'A 14-month internship that overlaps a full-time degree (to June 2023).'}),
+  R('Intern, Office Agency and Consultant - Real Estate Agency & Partners., Glasgow','June 2021 - August 2022',{chk:'Ask Lucas how his long internship fitted around his studies and what he learned from it.'}),
   B('Conducted research on local property markets, analysing trends and prices.'),
   B('Supported the agency team in preparing promotional materials for property listings.'),
   B('Assisted in organising property viewings and liaising with potential buyers.'),
@@ -274,12 +298,12 @@ const CANDS=[
  ]},{cls:'cv4 hdr',b:[
   N('SIRIYA JIRAPAT'),CT('12 Shinfield Road, Reading, Postcode, UK'),CT('Mobile: +44 XXXX XXXXXX     Email: siriyajirapat@email.com'),
   H('PERSONAL HIGHLIGHTS'),
-  P('Currently studying MSc Real Estate in UK. Knowledge about real estate valuation and investment, development etc. With T4 Post Study Working visa valid till 2027.',{nj:'Visa / right-to-work status (check legally, but it is not a judgement of ability)',chk:'"T4 Post Study Working" is not a current visa name. Right to work should be verified properly.'}),
+  P('Currently studying MSc Real Estate in UK. Knowledge about real estate valuation and investment, development etc. With T4 Post Study Working visa valid till 2027.',{nj:'Visa / right-to-work status (check legally, but it is not a judgement of ability)'}),
   P('Working experience in international hotel in Thailand; good knowledge about hotel service industry and international client care.'),
   P('Proficient in English (IELTs 6.5), Thai (Native), Teochew (Native).'),
   H('EDUCATION'),
   R('MSc in Real Estate, University of Reading, UK','Sep 2024 - Jun 2025'),
-  B('Merit Degree 2024',{chk:'"Merit Degree 2024" but the course runs to June 2025. Is it awarded or expected?'}),
+  B('Merit Degree 2024',{chk:'Ask Siriya whether her MSc result is confirmed or expected, and when she completes it.'}),
   B('Modules: Real Estate Development, Property Valuation, International Real Estate Markets, Real Estate Investment and Finance.'),
   B('International Fieldtrip to European countries.'),
   B('Final Project: "Impact of International Tourism on Local Real Estate Markets: A Case Study of Phuket."'),
@@ -292,7 +316,7 @@ const CANDS=[
   B('Liaised with international clients, offering tailored services based on cultural nuances and preferences.'),
   B('Collaborated with the marketing team to strategise promotional activities targeting international travellers.'),
   B('Analysed guest feedback to drive continuous improvements in service quality.'),
-  R('Associate, Property Management, Hotel Family Co., Pattaya City, Thailand','May 2017 - Aug 2019',{chk:'Full-time job in Pattaya overlapping a full-time degree in Bangkok (to April 2020).'}),
+  R('Associate, Property Management, Hotel Family Co., Pattaya City, Thailand','May 2017 - Aug 2019',{chk:'Ask Siriya how she combined her property work with her studies and what she took from it.'}),
   B('Marketing and leasing plan of premium properties to both local and international clients.'),
   B('Conducted market research to gauge property trends and investment opportunities in popular tourist destinations.'),
   B('Facilitated property viewings and collaborated with legal teams to ensure smooth transaction processes.'),
@@ -310,7 +334,7 @@ const CANDS=[
  secs:[{cls:'cv5 hdr',b:[
   N('LAYLA AL-HASHEM'),CT('27 Rose Lane, City, Postcode, UK'),CT('Email: layla.alhashem@email.com     Instagram: @laylanewlifeuk'),
   H('PERSONAL STATEMENT'),
-  P('I am a driven and innovative architect with a rich background in Syrian architectural design and urban planning. Offering over six years of experience in conceptualising and executing diverse architectural projects.',{chk:'Claims six-plus years of experience, but only one role (2018-2019) is listed.'}),
+  P('I am a driven and innovative architect with a rich background in Syrian architectural design and urban planning. Offering over six years of experience in conceptualising and executing diverse architectural projects.',{chk:'Ask Layla to walk through the projects behind her six years of experience.'}),
   P('As a mother, I possess a unique perspective on family-centric spaces and their importance in today\'s life.',{nj:'Parental status'}),
   P('As an architect with a deep-rooted passion for urban design, I am driven by the interplay of form, function, and the human experience. Despite of the disturbance of the war in Syria, since my arrival in the UK, I\'ve harnessed the power of visual storytelling through my Instagram account, using it as a platform to showcase my sketches and works, and simultaneously creating a communal space for those sharing a similar journey. This digital window has not only amplified my designs but also underscored the significance of inclusive spaces in the area I am living. I am determined to contribute to the UK\'s urban landscape by infusing it with designs that are both aesthetically pleasing and socially resonant.'),
   H('PROFESSIONAL EXPERIENCE'),
@@ -341,7 +365,7 @@ const CANDS=[
 {id:6,name:'Lorenzo Bianchi',first:'Lorenzo',headline:'Lead software developer at a rental PropTech',
  secs:[{cls:'cv6 hdr',b:[
   N('LORENZO BIANCHI'),CT('49 Digital Avenue, City, Postcode, UK'),
-  CT('Mobile: +39 XXXX XXXXXX     Email: lorenzo.bianchi@email.com',{chk:'Italian phone number with a UK address. Where is he actually based?'}),
+  CT('Mobile: +39 XXXX XXXXXX     Email: lorenzo.bianchi@email.com'),
   CT('GitHub: https://github.com/bianchihelps     LinkedIn: www.linkedin.com/in/lorenzobianchi'),
   H('PERSONAL STATEMENT'),
   P("I am a results-driven computer scientist with over 7 years of programming and software development experience. Combines deep technical expertise with a keen understanding of user-centric design, making tech solutions both intuitive and efficient. With a passion for leveraging technology to revolutionise industries, I'm enthusiastic about applying my skills to the PropTech sector, driving innovation in property and real estate solutions."),
@@ -380,7 +404,7 @@ const CANDS=[
   H('EDUCATION'),
   R('BSc in Business Management, Open University','2021 - Present'),
   B('Engaging in comprehensive studies with projects the intricacies of the property business in the UK.'),
-  R("St. Brigid's College, Co. Galway, Ireland",'2012',{chk:'Qualification in 2012 and caregiving from 2015: three years unaccounted for.'}),
+  R("St. Brigid's College, Co. Galway, Ireland",'2012'),
   B('NVQ Level 3 in Health and Social Care. Secondary education with humanities and social science topics. Achieved passing grades in core subjects.'),
   H('PROFESSIONAL EXPERIENCE'),
   R("Caregiver | St Mary's Apartment, CareHome Group | Belfast, NI",'2015 - Now'),
@@ -391,7 +415,7 @@ const CANDS=[
   H('SKILLS'),
   B('Basic Python Programming: Self-taught through online resources, with an ability to understand and modify simple scripts.'),
   B('Property Business Fundamentals: Acquired foundational knowledge through Open University studies.'),
-  B('Caretaking: long-term engagement with vulnerable people, professional knowledge about physical and mental healthcare.',{chk:'"Professional knowledge" of physical and mental healthcare is a big claim for an NVQ Level 3. What evidence is there?'}),
+  B('Caretaking: long-term engagement with vulnerable people, professional knowledge about physical and mental healthcare.',{chk:'Ask Aoife for examples of how she applies her caregiving knowledge day to day.'}),
   B('Communication: Skilled in interacting with diverse individuals, both in the caregiving realm and in day-to-day interactions.'),
   H('ACTIVITIES AND PERSONAL INTERESTS'),
   B('Continuous learning, particularly in the realms of technology and real estate.'),
@@ -406,9 +430,9 @@ const CANDS=[
  secs:[{cls:'cv8 hdr',b:[
   N('JACK TAYLOR'),CT("37 Builder's Lane, City, Postcode, UK     Mobile: +44 XXXX XXXXXX"),CT('Email: jack.taylor@email.com     LinkedIn: www.linkedin.com/in/jacktaylor'),
   H('PERSONAL STATEMENT'),
-  P('A dedicated building surveyor with over 5 years of hands-on experience in the independent business, I possess in-depth knowledge of construction processes, building regulations, and survey methodologies. With a genuine passion for the industry and a track record of delivering accurate and efficient surveys, I am eager to bring my expertise to a larger platform and contribute to the growth of an established organisation.',{chk:'Says "over 5 years", but the dates (March 2016 to present) imply considerably longer.'}),
+  P('A dedicated building surveyor with over 5 years of hands-on experience in the independent business, I possess in-depth knowledge of construction processes, building regulations, and survey methodologies. With a genuine passion for the industry and a track record of delivering accurate and efficient surveys, I am eager to bring my expertise to a larger platform and contribute to the growth of an established organisation.',{chk:'Ask Jack to walk through the timeline of his roles and projects.'}),
   H('PROFESSIONAL EXPERIENCE'),
-  R('Building Surveyor - Taylor & Sons Construction, City','March 2016 - Present',{chk:'Same firm for apprenticeship and role, and it shares his surname. References would be hard to verify independently.'}),
+  R('Building Surveyor - Taylor & Sons Construction, City','March 2016 - Present',{chk:'Ask Jack who else could speak to his work, such as clients or contractors.'}),
   B('Led building surveys for over 200 projects, ranging from residential properties to small commercial buildings.'),
   B('Collaborated closely with architects, builders, and property buyers to provide detailed feedback and actionable recommendations.'),
   B('Conducted in-depth analysis of structures, identified potential issues, and suggested preventive measures.'),
@@ -466,8 +490,8 @@ const CANDS=[
 {id:10,name:'Jiamei (Rita) Lee',first:'Jiamei',headline:'Accountancy and Law graduate, Singapore; real estate podcaster',
  secs:[{cls:'cv10 hdr',b:[
   N('JIAMEI (RITA) LEE'),CT('52 Marina View, City, Postcode, Singapore     Mobile: +65 XXXX XXXX     Email: jm.r.lee@email.sg'),
-  CT('LinkedIn: www.linkedin.com/in/jamielee     Podcast: Drunkonomics',{chk:'Name is "Jiamei" but the LinkedIn address says "jamielee".'}),
-  P('Hi! I am a meticulous and dedicated professional with a major in Real Estate related subject and a minor in Law. With a solid foundation in both financial and legal frameworks, I am keen to leverage this unique combination in the real estate asset management and investment sector. Fluent in multiple Asian languages, I can bring a diverse and multifaceted approach to international real estate investment opportunities.',{chk:'Claims a Real Estate major, but the degree listed is Accountancy with a minor in Law.'}),
+  CT('LinkedIn: www.linkedin.com/in/jamielee     Podcast: Drunkonomics'),
+  P('Hi! I am a meticulous and dedicated professional with a major in Real Estate related subject and a minor in Law. With a solid foundation in both financial and legal frameworks, I am keen to leverage this unique combination in the real estate asset management and investment sector. Fluent in multiple Asian languages, I can bring a diverse and multifaceted approach to international real estate investment opportunities.',{chk:'Ask Jiamei how her accountancy and law degree connects to the real estate coursework she mentions.'}),
   P('I can adapt to the new trends even working under pressure - this can be shown by the podcast I started to run during my maternity leave.',{nj:'Maternity leave'}),
   H('PROFESSIONAL EXPERIENCE'),
   R('Freelance Writer and Podcaster, Drunkonomics','January 2023 - till now'),
@@ -477,7 +501,7 @@ const CANDS=[
   B('Assisted in the analysis and valuation of potential real estate investments across Southeast Asia.'),
   B('Collaborated with the legal team to ensure compliance with local property laws and regulations.'),
   B('Utilised multilingual skills to facilitate communication with foreign partners and stakeholders.'),
-  R('Assistant Surveyor - Deloitte Real Estate, Singapore','January 2020 - May 2021',{chk:'A "Surveyor" title with duties that are financial records and audits; and a job that overlaps the degree (to July 2021).'}),
+  R('Assistant Surveyor - Deloitte Real Estate, Singapore','January 2020 - May 2021',{chk:'Ask Jiamei to describe a typical week in her Assistant Surveyor role and how she fitted it around her studies.'}),
   B('Managed financial records for a diverse clientele, including several local real estate developers and investors.'),
   B("Collaborated with the firm's legal department to address potential tax implications related to property acquisitions."),
   B('Conducted financial audits, ensuring accuracy and adherence to established regulations.'),
@@ -500,16 +524,14 @@ const CANDS=[
  grow:['Year 1: UK tax and property law upskilling','Year 3: own a client portfolio','Year 5: lead cross-border advisory']}
 ];
 
-/* Assign line ids */
-CANDS.forEach(c=>{let i=0;c.lines={};c.secs.forEach(s=>s.b.forEach(b=>{if(b.t!=='h'){b.id=c.id+'.'+(i++);c.lines[b.id]=b;}}));});
 const CAND=id=>CANDS.find(c=>c.id===+id);
 
 /* Attributes used by stakeholder cards */
-const ATTR={1:{ready:2,pot:3,client:1,cred:1,cost:1},2:{ready:2,pot:2,client:2,cred:3,cost:3},3:{ready:3,pot:2,client:2,cred:3,cost:1},
+const ATTR0={1:{ready:2,pot:3,client:1,cred:1,cost:1},2:{ready:2,pot:2,client:2,cred:3,cost:3},3:{ready:3,pot:2,client:2,cred:3,cost:1},
 4:{ready:2,pot:3,client:3,cred:1,cost:1},5:{ready:1,pot:3,client:2,cred:1,cost:1},6:{ready:3,pot:2,client:1,cred:2,cost:3},
 7:{ready:1,pot:3,client:3,cred:1,cost:1},8:{ready:3,pot:1,client:2,cred:1,cost:2},9:{ready:2,pot:3,client:2,cred:2,cost:1},10:{ready:2,pot:3,client:3,cred:2,cost:2}};
 
-const VAC=[
+const VAC0=[
 {id:'A',org:'Company A',role:'Junior valuation-data support',sector:'Leading residential agency in the North East',gem:null,decoys:[6,2],
  text:'Your company is a leading residential agency in the North East. As part of a strategic change, the company aims to offer online housing valuation consultancy services. This includes managing a housing price valuation and forecasting app. The team is looking for a junior-level individual to support data collection, specifically focusing on housing listings and transaction information in the local area. Aside from the typical agency works, the new member will collect data from the Land Registry and comparing it with information from other regional agency competitors. The ideal candidate should possess decent numerical skills and have a basic understanding of property valuation, as their duties will include entering client housing details into the model to produce results and then explaining these outcomes to clients. The person should be a fast learner. While programming skills are not required, the candidate should be capable of maintaining regular contact with the tech support team of the valuation model.'},
 {id:'B',org:'Company B',role:'Asset manager, new student-accommodation submarket',sector:'Student accommodation company listed on the Irish Stock Exchange',gem:2,decoys:[1,5],
@@ -527,10 +549,10 @@ const VAC=[
 ];
 
 /* Fit of candidates 1..10 for each vacancy (0 = no fit, 5 = excellent). Facilitator-adjustable. */
-const FIT={A:[5,1,4,2,0,2,1,1,2,3],B:[2,4,2,1,0,2,1,3,1,4],C:[1,1,2,4,0,0,0,0,1,5],D:[0,3,0,0,4,0,2,1,5,0],
+const FIT0={A:[5,1,4,2,0,2,1,1,2,3],B:[2,4,2,1,0,2,1,3,1,4],C:[1,1,2,4,0,0,0,0,1,5],D:[0,3,0,0,4,0,2,1,5,0],
            E:[0,4,3,3,0,0,0,2,1,1],F:[0,1,0,1,2,2,5,1,3,0],G:[2,4,3,1,0,3,0,2,1,3]};
 
-const WHY={
+const WHY0={
 A1:'Numerate, with Excel modelling and housing-market research. A fast-learning junior profile that matches the brief closely.',
 A3:'Real valuation methods and report writing, so productive quickly. The role is more data-led than inspection-led.',
 A10:'Strong numbers and finance, but this is junior data work. Likely overqualified and a flight risk.',
@@ -572,7 +594,7 @@ const GENERIC=[
  ['Digital native, ideally under 30','x','This is an age requirement. It is not about the job.'],
  ['Able to work any hours with no family commitments','x','This assumes something about family status and is not job-related.'],
  ['Degree from a top-ranked university only','x','Not in the brief, and narrows the pool without evidence the job needs it.']];
-const DRAFT={
+const DRAFT0={
 A:{titles:['Junior Valuation Data Assistant','Senior Surveyor','Software Support Analyst'],level:[0],chips:[
  ['Collect housing listing and transaction data in the local area','d'],
  ['Gather Land Registry data and compare it with regional competitor agencies','d'],
@@ -667,8 +689,8 @@ const STLAB={d:'Duty',m:'Must-have',n:'Nice-to-have'};
 const specCache={};
 function draftSpec(d){
   if(specCache[d.code])return specCache[d.code];
-  const dr=DRAFT[d.vac.id],r=rngFor(d.code+'D');
-  const gen=shuffle(GENERIC,r).slice(0,2);
+  const dr=DRAFT[d.vac.id]||{titles:[d.vac.role],level:[0,1,2],chips:[]},r=rngFor(d.code+'D');
+  const gen=(dr.chips||[]).length?shuffle(GENERIC,r).slice(0,2):[];
   const items=shuffle(dr.chips.concat(gen),r).map((c,i)=>({i,text:c[0],kind:c[1],why:c[2]||''}));
   const titles=shuffle(dr.titles.map((t,k)=>({t,ok:k===0})),r);
   return specCache[d.code]={items,titles,okLevels:dr.level};
@@ -762,8 +784,8 @@ function hostDraft(){
 }
 
 const TWISTS=[
-{id:'budget',title:'Budget squeeze',text:'Finance has cut the salary band. Anyone likely to expect higher pay is a risk.',mod:c=>({2:-1,6:-1}[c]||0),modText:'Salary-expectation penalty for Kwame and Lorenzo (-1)'},
-{id:'scope',title:'The role will double in scope',text:'Within three years this job will be twice as big. Who can grow into it?',mod:c=>([1,4,5,7,9,10].includes(c)?1:0),modText:'Growth-potential bonus (+1) for candidates with strong potential'},
+{id:'budget',title:'Budget squeeze',text:'Finance has cut the salary band. Anyone likely to expect higher pay is a risk.',mod:c=>(ATTR[c]&&ATTR[c].cost>=3?-1:0),modText:'Salary-expectation penalty for candidates with high pay expectations (-1)'},
+{id:'scope',title:'The role will double in scope',text:'Within three years this job will be twice as big. Who can grow into it?',mod:c=>(ATTR[c]&&ATTR[c].pot>=3?1:0),modText:'Growth-potential bonus (+1) for candidates with strong potential'},
 {id:'clock',title:'A rival is calling',text:'A competitor is about to interview your favourite. Discussion is cut to two minutes.',clock:120},
 {id:'withdraw',title:'The favourite withdraws',text:'The most popular first choice has accepted another offer. Re-decide without them.',effect:'withdraw'},
 {id:'pressure',title:'A word from the boss',text:'A director says one candidate "comes highly recommended". Check the CV, not the name-dropping.',effect:'pressure'},
@@ -777,6 +799,74 @@ const STAKE=[
 {id:'ops',name:'Operations Director',says:'I need someone productive from week one.',test:c=>ATTR[c].ready>=3,why:'ready to be productive immediately'}];
 
 /* ============================================================
+   CONTENT PACK ENGINE
+   Everything a tutor can change (candidates, vacancies, fit scores, job-post items)
+   lives in one pack. The rules, timers and scoring stay in this file.
+   ============================================================ */
+const HELP0={
+A:{keys:[['junior-level','c'],['support data collection','t'],['housing listings and transaction information','t'],['collect data from the Land Registry','t'],['comparing it with information from other regional agency competitors','t'],['decent numerical skills','s'],['basic understanding of property valuation','s'],['entering client housing details into the model','t'],['explaining these outcomes to clients','t'],['fast learner','s'],['programming skills are not required','c'],['regular contact with the tech support team','t']],
+ gist:['The job: help an estate agency collect house-price data and run its new online valuation tool.','Who they want: a junior, quick learner who is good with numbers and knows the basics of property valuation.','Watch out: no programming is needed, but you will talk to the tech support team.'],
+ gloss:[['Valuation','Estimating what a property is worth.'],['Land Registry','The official record of who owns property and what it sold for.'],['Transaction data','Records of properties that have been sold, and at what price.']]},
+B:{keys:[['cover one new submarket','t'],['regularly engage with the property managers','t'],['collect the leasing information and financial performance reports','t'],['energy efficiency goal','c'],['cutting property operating costs','c'],['sensor facilities','c'],['evaluate the cost and benefits','t'],['involved with the sensor facility project','t'],['listed on Irish Stock Exchange','c']],
+ gist:['The job: look after one new group of student buildings and check how well they are doing.','Who they want: someone who works well with building managers and understands leasing and finance reports.','Watch out: the company wants to cut energy use and will test sensors in your buildings.'],
+ gloss:[['Asset manager','Someone who looks after how a group of buildings performs as an investment.'],['Submarket','A smaller local area within a larger property market.'],['Leasing information','Details of who rents what, for how long and at what rent.'],['Energy efficiency','Using less energy to do the same job.']]},
+C:{keys:[['High Net Worth clients from Southeast Asia','c'],['understands both UK and Southeast Asian markets','s'],['where to invest a house','t'],['leasing property management','t'],['entry-level','c'],['assist the senior manager with the daily role and client care','t'],['Travelling between countries would be common','s'],['immigration law and tax regulations','n'],['contacts the solicitor partners','t']],
+ gist:['The job: help a senior adviser look after wealthy clients from Southeast Asia who invest in UK property.','Who they want: an entry-level person who understands both the UK and Southeast Asian markets and enjoys client care.','Watch out: lots of travel, and knowing a bit about immigration law and tax helps.'],
+ gloss:[['High Net Worth','People with a lot of money to invest.'],['Leasing and property management','Finding tenants and looking after a rented property.'],['Entry-level','A first job in the field, little experience needed.']]},
+D:{keys:[['a noticeable drop in the number of people','c'],['overpowering neon lights','c'],['not been appropriately maintained','c'],['rundown buildings','c'],['many shops closed down','c'],['influx of refugees','c'],['create spaces to make both locals and the new residents feel at home','t'],['strategic team for town centre renovation','t'],['seeking a planner','s'],['inclusive and welcoming space for all','t']],
+ gist:['The job: plan how to bring life back to a run-down town centre.','Who they want: a planner who can make spaces work for long-term residents and for newly arrived refugees.','Watch out: the old neon lights and empty shops are both the problem and the opportunity.'],
+ gloss:[['Town centre renovation','Improving the main shopping and public areas of a town.'],['Inclusive space','A place where different groups feel welcome and can use it.'],['Planner','A professional who guides how land and buildings are used.'],['Refugee','A person who had to leave their country for safety.']]},
+E:{keys:[['valuer for the hospitality branch','t'],['driving for inspection is essential','s'],['know hotel valuation practice','s'],['innovative','s'],['how to value old hotel buildings that have been renovated','t'],['higher energy efficiency','c'],['research spirit','s'],['senior-level salary','c'],['help the team come up with guidance','t']],
+ gist:['The job: value hotels, hostels and resorts, many in remote places you have to drive to.','Who they want: an experienced person who knows hotel valuation and likes to research new methods.','Watch out: the team needs new guidance for valuing old hotels that were renovated to save energy.'],
+ gloss:[['Hospitality valuation','Working out the value of hotels and similar properties.'],['Energy efficiency','Using less energy. It can change what a building is worth.'],['Associate director','A senior job level in a consultancy.'],['Industry standard','An agreed way of doing something that most firms follow.']]},
+F:{keys:[['smart home app','c'],['vulnerable elderly people','c'],['understand the real-life needs of elderly and vulnerable groups','t'],['a group of programmers','c'],['someone with a different background','s'],['work with the property management team','t'],['a close connection with the senior residents','s'],['get to the bottom of what they need','t'],['knows a bit about app development','n'],['pass it on to the programmers','t']],
+ gist:['The job: find out what older and vulnerable people really need from a smart-home app.','Who they want: someone close to older people who can work with building managers, and explain needs to programmers.','Watch out: the programmers already exist, so this is not a coding job.'],
+ gloss:[['PropTech','Technology that helps with property and housing.'],['Smart home','A home with connected devices you can control or monitor remotely.'],['Vulnerable','People who may need extra care or support.'],['Care home','A place where people live and are looked after.']]},
+G:{keys:[['data centre portfolio','c'],['first foray into digital infrastructure','c'],['oversee the performance of these facilities','t'],["work closely with the fund's technical partners and tenants",'t'],['identifying and evaluating efficiency technologies','t'],['translating technical outcomes into financial impacts','t'],['power usage effectiveness (PUE), uptime','s'],["liaising with the fund's ESG and investment teams",'t'],['bridge real-estate and infrastructure knowledge','s'],['high-spec commercial or industrial buildings','n'],['solid financial modelling skills','s'],['curiosity about the fast-changing digital economy','n']],
+ gist:['The job: manage a new portfolio of data centres for an investment fund.','Who they want: someone who can link property with technology and turn technical results into money terms.','Watch out: you must understand data-centre measures such as PUE and uptime.'],
+ gloss:[['Data centre','A building full of computers that store and process data.'],['PUE (power usage effectiveness)','A score of how efficiently a data centre uses electricity. Closer to 1 is better.'],['Uptime','How much of the time the system is running without failure.'],['ESG','Environmental, social and governance: ways to judge how responsibly a company behaves.'],['Retrofit','Upgrading an existing building with new equipment.']]}
+};
+
+let CANDS=[],VAC=[],FIT={},WHY={},DRAFT={},ATTR={},PACK=null,PACKCHECK='A';
+const LINEREG={};
+function hideProp(o,k,v){Object.defineProperty(o,k,{value:v,enumerable:false,writable:true,configurable:true});}
+function tokensOf(b){
+  if(b._tok)return b._tok;
+  const w=x=>String(x||'').split(/\s+/).filter(Boolean),t=[];
+  if(b.t==='r'){w(b.x).forEach(x=>t.push({w:x,c:'rb'}));w(b.d).forEach(x=>t.push({w:x,c:'rd'}));}
+  else w(b.x).forEach(x=>t.push({w:x,c:''}));
+  hideProp(b,'_tok',t);return t;
+}
+function assignIds(c,prefix){
+  let i=0;const lines={};
+  c.secs.forEach(s=>s.b.forEach(b=>{if(b.t!=='h'){hideProp(b,'id',(prefix||'')+c.id+'.'+(i++));lines[b.id]=b;LINEREG[b.id]=b;}}));
+  hideProp(c,'lines',lines);
+}
+function validatePack(p){
+  if(!p||typeof p!=='object')return 'This is not a content pack.';
+  if(!Array.isArray(p.candidates)||!p.candidates.length)return 'The pack has no candidates.';
+  if(!Array.isArray(p.vacancies)||!p.vacancies.length)return 'The pack has no vacancies.';
+  for(const c of p.candidates){if(!Array.isArray(c.secs))return 'Candidate '+c.id+' has no CV.';}
+  for(const v of p.vacancies){if(!v.id||!v.text)return 'A vacancy is missing its id or text.';}
+  return '';
+}
+function applyPack(pack){
+  const p=JSON.parse(JSON.stringify(pack));
+  p.candidates=p.candidates||[];p.vacancies=p.vacancies||[];p.fit=p.fit||{};p.why=p.why||{};p.draft=p.draft||{};
+  const core=JSON.stringify({c:p.candidates,v:p.vacancies,f:p.fit,w:p.why,d:p.draft});
+  p.candidates.forEach(c=>{c.id=+c.id;c.attr=c.attr||{ready:2,pot:2,client:2,cred:2,cost:2};assignIds(c);});
+  CANDS=p.candidates;VAC=p.vacancies;FIT=p.fit;WHY=p.why;DRAFT=p.draft;
+  ATTR={};CANDS.forEach(c=>{ATTR[c.id]=c.attr;});
+  PACK=p;PACKCHECK=ALPHA[xmur3(core)()%ALPHA.length];
+  for(const k in specCache)delete specCache[k];
+}
+const FIT0o={};Object.keys(FIT0).forEach(k=>{FIT0o[k]={};FIT0[k].forEach((v,i)=>{FIT0o[k][i+1]=v;});});
+const BUILTIN_PACK={name:'Built-in sample pack',version:'1.0',defaultHelp:'keys',
+  candidates:CANDS0.map(c=>Object.assign({},c,{attr:ATTR0[c.id]})),
+  vacancies:VAC0.map(v=>Object.assign({},v,HELP0[v.id])),fit:FIT0o,why:WHY0,draft:DRAFT0};
+
+
+/* ============================================================
    UTILITIES
    ============================================================ */
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
@@ -786,40 +876,45 @@ function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a
 const rngFor=code=>mulberry32(xmur3(code.toUpperCase())());
 function shuffle(a,r){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const ALPHA='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-const newCode=()=>Array.from({length:4},()=>ALPHA[Math.floor(Math.random()*ALPHA.length)]).join('');
+const newCode=()=>Array.from({length:4},()=>ALPHA[Math.floor(Math.random()*ALPHA.length)]).join('')+PACKCHECK;
 const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 
+applyPack(BUILTIN_PACK);
+
 /* Deterministic deal: the same round code gives every device the same round */
+const fitOf=(vid,c)=>((FIT[vid]||{})[c])||0;
 function deal(code){
   code=code.toUpperCase();
   const r=rngFor(code);
   const vac=VAC[Math.floor(r()*VAC.length)];
   const twist=TWISTS[Math.floor(r()*TWISTS.length)];
   const sh=STAKE[Math.floor(r()*STAKE.length)];
-  const fit=FIT[vac.id];
-  let best=0;fit.forEach((f,i)=>{if(f>fit[best])best=i;});
-  const ids=new Set([best+1]);
-  if(vac.gem)ids.add(vac.gem);
-  const dec=vac.decoys.filter(d=>!ids.has(d));
+  const all=CANDS.map(c=>c.id);
+  let best=all[0];all.forEach(i=>{if(fitOf(vac.id,i)>fitOf(vac.id,best))best=i;});
+  const ids=new Set([best]);
+  if(vac.gem&&all.includes(+vac.gem))ids.add(+vac.gem);
+  const dec=(vac.decoys||[]).map(Number).filter(d=>all.includes(d)&&!ids.has(d));
   if(dec.length)ids.add(dec[Math.floor(r()*dec.length)]);
-  const rest=shuffle([1,2,3,4,5,6,7,8,9,10].filter(i=>!ids.has(i)),r);
-  while(ids.size<6)ids.add(rest.shift());
+  const rest=shuffle(all.filter(i=>!ids.has(i)),r);
+  const target=Math.min(6,all.length);
+  while(ids.size<target&&rest.length)ids.add(rest.shift());
   const cands=shuffle([...ids],r);
   let pressured=null;
   if(twist.effect==='pressure'){
-    let low=cands.filter(c=>fit[c-1]<=1);if(!low.length)low=cands.filter(c=>fit[c-1]<=2);if(!low.length)low=cands;
+    let low=cands.filter(c=>fitOf(vac.id,c)<=1);if(!low.length)low=cands.filter(c=>fitOf(vac.id,c)<=2);if(!low.length)low=cands;
     pressured=low[Math.floor(r()*low.length)];
   }
-  return {code,vac,twist,sh,cands,best:best+1,pressured};
+  return {code,vac,twist,sh,cands,best,pressured};
 }
-const adjFit=(d,c)=>clamp(FIT[d.vac.id][c-1]+(d.twist.mod?d.twist.mod(c):0),0,5);
-const whyText=(d,c)=>WHY[d.vac.id+c]||(FIT[d.vac.id][c-1]>=2?'Some relevant skills, but the core requirements are only partly met.':'Little evidence of the core requirements in this brief.');
+const adjFit=(d,c)=>clamp(fitOf(d.vac.id,c)+(d.twist.mod?d.twist.mod(c):0),0,5);
+const whyText=(d,c)=>WHY[d.vac.id+c]||(fitOf(d.vac.id,c)>=2?'Some relevant skills, but the core requirements are only partly met.':'Little evidence of the core requirements in this brief.');
+const hasDraft=d=>!!(DRAFT[d.vac.id]&&(DRAFT[d.vac.id].chips||[]).length);
 
 /* ============================================================
    STATE
    ============================================================ */
-const S={view:'home',zoom:1,tool:'for',showBrief:false,viewer:null,tags:{host:{},player:{}},err:'',
- host:{n:3,names:['','','',''],readMin:4,discMin:6,deal:null,stage:'draw',players:[],roles:[],timer:{secs:0,running:false,end:0},
+const S={view:'home',zoom:1,tool:'for',mark:'phrase',anchor:null,help:'keys',loading:false,bs:null,showBrief:false,viewer:null,tags:{host:{},player:{},bs:{}},err:'',
+ host:{n:3,names:['','','','',''],readMin:4,discMin:6,deal:null,stage:'draw',players:[],roles:[],timer:{secs:0,running:false,end:0},
    withdrawn:null,tie:null,decision:null,result:null,rounds:[],roundNo:0},
  pl:{code:'',name:'',deal:null,tab:'brief',draft:{title:'',level:'',st:{}},check:false,r1:'',r2:'',rej:'',locked:false,finalPick:'',reason:'',ref1:'',ref2:''}};
 
@@ -841,10 +936,51 @@ function stopTimer(){clearInterval(tInt);S.host.timer.running=false;}
    ============================================================ */
 const sign=()=>`<div class="signbar"><h1 class="sign">Match <span class="dim">D</span>esk<small>Gnawtown Employment Bureau. Open late, lights dimming.</small></h1></div>`;
 
-function vacancyCard(d){return `<div class="folder" data-tab="Vacancy ${esc(d.vac.org)}"><h3>${esc(d.vac.role)}</h3><p><em>${esc(d.vac.sector)}</em></p><p>${esc(d.vac.text)}</p></div>`;}
+function hiText(text,keys){
+  const spans=[];keys.forEach(k=>{const i=text.indexOf(k[0]);if(i>=0)spans.push([i,i+k[0].length,k[1]]);});
+  spans.sort((a,b)=>a[0]-b[0]);
+  let out='',pos=0;
+  spans.forEach(([a,b,t])=>{if(a<pos)return;out+=esc(text.slice(pos,a))+`<mark class="k k-${t}">${esc(text.slice(a,b))}</mark>`;pos=b;});
+  return out+esc(text.slice(pos));
+}
+function vacancyCard(d){
+  const v=d.vac,help=S.help;
+  const bar=`<div class="row helpbar" role="group" aria-label="Reading help">${[['off','Plain text'],['keys','Key terms'],['plain','Plain English']].map(([k,l])=>`<button class="hb ${help===k?'on':''}" data-act="setHelp" data-v="${k}" aria-pressed="${help===k}">${l}</button>`).join('')}</div>`;
+  const keys=help==='off'?[]:(v.keys||[]);
+  const body=keys.length?hiText(v.text,keys):esc(v.text);
+  const legend=keys.length?`<p class="legend"><mark class="k k-t">What you will do</mark> <mark class="k k-s">Who they want</mark> <mark class="k k-n">Nice to have</mark> <mark class="k k-c">Context and watch-outs</mark></p>`:'';
+  const gist=(help==='plain'&&(v.gist||[]).length)?`<div class="gist"><b>In plain English</b><ul>${v.gist.map(g=>`<li>${esc(g)}</li>`).join('')}</ul></div>`:'';
+  const gloss=(help!=='off'&&(v.gloss||[]).length)?`<details class="gloss"><summary>Word help</summary><dl>${v.gloss.map(g=>`<dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd>`).join('')}</dl></details>`:'';
+  return `<div class="folder" data-tab="Vacancy ${esc(v.org)}">${bar}<h3>${esc(v.role)}</h3><p><em>${esc(v.sector)}</em></p>${gist}${legend}<p class="vtext">${body}</p>${gloss}</div>`;
+}
 function twistCard(d){return `<div class="folder" data-tab="Twist" style="background:#e9c5d8"><h3>${esc(d.twist.title)}</h3><p>${esc(d.twist.text)}</p></div>`;}
 function stakeCard(d){return `<div class="folder" data-tab="Stakeholder" style="background:#bcd6e0"><h3>${esc(d.sh.name)}</h3><p>"${esc(d.sh.says)}"</p></div>`;}
-const countTags=(reader,cid,type)=>Object.keys(S.tags[reader]).filter(k=>k.startsWith(cid+'.')&&S.tags[reader][k]===type).length;
+const rangesOf=(reader,id)=>S.tags[reader][id]||[];
+function countTags(reader,cid,type){let n=0;const pre=cid+'.';Object.keys(S.tags[reader]).forEach(k=>{if(k.startsWith(pre))S.tags[reader][k].forEach(r=>{if(r.t===type)n++;});});return n;}
+const TAGLAB={for:'evidence',against:'concern',verify:'ask at interview'};
+function rangeText(b,r){return tokensOf(b).slice(r.a,r.b+1).map(t=>t.w).join(' ');}
+function evidenceList(reader,cid){const out=[];const c=CAND(cid);Object.keys(c.lines).forEach(id=>{rangesOf(reader,id).forEach(r=>{if(r.t==='for')out.push(rangeText(c.lines[id],r));});});return out;}
+function addRanges(reader,groups,tool){
+  const T=S.tags[reader];
+  Object.keys(groups).forEach(id=>{
+    const [mn,mx]=groups[id];
+    let rs=(T[id]||[]).filter(r=>r.b<mn||r.a>mx);
+    if(tool!=='clear')rs.push({a:mn,b:mx,t:tool});
+    rs.sort((x,y)=>x.a-y.a);
+    if(rs.length)T[id]=rs;else delete T[id];
+  });
+}
+function markWords(reader,els){
+  const g={};
+  els.forEach(e=>{const id=e.dataset.id,w=+e.dataset.w;if(!g[id])g[id]=[w,w];else{g[id][0]=Math.min(g[id][0],w);g[id][1]=Math.max(g[id][1],w);}});
+  addRanges(reader,g,S.tool);
+}
+function toggleLine(reader,id){
+  const b=LINEREG[id];if(!b)return;
+  const n=tokensOf(b).length,T=S.tags[reader],rs=T[id]||[];
+  const full=rs.length===1&&rs[0].a===0&&rs[0].b===n-1&&rs[0].t===S.tool;
+  if(S.tool==='clear'||full)delete T[id];else T[id]=[{a:0,b:n-1,t:S.tool}];
+}
 
 function candCard(c,reader){
   return `<div class="cand"><b>${esc(c.name)}</b><span class="mute">${esc(c.headline)}</span>
@@ -858,17 +994,26 @@ function opts(d,sel,exclude){return `<option value="">Choose...</option>`+d.cand
    ============================================================ */
 function renderSection(c,sec,reader){
   const T=S.tags[reader];
-  const ln=(b,inner)=>{const tg=T[b.id];return `<span class="ln ${tg?'t-'+tg:''}" tabindex="0" role="button" data-act="tag" data-id="${b.id}" data-reader="${reader}">${inner}</span>`;};
+  const ln=b=>{
+    const toks=tokensOf(b),rs=T[b.id]||[];
+    const an=(S.anchor&&S.anchor.id===b.id&&S.anchor.reader===reader)?S.anchor.w:-1;
+    const inner=toks.map((t,i)=>{
+      let h=null;rs.forEach(r=>{if(i>=r.a&&i<=r.b)h=r;});
+      const cls=['w'];if(t.c)cls.push(t.c);if(h){cls.push('t-'+h.t);if(i===h.b)cls.push('t-e');}if(i===an)cls.push('anch');
+      return `<span class="${cls.join(' ')}" data-act="word" data-id="${b.id}" data-w="${i}" data-reader="${reader}">${esc(t.w)}${i<toks.length-1?' ':''}</span>`;
+    }).join('');
+    return `<span class="ln" tabindex="0" role="group" aria-label="Line. Press Enter to mark the whole line." data-line="${b.id}" data-reader="${reader}">${inner}</span>`;
+  };
   let html='',inList=false;
   const closeList=()=>{if(inList){html+='</ul>';inList=false;}};
   sec.b.forEach(b=>{
-    if(b.t==='b'){if(!inList){html+='<ul>';inList=true;}html+=`<li>${ln(b,esc(b.x))}</li>`;return;}
+    if(b.t==='b'){if(!inList){html+='<ul>';inList=true;}html+=`<li>${ln(b)}</li>`;return;}
     closeList();
-    if(b.t==='n')html+=`<div class="nm">${ln(b,esc(b.x))}</div>`;
-    else if(b.t==='c')html+=`<div class="ct">${ln(b,esc(b.x))}</div>`;
+    if(b.t==='n')html+=`<div class="nm">${ln(b)}</div>`;
+    else if(b.t==='c')html+=`<div class="ct">${ln(b)}</div>`;
     else if(b.t==='h')html+=`<h4>${esc(b.x)}</h4>`;
-    else if(b.t==='p')html+=`<p>${ln(b,esc(b.x))}</p>`;
-    else if(b.t==='r')html+=`<div class="rl">${ln(b,`<b>${esc(b.x)}</b> <span class="dt">${esc(b.d)}</span>`)}</div>`;
+    else if(b.t==='p')html+=`<p>${ln(b)}</p>`;
+    else if(b.t==='r')html+=`<div class="rl">${ln(b)}</div>`;
   });
   closeList();
   const letter=sec.cls.includes('letter');
@@ -889,9 +1034,10 @@ function renderViewer(){
      <button class="btn small" data-act="navCand" data-d="1" ${idx>=d.cands.length-1?'disabled':''} aria-label="Next candidate">Next &rsaquo;</button>
    </div>
    <div class="vbar">
-     ${tool('for','&#10003;','tf','Evidence for')}${tool('against','!','ta','Concern')}${tool('verify','?','tv','Verify')}${tool('clear','&#10005;','','Clear')}
+     ${tool('for','&#10003;','tf','Evidence for')}${tool('against','!','ta','Concern')}${tool('verify','?','tv','Ask at interview')}${tool('clear','&#10005;','','Clear')}
      <span class="tagcount" style="margin-left:6px"><span class="f">&#10003; ${cnt('for')}</span><span class="a">! ${cnt('against')}</span><span class="v">? ${cnt('verify')}</span></span>
      <span class="grow"></span>
+     <button class="tool ${S.mark==='phrase'?'on':''}" data-act="mark" data-m="phrase" aria-pressed="${S.mark==='phrase'}">Phrase</button><button class="tool ${S.mark==='line'?'on':''}" data-act="mark" data-m="line" aria-pressed="${S.mark==='line'}">Whole line</button>
      <button class="tool" data-act="zoom" data-d="-0.1" aria-label="Zoom out">A-</button>
      <button class="tool" data-act="zoom" data-d="0.1" aria-label="Zoom in">A+</button>
      <button class="tool ${S.showBrief?'on':''}" data-act="toggleBrief" aria-pressed="${S.showBrief}">Show vacancy</button>
@@ -899,7 +1045,8 @@ function renderViewer(){
    <div class="vbody ${S.showBrief?'two':''}">
      ${S.showBrief?`<div>${vacancyCard(d)}${postPanel(v.reader)}</div>`:''}
      <div class="sheets">${c.secs.map(s=>renderSection(c,s,v.reader)).join('')}
-       <p class="hint" style="max-width:820px">Pick a tool, then tap any line. Tap the same line again with the same tool to remove the mark. Pinch to zoom also works.</p></div>
+       ${S.anchor&&S.anchor.reader===v.reader?'<div class="note" style="max-width:820px" role="status">First word chosen. Now tap the <b>last word</b> of the phrase, or tap the same word again for a single word. Press Esc to cancel.</div>':''}
+       <p class="hint" style="max-width:820px">${S.mark==='phrase'?'Pick a tool, then tap the <b>first word</b> and the <b>last word</b> of the phrase you want to mark. On a computer you can also drag across the words. Tap a mark to remove it.':'Pick a tool, then tap any word to mark its whole line. Tap again to remove it.'} Pinch to zoom also works.</p></div>
    </div></div>`;
 }
 
@@ -910,24 +1057,25 @@ function viewHome(){
   return `${sign()}
   <div class="grid g2">
    <div class="panel"><h2>Host a table</h2><p>One screen per group. It draws the round, runs the timers, collects picks and reveals the result.</p>
-     <button class="btn main" data-act="goHostSetup">Host a table</button></div>
-   <div class="panel"><h2>Join as a player</h2><p>Type the four-letter round code shown on your host screen. You read the dossiers privately on your own device and make your own picks.</p>
-     <button class="btn pink" data-act="goJoin">Join a round</button></div>
+     <button class="btn main" data-act="goHostSetup" ${S.loading?'disabled':''}>Host a table</button></div>
+   <div class="panel"><h2>Join as a player</h2><p>Type the five-character round code shown on your host screen. You read the dossiers privately on your own device and make your own picks.</p>
+     <button class="btn pink" data-act="goJoin" ${S.loading?'disabled':''}>Join a round</button></div>
   </div>
   <div class="panel" style="margin-top:14px"><h3>How a round works</h3>
    <ol><li>The host draws a vacancy, a twist and a stakeholder, and shows the round code.</li>
    <li>Optional: everyone drafts the job post alone by tapping key information from the brief, then the host combines the drafts into one group post.</li>
-   <li>Everyone reads the six dossiers alone. Tap lines to mark evidence for, concerns, or things to verify.</li>
+   <li>Everyone reads the six dossiers alone. Mark key phrases as evidence for, concerns, or things to ask at interview.</li>
    <li>Each player locks a first choice, a second choice and one reject, then shows the host their pick code.</li>
    <li>The host reveals all picks together. The group talks, with a chair, an evidence checker, a devil's advocate and a fairness watcher.</li>
    <li>Everyone votes again. The majority decides. The result card shows how the hire fares a year later, who was the hidden fit, and what the dossiers did not say.</li></ol>
-   <p class="hint">All people and organisations are fictional. There may not be a perfect candidate for any vacancy. Nothing is saved when you close the page, so download your journal before leaving.</p></div>`;
+   <p class="hint">All people and organisations are fictional. There may not be a perfect candidate for any vacancy. Nothing is saved when you close the page, so download your journal before leaving.</p></div>
+  <div class="row" style="margin-top:14px;justify-content:space-between"><span class="hint">${S.loading?'Loading content...':'Content: '+esc(PACK.name||'pack')+(PACK.version?' v'+esc(PACK.version):'')+' (check '+PACKCHECK+')'}</span><button class="btn small" data-act="goBackstage" ${S.loading?'disabled':''}>Tutor backstage</button></div>`;
 }
 function viewHostSetup(){
   const h=S.host;
   return `${sign()}<div class="panel"><h2>Table setup</h2>
    <label>Players at this table</label>
-   <div class="row"><button class="tab ${h.n===3?'on':''}" data-act="setN" data-n="3">3 players</button><button class="tab ${h.n===4?'on':''}" data-act="setN" data-n="4">4 players</button></div>
+   <div class="row">${[2,3,4,5].map(k=>`<button class="tab ${h.n===k?'on':''}" data-act="setN" data-n="${k}" aria-pressed="${h.n===k}">${k} players</button>`).join('')}</div>
    <div class="grid g2">${Array.from({length:h.n},(_,i)=>`<div><label for="nm${i}">Player ${i+1} name</label><input id="nm${i}" type="text" data-in="host.names.${i}" value="${esc(h.names[i])}" placeholder="Player ${i+1}"></div>`).join('')}</div>
    <div class="grid g2"><div><label for="rm">Silent reading (minutes)</label><select id="rm" data-in="host.readMin" data-num="1"><option ${h.readMin==3?'selected':''}>3</option><option ${h.readMin==4?'selected':''}>4</option><option ${h.readMin==5?'selected':''}>5</option><option ${h.readMin==6?'selected':''}>6</option></select></div>
    <div><label for="dm">Discussion (minutes)</label><select id="dm" data-in="host.discMin" data-num="1"><option ${h.discMin==4?'selected':''}>4</option><option ${h.discMin==6?'selected':''}>6</option><option ${h.discMin==8?'selected':''}>8</option></select></div></div>
@@ -944,7 +1092,8 @@ function newRound(){
   h.stage='draw';h.group=null;h.withdrawn=null;h.tie=null;h.decision=null;h.result=null;
   const n=h.n;
   h.players=Array.from({length:n},(_,i)=>({name:(h.names[i]||'').trim()||'Player '+(i+1),r1:'',r2:'',rej:'',ev:null,nj:null,det:null,final:'',reason:'',draft:null}));
-  const roleNames=n===3?['Chair','Evidence checker and fairness watcher',"Devil's advocate"]:['Chair','Evidence checker',"Devil's advocate",'Fairness watcher'];
+  const ROLESETS={2:['Chair and evidence checker',"Devil's advocate and fairness watcher"],3:['Chair','Evidence checker and fairness watcher',"Devil's advocate"],4:['Chair','Evidence checker',"Devil's advocate",'Fairness watcher'],5:['Chair','Evidence checker',"Devil's advocate",'Fairness watcher','Stakeholder voice (speaks for the stakeholder card)']};
+  const roleNames=ROLESETS[n]||ROLESETS[3];
   const order=shuffle(h.players.map((_,i)=>i),Math.random);
   h.roles=roleNames.map((r,k)=>({role:r,player:order[k]}));
   S.tags.host={};
@@ -960,7 +1109,7 @@ function timerPanel(label){
 }
 function viewHost(){
   const h=S.host,d=h.deal;
-  const head=`${sign()}<div class="row" style="justify-content:space-between;margin-bottom:6px"><div><span class="chip">Round ${h.roundNo}</span></div><div class="row"><span class="mute">Round code</span><span class="code" aria-label="Round code ${d.code.split('').join(' ')}">${d.code}</span><button class="btn small" data-act="copyCode">Copy</button></div></div>`;
+  const head=`${sign()}<div class="row" style="justify-content:space-between;margin-bottom:6px"><div><span class="chip">Round ${h.roundNo}</span> <span class="chip" title="${esc(PACK.name||'')}">Content ${PACKCHECK}</span></div><div class="row"><span class="mute">Round code</span><span class="code" aria-label="Round code ${d.code.split('').join(' ')}">${d.code}</span><button class="btn small" data-act="copyCode">Copy</button></div></div>`;
   if(h.stage==='draw')return head+hostDraw();
   if(h.stage==='draft')return head+hostDraft();
   if(h.stage==='read')return head+hostRead();
@@ -1025,7 +1174,7 @@ function hostVote(){
   const h=S.host,d=h.deal;
   const allVoted=h.players.every(p=>p.final);
   const t=voteTally(h);
-  const chair=h.players[h.roles.find(r=>r.role==='Chair').player];
+  const chair=h.players[h.roles.find(r=>r.role.startsWith('Chair')).player];
   const tied=allVoted&&t.lead.length>1;
   return `<div class="panel"><h2>Final vote</h2>
    ${h.withdrawn?`<div class="note">${esc(CAND(h.withdrawn).name)} has withdrawn and cannot be chosen.</div>`:''}
@@ -1078,7 +1227,7 @@ function hostOutcome(){
    ${bd('Spotted a transferable fit',r.gem,r.gem?'This was the hidden fit.':(d.vac.gem?'There was a less obvious strong fit on the table.':'No hidden fit in this round.'))}
    ${bd(esc(d.sh.name)+' satisfied',r.stk,r.stk?'Chosen candidate has '+esc(d.sh.why)+'.':'Chosen candidate does not show '+esc(d.sh.why)+'.')}
    ${bd('Evidence quality',r.evPts,r.avg==null?'No pick codes were entered.':'Average evidence marks per player for their first choice: '+r.avg.toFixed(1))}
-   ${bd('Document detective',r.detPts,r.det+' flagged inconsistencies were marked with "?" across the table')}
+   ${bd('Interview questions',r.detPts,r.det+' sensible things to ask at interview were marked with "?" across the table')}
    ${bd('Fairness radar',r.fair,r.njTot+' non-job signals were marked as evidence or concern')}
    ${d.twist.effect==='pressure'?bd('Pressure from the boss',r.pres,r.pres?'The recommended candidate was chosen.':'The group held its ground.'):''}</table></div>
   <div class="grid g2" style="margin-top:14px">
@@ -1090,9 +1239,9 @@ function hostOutcome(){
   <div class="grid g2" style="margin-top:14px"><div class="panel"><h3>Fairness watcher: signals in these dossiers</h3>
    ${njl.length?`<ul>${njl.map(f=>`<li><b>${esc(f.c)}</b>: "${esc(short(f.x))}" <span class="mute">(${esc(f.nj)})</span></li>`).join('')}</ul>`:'<p>None in this round.</p>'}
    <p class="hint">These facts may be true and may matter legally (right to work), but they say little about ability to do the job. Did any reasoning lean on them?</p></div>
-   <div class="panel"><h3>Document detective: what to verify</h3>${chl.length?`<ul>${chl.map(f=>`<li><b>${esc(f.c)}</b>: ${esc(f.chk)}</li>`).join('')}</ul>`:'<p>None in this round.</p>'}</div></div>
+   <div class="panel"><h3>Something to ask at interview</h3><p class="hint">Gaps and mismatches are common and usually have simple explanations. These are open questions to ask, not accusations.</p>${chl.length?`<ul>${chl.map(f=>`<li><b>${esc(f.c)}</b>: ${esc(f.chk)}</li>`).join('')}</ul>`:'<p>None in this round.</p>'}</div></div>
   ${h.group?`<div class="panel" style="margin-top:14px"><h3>Job post: the group's draft</h3>${groupDoc(h).html}<div style="margin-top:12px">${fbHTML(h.group.sc)}</div></div>`:''}
-  <div class="panel" style="margin-top:14px"><h3>Debrief questions</h3><ol><li>Which line in the job post made the biggest difference to who looked like a good candidate?</li><li>Who would have been a good hire that nobody applied to this role for?</li><li>Which candidate's career path is closest to yours? What gap would you need to close?</li><li>What evidence would you have wanted that no CV could give you?</li></ol></div>
+  <div class="panel" style="margin-top:14px"><h3>Debrief questions</h3><ol><li>Which interview question would you most want to ask, and what answer would change your mind?</li><li>Which line in the job post made the biggest difference to who looked like a good candidate?</li><li>Who would have been a good hire that nobody applied to this role for?</li><li>Which candidate's career path is closest to yours? What gap would you need to close?</li><li>What evidence would you have wanted that no CV could give you?</li></ol></div>
   <div class="row" style="margin-top:16px"><button class="btn" data-act="dlRound">Download round journal</button><button class="btn main" data-act="nextRound">Next round</button><button class="btn pink" data-act="endSession">End session</button></div>`;
 }
 function hostSummary(){
@@ -1109,14 +1258,14 @@ function hostSummary(){
    ============================================================ */
 function viewJoin(){
   return `${sign()}<div class="panel"><h2>Join a round</h2>
-   <label for="jc">Round code (four letters or digits)</label><input id="jc" type="text" maxlength="4" autocapitalize="characters" autocomplete="off" data-in="pl.code" value="${esc(S.pl.code)}" style="text-transform:uppercase;font:700 28px 'Courier New',monospace;letter-spacing:.2em">
+   <label for="jc">Round code (five letters or digits)</label><input id="jc" type="text" maxlength="5" autocapitalize="characters" autocomplete="off" data-in="pl.code" value="${esc(S.pl.code)}" style="text-transform:uppercase;font:700 28px 'Courier New',monospace;letter-spacing:.2em">
    <label for="jn">Your name</label><input id="jn" type="text" data-in="pl.name" value="${esc(S.pl.name)}">
    ${S.err?`<p class="err" role="alert">${esc(S.err)}</p>`:''}
    <div class="row" style="margin-top:14px"><button class="btn" data-act="home">Back</button><button class="btn main" data-act="join">Join round</button></div></div>`;
 }
 function playerEv(){const p=S.pl;return p.r1?countTags('player',+p.r1,'for'):0;}
-function playerNJ(d){let n=0;d.cands.forEach(c=>Object.keys(CAND(c).lines).forEach(id=>{if(CAND(c).lines[id].nj&&S.tags.player[id]&&S.tags.player[id]!=='verify')n++;}));return n;}
-function playerDet(d){let n=0;d.cands.forEach(c=>Object.keys(CAND(c).lines).forEach(id=>{if(CAND(c).lines[id].chk&&S.tags.player[id]==='verify')n++;}));return n;}
+function playerNJ(d){let n=0;d.cands.forEach(c=>{const cd=CAND(c);Object.keys(cd.lines).forEach(id=>{if(cd.lines[id].nj&&rangesOf('player',id).some(r=>r.t!=='verify'))n++;});});return n;}
+function playerDet(d){let n=0;d.cands.forEach(c=>{const cd=CAND(c);Object.keys(cd.lines).forEach(id=>{if(cd.lines[id].chk&&rangesOf('player',id).some(r=>r.t==='verify'))n++;});});return n;}
 function pickCode(){const p=S.pl,d=p.deal;return `${d.code}.${p.r1}-${p.r2}-${p.rej}.${playerEv()}.${playerNJ(d)}.${playerDet(d)}`;}
 function viewPlayer(){
   const p=S.pl,d=p.deal;
@@ -1132,7 +1281,7 @@ function viewPlayer(){
      <label for="p1">First choice</label><select id="p1" data-in="pl.r1" data-render="1" ${p.locked?'disabled':''}>${opts(d,p.r1)}</select>
      <label for="p2">Second choice</label><select id="p2" data-in="pl.r2" data-render="1" ${p.locked?'disabled':''}>${opts(d,p.r2)}</select>
      <label for="pj">Reject</label><select id="pj" data-in="pl.rej" data-render="1" ${p.locked?'disabled':''}>${opts(d,p.rej)}</select>
-     ${p.r1?`<p style="margin-top:10px">Evidence marked for your first choice: <b>${ev}</b> ${ev<3?'<span class="err">(mark at least three lines you can point to)</span>':'<span class="ok">(good)</span>'}</p>`:''}
+     ${p.r1?`<p style="margin-top:10px">Evidence marked for your first choice: <b>${ev}</b> ${ev<3?'<span class="err">(mark at least three phrases you can point to)</span>':'<span class="ok">(good)</span>'}</p>${ev?`<ul class="hint">${evidenceList('player',+p.r1).slice(0,8).map(x=>`<li>${esc(x.length>120?x.slice(0,117)+'...':x)}</li>`).join('')}</ul>`:''}`:''}
      ${(p.r1||p.r2||p.rej)&&!valid?'<p class="err" role="alert">First, second and reject must be three different candidates.</p>':''}
      ${!p.locked?`<button class="btn main" data-act="lock" ${valid?'':'disabled'}>Lock my picks</button>`:`
       <div class="note" style="margin-top:12px"><b>Locked.</b> Show this code to your host, then keep your screen down until the reveal.</div>
@@ -1159,7 +1308,7 @@ function download(name,text){const a=document.createElement('a');a.href=URL.crea
 function roundText(r){
   const d=r.deal,L=[];
   L.push('THE MATCH DESK: round journal','Round code: '+d.code,'Vacancy: '+d.vac.org+' - '+d.vac.role,'Twist: '+d.twist.title+' - '+d.twist.text,'Stakeholder: '+d.sh.name+' - "'+d.sh.says+'"','');
-  L.push('Decision: '+CAND(r.decision.cand).name,'Panel score: '+r.result.total+' / '+r.result.max,'Fit: '+r.result.fit+', hidden-fit bonus: '+r.result.gem+', stakeholder: '+r.result.stk+', evidence: '+r.result.evPts+', detective: '+r.result.detPts+', fairness: '+r.result.fair+(r.result.pres?', pressure: '+r.result.pres:''),'');
+  L.push('Decision: '+CAND(r.decision.cand).name,'Panel score: '+r.result.total+' / '+r.result.max,'Fit: '+r.result.fit+', hidden-fit bonus: '+r.result.gem+', stakeholder: '+r.result.stk+', evidence: '+r.result.evPts+', interview questions: '+r.result.detPts+', fairness: '+r.result.fair+(r.result.pres?', pressure: '+r.result.pres:''),'');
   if(r.group){L.push('Group job post (score '+r.group.sc.score+' / 10):');L.push(postDoc(d,r.group.spec,r.group.title,r.group.level,i=>r.group.stArr[i]).text);}
   L.push('Picks and mind changes:');
   r.players.forEach(p=>L.push('- '+p.name+': 1st '+CAND(p.r1).name+', 2nd '+CAND(p.r2).name+', reject '+CAND(p.rej).name+' | final vote '+CAND(p.final).name+(p.final!=p.r1?' (changed'+(p.reason?': '+p.reason:'')+')':' (held)')));
@@ -1180,6 +1329,7 @@ function parseCode(str,code){const s=String(str||'').trim().toUpperCase().split(
 
 const A={
  home(){stopTimer();S.view='home';S.err='';},
+ setHelp(d){S.help=d.v;return 'noscroll';},
  goHostSetup(){S.view='hostSetup';},
  goJoin(){S.view='join';S.err='';},
  setN(d){S.host.n=+d.n;},
@@ -1221,16 +1371,38 @@ const A={
  dlSession(){download('match-desk-session.txt',S.host.rounds.map(roundText).join('\n----------------------------------------\n'));return false;},
  /* viewer */
  open(d){S.viewer={cid:+d.cid,reader:d.reader};},
- closeViewer(){S.viewer=null;},
- navCand(d){const v=S.viewer,dl=v.reader==='host'?S.host.deal:S.pl.deal;const i=dl.cands.indexOf(v.cid)+(+d.d);if(i>=0&&i<dl.cands.length)v.cid=dl.cands[i];},
+ closeViewer(){S.viewer=null;S.anchor=null;},
+ navCand(d){S.anchor=null;const v=S.viewer,dl=v.reader==='host'?S.host.deal:S.pl.deal;const i=dl.cands.indexOf(v.cid)+(+d.d);if(i>=0&&i<dl.cands.length)v.cid=dl.cands[i];},
  tool(d){S.tool=d.t;return 'noscroll';},
  zoom(d){S.zoom=clamp(Math.round((S.zoom+ +d.d)*10)/10,0.7,2);return 'noscroll';},
  toggleBrief(){S.showBrief=!S.showBrief;return 'noscroll';},
- tag(d){const T=S.tags[d.reader];const id=d.id;
-   if(S.tool==='clear')delete T[id];else if(T[id]===S.tool)delete T[id];else T[id]=S.tool;return 'noscroll';},
+ mark(d){S.mark=d.m;S.anchor=null;return 'noscroll';},
+ word(d){
+   const reader=d.reader,id=d.id,w=+d.w,b=LINEREG[id];if(!b)return 'noscroll';
+   const T=S.tags[reader];
+   if(S.mark==='line'){S.anchor=null;toggleLine(reader,id);return 'noscroll';}
+   const rs=T[id]||[];
+   if(!S.anchor){
+     const hit=rs.findIndex(r=>w>=r.a&&w<=r.b);
+     if(hit>=0){rs.splice(hit,1);if(!rs.length)delete T[id];return 'noscroll';}
+     if(S.tool==='clear')return 'noscroll';
+     S.anchor={reader,id,w};return 'noscroll';
+   }
+   const a=S.anchor;S.anchor=null;
+   const sel=`.w[data-reader="${reader}"]`;
+   const el=document.querySelector(`${sel}[data-id="${id}"][data-w="${w}"]`);
+   const paper=el&&el.closest('.paper');
+   const all=paper?[...paper.querySelectorAll('.w')]:[];
+   let i1=all.findIndex(e=>e.dataset.id===a.id&&+e.dataset.w===a.w),i2=all.findIndex(e=>e.dataset.id===id&&+e.dataset.w===w);
+   if(i1<0||a.reader!==reader){S.anchor={reader,id,w};return 'noscroll';}
+   if(i1>i2)[i1,i2]=[i2,i1];
+   markWords(reader,all.slice(i1,i2+1));return 'noscroll';
+ },
+ tagline(d){toggleLine(d.reader,d.line);return 'noscroll';},
  /* player */
  join(){const p=S.pl;const code=(p.code||'').trim().toUpperCase();
-   if(!/^[A-Z0-9]{4}$/.test(code)){S.err='Enter the four-character code from the host screen.';return;}
+   if(!/^[A-Z0-9]{5}$/.test(code)){S.err='Enter the five-character code from the host screen.';return;}
+   if(code[4]!==PACKCHECK){S.err='This code was made with different content (its last character does not match your content version). Refresh the page and try again. If it still fails, ask the host which content pack is loaded.';return;}
    S.err='';p.code=code;p.deal=deal(code);p.tab='brief';p.draft={title:'',level:'',st:{}};p.check=false;p.r1=p.r2=p.rej='';p.locked=false;p.finalPick='';p.reason='';S.tags.player={};S.view='player';},
  ptab(d){S.pl.tab=d.t;},
  lock(){S.pl.locked=true;},
@@ -1239,12 +1411,268 @@ const A={
  copyFinal(){copyText(S.pl.deal.code+'.F'+S.pl.finalPick);return false;},
  dlPlayer(){const p=S.pl,d=p.deal;const L=['THE MATCH DESK: my journal','Name: '+p.name,'Round: '+d.code,'Vacancy: '+d.vac.org+' - '+d.vac.role,''];
    L.push('My picks: 1st '+(p.r1?CAND(+p.r1).name:'-')+', 2nd '+(p.r2?CAND(+p.r2).name:'-')+', reject '+(p.rej?CAND(+p.rej).name:'-'));
-   L.push('Final vote: '+(p.finalPick?CAND(+p.finalPick).name:'-')+(p.reason?' (reason: '+p.reason+')':''),'','Lines I marked:');
-   d.cands.forEach(c=>{const cd=CAND(c);const m=Object.keys(S.tags.player).filter(k=>k.startsWith(c+'.')).map(k=>'  ['+S.tags.player[k]+'] '+cd.lines[k].x);if(m.length){L.push(cd.name);m.forEach(x=>L.push(x));}});
+   L.push('Final vote: '+(p.finalPick?CAND(+p.finalPick).name:'-')+(p.reason?' (reason: '+p.reason+')':''),'','Phrases I marked:');
+   d.cands.forEach(c=>{const cd=CAND(c);const m=[];Object.keys(cd.lines).forEach(k=>{rangesOf('player',k).forEach(r=>m.push('  ['+TAGLAB[r.t]+'] '+rangeText(cd.lines[k],r)));});if(m.length){L.push(cd.name);m.forEach(x=>L.push(x));}});
    {const dr=p.draft;if(dr&&Object.values(dr.st).some(v=>v&&v!=='0')){L.push('','My job post draft:',postDoc(d,draftSpec(d),dr.title,dr.level,i=>dr.st[i]).text);}}
    L.push('','Closest career path to mine:',p.ref1||'-','','What this changes about my CV:',p.ref2||'-','');
    download('my-match-desk-journal.txt',L.join('\n'));return false;}
 };
+
+
+/* ============================================================
+   BACKSTAGE (tutor): edit the content pack. Rules and scoring are not touched.
+   ============================================================ */
+const NEWSEC=(cid)=>'cv'+((((+cid-1)%10)+10)%10+1)+' hdr';
+function parseCV(text,cid){
+  const secs=[];let cur=null;
+  const start=cls=>{cur={cls,b:[]};secs.push(cur);};
+  String(text||'').split(/\r?\n/).forEach(raw=>{
+    let line=raw.replace(/\s+$/,'');
+    if(!line.trim())return;
+    const m=line.match(/^===\s*(letter|cv\d*)?\s*$/i);
+    if(m){const k=(m[1]||'cv').toLowerCase();start(k==='letter'?'letter':(k==='cv'?NEWSEC(cid):k+' hdr'));return;}
+    if(!cur)start(NEWSEC(cid));
+    const flags={};
+    line=line.replace(/\s*\{(nj|chk):\s*([^}]*)\}/g,(_,k,v)=>{flags[k]=v.trim();return '';});
+    let b;
+    if(/^#\s+/.test(line))b=N(line.replace(/^#\s+/,'').trim(),flags);
+    else if(/^@\s+/.test(line))b=CT(line.replace(/^@\s+/,'').trim(),flags);
+    else if(/^==\s*/.test(line))b=H(line.replace(/^==\s*/,'').trim());
+    else if(/^[-\u2022]\s+/.test(line))b=B(line.replace(/^[-\u2022]\s+/,'').trim(),flags);
+    else if(/^\*\s+/.test(line)){const t=line.replace(/^\*\s+/,'').split('|');b=R(t[0].trim(),(t[1]||'').trim(),flags);}
+    else b=P(line.trim(),flags);
+    cur.b.push(b);
+  });
+  return secs;
+}
+function serializeCV(secs){
+  const fl=b=>(b.nj?' {nj: '+b.nj+'}':'')+(b.chk?' {chk: '+b.chk+'}':'');
+  return (secs||[]).map(sec=>{
+    const head='=== '+(sec.cls.includes('letter')?'letter':((sec.cls.match(/cv\d+/)||['cv'])[0]));
+    return head+'\n'+sec.b.map(b=>b.t==='n'?'# '+b.x+fl(b):b.t==='c'?'@ '+b.x+fl(b):b.t==='h'?'== '+b.x:b.t==='b'?'- '+b.x+fl(b):b.t==='r'?'* '+b.x+' | '+(b.d||'')+fl(b):b.x+fl(b)).join('\n');
+  }).join('\n\n');
+}
+function textToMarkup(text){
+  const out=['=== cv'];let first=true;
+  text.split(/\r?\n/).map(x=>x.trim()).forEach(l=>{
+    if(!l)return;
+    if(first){out.push('# '+l);first=false;return;}
+    if(l.length>2&&l.length<=45&&l===l.toUpperCase()&&/[A-Z]/.test(l))out.push('== '+l);
+    else if(/^[-\u2022*\u00b7]\s+/.test(l))out.push('- '+l.replace(/^[-\u2022*\u00b7]\s+/,''));
+    else out.push(l);
+  });
+  return out.join('\n');
+}
+function htmlToMarkup(html){
+  const div=document.createElement('div');div.innerHTML=html;
+  const out=['=== cv'];let first=true;
+  const caps=t=>t.length>2&&t.length<=45&&t===t.toUpperCase()&&/[A-Z]/.test(t);
+  const push=(kind,t)=>{
+    t=t.replace(/\s+/g,' ').trim();if(!t)return;
+    if(first&&kind!=='b'){out.push('# '+t);first=false;return;}
+    first=false;
+    if(kind==='h'||caps(t))out.push('== '+t);else if(kind==='b')out.push('- '+t);else if(kind==='r')out.push('* '+t);else out.push(t);
+  };
+  const walk=el=>{[...el.children].forEach(ch=>{
+    const tag=ch.tagName;
+    if(/^H[1-6]$/.test(tag))push('h',ch.textContent);
+    else if(tag==='UL'||tag==='OL')[...ch.children].forEach(li=>push('b',li.textContent));
+    else if(tag==='TABLE')[...ch.querySelectorAll('td,th')].forEach(c=>push('p',c.textContent));
+    else if(tag==='P'){const st=ch.children.length===1&&ch.children[0].tagName==='STRONG'&&ch.children[0].textContent.trim()===ch.textContent.trim();push(st?'r':'p',ch.textContent);}
+    else walk(ch);
+  });};
+  walk(div);return out.join('\n');
+}
+function loadMammoth(){return new Promise((res,rej)=>{
+  if(window.mammoth)return res(window.mammoth);
+  const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+  sc.onload=()=>res(window.mammoth);sc.onerror=()=>rej(new Error('offline'));document.head.appendChild(sc);});}
+
+const PARSERS={
+  lines:v=>v.split('\n').map(x=>x.trim()).filter(Boolean),
+  cv:(v,ds)=>parseCV(v,ds.cid),
+  keys:v=>v.split('\n').map(x=>x.trim()).filter(Boolean).map(l=>{const m=l.match(/^([tsnc])\s*:\s*(.+)$/i);return m?[m[2].trim(),m[1].toLowerCase()]:null;}).filter(Boolean),
+  chips:v=>v.split('\n').map(x=>x.trim()).filter(Boolean).map(l=>{const q=l.split('|').map(x=>x.trim());const k=(q[0]||'').toLowerCase();if(!['d','m','n','x'].includes(k)||!q[1])return null;return q[2]?[q[1],k,q[2]]:[q[1],k];}).filter(Boolean),
+  gloss:v=>v.split('\n').map(x=>x.trim()).filter(Boolean).map(l=>{const i=l.indexOf('=');return i>0?[l.slice(0,i).trim(),l.slice(i+1).trim()]:null;}).filter(Boolean),
+  why:v=>{const o={};v.split('\n').map(x=>x.trim()).filter(Boolean).forEach(l=>{const q=l.split('|').map(x=>x.trim());if(q.length>=3&&q[0]&&q[1])o[q[0]+q[1]]=q.slice(2).join(' | ');});return o;},
+  ids:v=>v.split(/[,\s]+/).filter(Boolean).map(Number).filter(n=>!isNaN(n))
+};
+const chipsText=a=>(a||[]).map(c=>c[1]+' | '+c[0]+(c[2]?' | '+c[2]:'')).join('\n');
+const keysText=a=>(a||[]).map(k=>k[1]+': '+k[0]).join('\n');
+const glossText=a=>(a||[]).map(g=>g[0]+' = '+g[1]).join('\n');
+function whyLines(p){const out=[];p.vacancies.forEach(v=>p.candidates.forEach(c=>{const t=(p.why||{})[v.id+c.id];if(t)out.push(v.id+' | '+c.id+' | '+t);}));return out.join('\n');}
+
+function clonePack(){return JSON.parse(JSON.stringify(PACK));}
+function enterBackstage(){stopTimer();S.tags.bs={};S.bs={tab:'pack',csel:0,vsel:0,dirty:false,preview:false,pack:clonePack()};S.view='backstage';}
+const ask=m=>(typeof confirm==='function'?confirm(m):true);
+
+function checkPack(p){
+  const out=[];const add=(ok,msg)=>out.push({ok,msg});
+  add(p.candidates.length>=6,p.candidates.length+' candidates. Six or more are needed to deal a full round.');
+  add(p.vacancies.length>=1,p.vacancies.length+' vacancies.');
+  p.candidates.forEach(c=>{
+    const nb=(c.secs||[]).reduce((a,x)=>a+x.b.length,0);
+    if(!c.name||nb<5)add(false,'Candidate '+c.id+' ('+(c.name||'no name')+'): the CV is empty or very short.');
+    if(!(c.strengths||[]).length||!(c.gaps||[]).length||!(c.grow||[]).length)add(false,'Candidate '+c.id+' ('+c.name+'): add strengths, gaps and a development path for the grow card.');
+    if(!p.vacancies.some(v=>((p.fit[v.id]||{})[c.id]||0)>=3))add(false,'Candidate '+c.id+' ('+c.name+') is not a good fit (3 or more) for any vacancy.');
+  });
+  p.vacancies.forEach(v=>{
+    const L='Vacancy '+v.id+' ('+(v.role||'untitled')+'): ';
+    const f=p.fit[v.id]||{};const sc=p.candidates.map(c=>+f[c.id]||0);
+    if(!v.text||v.text.length<80)add(false,L+'the vacancy text is very short.');
+    add(sc.some(x=>x>=4),L+(sc.some(x=>x>=4)?'has a strong candidate (fit 4 or 5).':'no candidate has fit 4 or 5. Is that intended?'));
+    (v.keys||[]).forEach(k=>{if(!(v.text||'').includes(k[0]))add(false,L+'highlighted phrase not found in the text: "'+k[0]+'"');});
+    const dr=p.draft[v.id];
+    if(!dr||!(dr.chips||[]).length)add(false,L+'no job-post items, so the drafting task will be hidden for this vacancy.');
+    else{
+      const k=x=>dr.chips.filter(c=>c[1]===x).length;
+      add(k('d')>=3&&k('m')>=2,L+'job-post items: '+k('d')+' duties, '+k('m')+' must-haves, '+k('n')+' nice-to-haves, '+k('x')+' traps.');
+      add((dr.titles||[]).length>=2,L+'job titles: the first is correct. Add at least two wrong ones.');
+      add((dr.level||[]).length>0,L+'choose the correct seniority level.');
+    }
+    if(v.gem){const g=+f[v.gem]||0;add(g>=4,L+'hidden-fit candidate '+v.gem+' has fit '+g+(g>=4?'.':'. It should be 4 or more.'));}
+  });
+  return {out,bad:out.filter(o=>!o.ok).length};
+}
+
+const bsIn=(label,path,val)=>`<label for="${path}">${label}</label><input id="${path}" type="text" data-in="${path}" value="${esc(val)}">`;
+const bsTa=(label,path,val,kind,extra,cls)=>`<label for="${path}">${label}</label><textarea id="${path}" class="${cls||''}" data-in="${path}" ${kind?`data-kind="${kind}"`:''} ${extra||''}>${esc(val)}</textarea>`;
+
+function bsPack(p){
+  return `<div class="panel"><h3>Pack</h3>
+   <div class="grid g2"><div>${bsIn('Pack name','bs.pack.name',p.name||'')}</div><div>${bsIn('Version note','bs.pack.version',p.version||'')}</div></div>
+   <label for="bsdh">Default reading help for students</label><select id="bsdh" data-in="bs.pack.defaultHelp"><option value="off" ${p.defaultHelp==='off'?'selected':''}>Plain text</option><option value="keys" ${(!p.defaultHelp||p.defaultHelp==='keys')?'selected':''}>Key terms</option><option value="plain" ${p.defaultHelp==='plain'?'selected':''}>Plain English</option></select>
+   <div class="row" style="margin-top:14px"><button class="btn main" data-act="bsDownload">Download content.json</button>
+    <label class="btn filebtn" for="packfile">Load a pack file</label><input id="packfile" class="vh" type="file" accept=".json,application/json">
+    <button class="btn" data-act="bsApply">Use on this device</button><button class="btn" data-act="bsTest">Test play</button><button class="btn pink" data-act="bsReset">Reset to built-in sample</button></div></div>
+   <div class="panel" style="margin-top:14px"><h3>Publishing to students</h3><ol>
+    <li>Edit candidates, vacancies and fit scores here. Use <b>Check</b> to catch gaps.</li>
+    <li>Choose <b>Download content.json</b>.</li>
+    <li>Upload that file to your GitHub project, in the same folder as <code>match_desk.html</code>, replacing the old one.</li>
+    <li>Wait a minute and reload the game. The home page shows the content name and a check letter. Round codes end with that letter, so a device with different content cannot join by mistake.</li></ol>
+    <p class="hint">Your edits are only kept in this browser tab until you download them. Rounds, timers, scoring and rules are not part of the pack and do not change.</p></div>`;
+}
+function bsCands(p,B){
+  if(B.csel>=p.candidates.length)B.csel=Math.max(0,p.candidates.length-1);
+  const i=B.csel,c=p.candidates[i];
+  const list=`<div class="tabs">${p.candidates.map((x,k)=>`<button class="tab ${k===i?'on':''}" data-act="bsSel" data-k="csel" data-i="${k}">${x.id}. ${esc(x.name||'(unnamed)')}</button>`).join('')}</div>
+   <div class="row"><button class="btn small main" data-act="bsAddCand">Add candidate</button>${c?'<button class="btn small" data-act="bsDupCand">Duplicate</button><button class="btn small" data-act="bsDelCand">Delete</button>':''}</div>`;
+  if(!c)return list+'<p>No candidates yet.</p>';
+  c.attr=c.attr||{ready:2,pot:2,client:2,cred:2,cost:2};
+  const base='bs.pack.candidates.'+i;
+  const sel=(k,lab)=>`<div><label for="${base}.attr.${k}">${lab}</label><select id="${base}.attr.${k}" data-in="${base}.attr.${k}" data-num="1">${[0,1,2,3].map(n=>`<option ${c.attr[k]===n?'selected':''}>${n}</option>`).join('')}</select></div>`;
+  let prev='';
+  if(B.preview){const tmp={id:c.id,secs:c.secs};assignIds(tmp,'p');prev=`<div class="sheets" style="margin-top:12px">${c.secs.map(x=>renderSection(tmp,x,'bs')).join('')}<p class="hint">Preview. Try the marking tools in the dossier viewer to see how phrases work on this CV.</p></div>`;}
+  return `${list}<div class="panel" style="margin-top:12px">
+   <div class="grid g2"><div>${bsIn('Full name',base+'.name',c.name||'')}</div><div>${bsIn('First name (used in outcome text)',base+'.first',c.first||'')}</div></div>
+   ${bsIn('One-line description on the candidate card',base+'.headline',c.headline||'')}
+   <h3 style="margin-top:14px">Quick ratings (0 to 3)</h3><p class="hint">Used by the stakeholder cards and the budget and growth twists.</p>
+   <div class="grid g3">${sel('ready','Ready from week one')}${sel('pot','Growth potential')}${sel('client','Client-facing skills')}${sel('cred','Credentials')}${sel('cost','Salary expectation (3 = high)')}</div>
+   <div class="grid g3">${bsTa('Strengths (one per line)',base+'.strengths',(c.strengths||[]).join('\n'),'lines','rows="5"')}${bsTa('Gaps (one per line)',base+'.gaps',(c.gaps||[]).join('\n'),'lines','rows="5"')}${bsTa('Development path (one per line)',base+'.grow',(c.grow||[]).join('\n'),'lines','rows="5"')}</div>
+   <h3 style="margin-top:14px">CV and cover letter</h3>
+   <pre class="guide">=== letter          starts a cover letter page (use === cv for a CV page)
+# Full name
+@ Contact line
+== SECTION HEADING
+A normal paragraph
+- A bullet point
+* Role title | dates
+Add {nj: reason} at the end of a line to flag a non-job signal,
+or {chk: question} to suggest something to ask at interview.</pre>
+   <div class="row"><label class="btn small filebtn" for="cvfile">Import Word or text file</label><input id="cvfile" class="vh" type="file" accept=".docx,.txt,.md"><button class="btn small" data-act="bsPreview">${B.preview?'Hide preview':'Preview'}</button></div>
+   ${bsTa('CV text',base+'.secs',serializeCV(c.secs),'cv','data-cid="'+c.id+'" rows="18"','mono')}${prev}</div>`;
+}
+function bsVacs(p,B){
+  if(B.vsel>=p.vacancies.length)B.vsel=Math.max(0,p.vacancies.length-1);
+  const i=B.vsel,v=p.vacancies[i];
+  const list=`<div class="tabs">${p.vacancies.map((x,k)=>`<button class="tab ${k===i?'on':''}" data-act="bsSel" data-k="vsel" data-i="${k}">${esc(x.id)}. ${esc(x.role||'(new)')}</button>`).join('')}</div>
+   <div class="row"><button class="btn small main" data-act="bsAddVac">Add vacancy</button>${v?'<button class="btn small" data-act="bsDelVac">Delete</button>':''}</div>`;
+  if(!v)return list+'<p>No vacancies yet.</p>';
+  const dr=p.draft[v.id]||(p.draft[v.id]={titles:[],level:[1],chips:[]});
+  dr.level=dr.level||[];
+  const base='bs.pack.vacancies.'+i,db='bs.pack.draft.'+v.id;
+  const gem=`<label for="${base}.gem">Hidden fit (a strong candidate from outside the obvious field)</label><select id="${base}.gem" data-in="${base}.gem" data-num="1"><option value="">None</option>${p.candidates.map(c=>`<option value="${c.id}" ${+v.gem===c.id?'selected':''}>${c.id}. ${esc(c.name)}</option>`).join('')}</select>`;
+  return `${list}<div class="panel" style="margin-top:12px">
+   <div class="grid g3"><div>${bsIn('Organisation',base+'.org',v.org||'')}</div><div>${bsIn('Role',base+'.role',v.role||'')}</div><div>${bsIn('Sector',base+'.sector',v.sector||'')}</div></div>
+   ${bsTa('Vacancy text',base+'.text',v.text||'',null,'rows="9"')}
+   <h3 style="margin-top:14px">Reading help</h3>
+   ${bsTa('Highlighted phrases (one per line: t = what you will do, s = who they want, n = nice to have, c = context). The phrase must appear in the text exactly.',base+'.keys',keysText(v.keys),'keys','rows="7"','mono')}
+   ${bsTa('Plain English summary (one point per line)',base+'.gist',(v.gist||[]).join('\n'),'lines','rows="4"')}
+   ${bsTa('Word help (one per line: term = meaning)',base+'.gloss',glossText(v.gloss),'gloss','rows="4"','mono')}
+   <h3 style="margin-top:14px">Job-post drafting task</h3>
+   ${bsTa('Job titles (the first line is the correct one; add two wrong ones)',db+'.titles',(dr.titles||[]).join('\n'),'lines','rows="3"')}
+   <label>Correct seniority level (tick all that are acceptable)</label><div class="row">${LEVELS.map((l,k)=>`<button class="tool ${dr.level.includes(k)?'on':''}" data-act="bsLevel" data-k="${k}" aria-pressed="${dr.level.includes(k)}">${l}</button>`).join('')}</div>
+   ${bsTa('Items students tap (one per line: type | text | reason). Types: d = duty, m = must-have, n = nice-to-have, x = trap (the reason explains why).',db+'.chips',chipsText(dr.chips),'chips','rows="14"','mono')}
+   <h3 style="margin-top:14px">Round setup</h3>
+   <div class="grid g2"><div>${gem}</div><div>${bsIn('Plausible-but-wrong candidates (ids, comma separated)',base+'.decoys',(v.decoys||[]).join(', ')).replace('data-in=','data-kind="ids" data-in=')}</div></div></div>`;
+}
+function bsFit(p){
+  p.vacancies.forEach(v=>{p.fit[v.id]=p.fit[v.id]||{};});
+  const head=`<tr><th>Candidate</th>${p.vacancies.map(v=>`<th title="${esc(v.role)}">${esc(v.id)}</th>`).join('')}</tr>`;
+  const rows=p.candidates.map(c=>`<tr><td><b>${c.id}.</b> ${esc(c.name)}</td>${p.vacancies.map(v=>`<td><select aria-label="Fit of ${esc(c.name)} for vacancy ${esc(v.id)}" data-in="bs.pack.fit.${v.id}.${c.id}" data-num="1">${[0,1,2,3,4,5].map(n=>`<option ${((+p.fit[v.id][c.id])||0)===n?'selected':''}>${n}</option>`).join('')}</select></td>`).join('')}</tr>`).join('');
+  return `<div class="panel"><h3>Fit matrix</h3><p class="hint">0 = no fit, 5 = excellent. These scores drive the hire's outcome, the best-fit ranking and which candidates are dealt.</p>
+   <div style="overflow:auto" class="bsfit"><table>${head}${rows}</table></div>
+   <ul class="hint">${p.vacancies.map(v=>`<li><b>${esc(v.id)}</b>: ${esc(v.role)}</li>`).join('')}</ul></div>
+   <div class="panel" style="margin-top:14px">${bsTa('Reasons shown on the result card (one per line: vacancy id | candidate id | text)','bs.pack.why',whyLines(p),'why','rows="12"','mono')}</div>`;
+}
+function bsCheck(p){
+  const r=checkPack(p);
+  return `<div class="panel"><h3>${r.bad?r.bad+' thing'+(r.bad>1?'s':'')+' to look at':'Everything looks complete'}</h3><ul>${r.out.map(o=>`<li class="${o.ok?'bsok':'bswarn'}">${o.ok?'&#10003;':'!'} ${esc(o.msg)}</li>`).join('')}</ul></div>`;
+}
+function viewBackstage(){
+  const B=S.bs,p=B.pack;
+  const tabs=[['pack','Pack'],['cands','Candidates'],['vacs','Vacancies'],['fit','Fit matrix'],['check','Check']];
+  const body={pack:()=>bsPack(p),cands:()=>bsCands(p,B),vacs:()=>bsVacs(p,B),fit:()=>bsFit(p),check:()=>bsCheck(p)}[B.tab]();
+  return `${sign()}<div class="panel" style="border-color:var(--pink)"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Backstage (tutor)</h2><button class="btn small" data-act="home">Leave backstage</button></div>
+   <p class="hint" style="margin-top:8px">Edit the materials here. The game rules, timers and scoring stay as they are. ${B.dirty?'<b class="bswarn">You have changes that are not downloaded yet.</b>':''}</p>
+   <div class="tabs" role="tablist">${tabs.map(t=>`<button class="tab ${B.tab===t[0]?'on':''}" role="tab" aria-selected="${B.tab===t[0]}" data-act="bsTab" data-t="${t[0]}">${t[1]}</button>`).join('')}</div>${body}</div>`;
+}
+Object.assign(A,{
+ goBackstage(){enterBackstage();},
+ bsTab(d){S.bs.tab=d.t;S.bs.preview=false;},
+ bsSel(d){S.bs[d.k]=+d.i;S.bs.preview=false;S.tags.bs={};},
+ bsPreview(){S.bs.preview=!S.bs.preview;S.tags.bs={};S.anchor=null;},
+ bsAddCand(){const p=S.bs.pack,id=Math.max(0,...p.candidates.map(c=>c.id))+1;
+   p.candidates.push({id,name:'New candidate',first:'New',headline:'',secs:parseCV('=== cv\n# NEW CANDIDATE\n@ Contact details\n== PERSONAL STATEMENT\nWrite or paste the CV here.',id),strengths:[],gaps:[],grow:[],attr:{ready:2,pot:2,client:2,cred:2,cost:2}});
+   S.bs.csel=p.candidates.length-1;S.bs.dirty=true;},
+ bsDupCand(){const p=S.bs.pack,c=p.candidates[S.bs.csel];const n=JSON.parse(JSON.stringify(c));n.id=Math.max(0,...p.candidates.map(x=>x.id))+1;n.name=(c.name||'Candidate')+' (copy)';
+   p.candidates.push(n);S.bs.csel=p.candidates.length-1;S.bs.dirty=true;},
+ bsDelCand(){const p=S.bs.pack,c=p.candidates[S.bs.csel];if(!c||!ask('Delete '+c.name+'? This also removes their fit scores.'))return false;
+   p.candidates.splice(S.bs.csel,1);Object.keys(p.fit).forEach(v=>{delete p.fit[v][c.id];});S.bs.dirty=true;},
+ bsAddVac(){const p=S.bs.pack;let id='';for(const ch of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'){if(!p.vacancies.some(v=>v.id===ch)){id=ch;break;}}if(!id)id='V'+(p.vacancies.length+1);
+   p.vacancies.push({id,org:'Company '+id,role:'New role',sector:'',text:'',keys:[],gist:[],gloss:[],gem:'',decoys:[]});
+   p.draft[id]={titles:['Correct job title','Wrong title one','Wrong title two'],level:[1],chips:[]};p.fit[id]={};
+   S.bs.vsel=p.vacancies.length-1;S.bs.dirty=true;},
+ bsDelVac(){const p=S.bs.pack,v=p.vacancies[S.bs.vsel];if(!v||!ask('Delete vacancy '+v.id+' ('+v.role+')?'))return false;
+   p.vacancies.splice(S.bs.vsel,1);delete p.fit[v.id];delete p.draft[v.id];S.bs.dirty=true;},
+ bsLevel(d){const dr=S.bs.pack.draft[S.bs.pack.vacancies[S.bs.vsel].id];const k=+d.k;const i=dr.level.indexOf(k);if(i>=0)dr.level.splice(i,1);else dr.level.push(k);S.bs.dirty=true;return 'noscroll';},
+ bsApply(){const err=validatePack(S.bs.pack);if(err){toast(err);return false;}applyPack(S.bs.pack);toast('This device now uses the edited pack (check '+PACKCHECK+')');return 'noscroll';},
+ bsTest(){const err=validatePack(S.bs.pack);if(err){toast(err);return false;}applyPack(S.bs.pack);S.view='hostSetup';},
+ bsDownload(){const err=validatePack(S.bs.pack);if(err){toast(err);return false;}download('content.json',JSON.stringify(S.bs.pack,null,1));S.bs.dirty=false;return 'noscroll';},
+ bsReset(){if(!ask('Replace everything in backstage with the built-in sample pack?'))return false;S.bs.pack=JSON.parse(JSON.stringify(BUILTIN_PACK));S.bs.csel=0;S.bs.vsel=0;S.bs.dirty=true;}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;if(!t||t.type!=='file'||!t.files||!t.files[0]||!S.bs)return;
+  const f=t.files[0],name=f.name.toLowerCase();
+  if(t.id==='packfile'){
+    f.text().then(txt=>{try{const pk=JSON.parse(txt);const err=validatePack(pk);if(err){toast(err);return;}
+      S.bs.pack=JSON.parse(JSON.stringify(pk));S.bs.csel=0;S.bs.vsel=0;S.bs.dirty=true;toast('Pack loaded into backstage');render(true);}catch(x){toast('That file is not valid JSON.');}});
+  }
+  if(t.id==='cvfile'){
+    const c=S.bs.pack.candidates[S.bs.csel];
+    const done=md=>{c.secs=parseCV(md,c.id);S.bs.dirty=true;toast('Imported. Check the text, then add flags where needed.');render(true);};
+    if(name.endsWith('.docx'))f.arrayBuffer().then(buf=>loadMammoth().then(m=>m.convertToHtml({arrayBuffer:buf}))).then(r=>done(htmlToMarkup(r.value))).catch(()=>toast('Could not read the Word file. It needs an internet connection. Save it as .txt or paste the text instead.'));
+    else f.text().then(txt=>done(textToMarkup(txt)));
+  }
+});
+window.addEventListener('beforeunload',e=>{if(S.bs&&S.bs.dirty){e.preventDefault();e.returnValue='';}});
+function loadContent(){
+  const fin=()=>{S.loading=false;if(location.hash==='#backstage')enterBackstage();render();};
+  if(!S.loading){if(location.hash==='#backstage'){enterBackstage();render();}return;}
+  fetch('content.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('none');return r.json();})
+   .then(pk=>{const err=validatePack(pk);if(err)throw new Error(err);applyPack(pk);if(pk.defaultHelp)S.help=pk.defaultHelp;})
+   .catch(()=>{}).then(fin);
+}
 
 /* ============================================================
    RENDER LOOP AND EVENTS
@@ -1253,7 +1681,7 @@ function render(keepScroll){
   const app=document.getElementById('app');
   const vw=document.querySelector('.vbody');const vs=vw?vw.scrollTop:0;
   const ps=window.scrollY;
-  const html={home:viewHome,hostSetup:viewHostSetup,host:viewHost,join:viewJoin,player:viewPlayer}[S.view]();
+  const html={home:viewHome,hostSetup:viewHostSetup,host:viewHost,join:viewJoin,player:viewPlayer,backstage:viewBackstage}[S.view]();
   app.innerHTML=html;
   document.getElementById('overlay').innerHTML=S.viewer?renderViewer():'';
   document.body.style.overflow=S.viewer?'hidden':'';
@@ -1265,24 +1693,46 @@ document.addEventListener('click',e=>{
   const fn=A[t.dataset.act];if(!fn)return;
   const r=fn(t.dataset,e);
   if(r===false)return;
-  const toTop=['startDraft','goHostSetup','goJoin','drawRound','redraw','startRead','reveal','toVote','backReveal','decide','nextRound','endSession','join','home'].includes(t.dataset.act);
+  const toTop=['goBackstage','startDraft','goHostSetup','goJoin','drawRound','redraw','startRead','reveal','toVote','backReveal','decide','nextRound','endSession','join','home'].includes(t.dataset.act);
   render(!toTop);
   if(toTop)window.scrollTo(0,0);
 });
 document.addEventListener('keydown',e=>{
-  if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('ln')){e.preventDefault();e.target.click();}
-  if(e.key==='Escape'&&S.viewer){S.viewer=null;render(true);}
+  if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('ln')){e.preventDefault();toggleLine(e.target.dataset.reader,e.target.dataset.line);render(true);}
+  if(e.key==='Escape'){if(S.anchor){S.anchor=null;render(true);}else if(S.viewer){S.viewer=null;render(true);}}
 });
 function onInput(e){
   const t=e.target;if(!t.dataset||!t.dataset.in)return;
-  let v=t.value;if(t.dataset.num)v=v===''?'':+v;
+  let v=t.value;
+  if(t.dataset.kind&&PARSERS[t.dataset.kind])v=PARSERS[t.dataset.kind](v,t.dataset);
+  else if(t.dataset.num)v=v===''?'':+v;
   if(t.dataset.in==='pl.code')v=v.toUpperCase();
   setPath(t.dataset.in,v);
+  if(S.view==='backstage'&&S.bs&&!S.bs.dirty){S.bs.dirty=true;}
   if(t.dataset.render&&e.type==='change')render(true);
 }
+document.addEventListener('mouseup',()=>{
+  setTimeout(()=>{
+    const sel=window.getSelection&&window.getSelection();
+    if(!sel||sel.isCollapsed||!sel.rangeCount)return;
+    const rg=sel.getRangeAt(0);
+    const wEl=n=>{const el=n.nodeType===1?n:n.parentElement;return el?el.closest('.w'):null;};
+    const s1=wEl(rg.startContainer),t1=wEl(rg.endContainer);
+    if(!s1||!t1)return;
+    const paper=s1.closest('.paper');if(!paper||paper!==t1.closest('.paper'))return;
+    const all=[...paper.querySelectorAll('.w')];
+    let i1=all.indexOf(s1),i2=all.indexOf(t1);
+    if(i1>i2)[i1,i2]=[i2,i1];
+    if(rg.endContainer.nodeType===3&&rg.endOffset===0&&i2>i1&&t1!==s1)i2--;
+    S.anchor=null;markWords(s1.dataset.reader,all.slice(i1,i2+1));
+    sel.removeAllRanges();render(true);
+  },0);
+});
 document.addEventListener('input',onInput);
 document.addEventListener('change',onInput);
+S.loading=(typeof fetch==='function'&&location.protocol!=='file:');
 render();
+loadContent();
 </script>
 </body>
 </html>
