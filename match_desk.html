@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Match Desk</title>
+<style>
+:root{
+  --desk:#24363c; --panel:#2f464e; --panel2:#3a5560; --line:#4d6a74;
+  --paper:#f2f4f1; --ink:#1c2428; --mute:#a9bcc2; --text:#ecf2f1;
+  --manila:#d8b36a; --stamp:#c0392b; --blue:#244a9a;
+  --pink:#ff5fa8; --cyan:#5be7ff; --green:#5fbf8a; --amber:#e8a838;
+  --z:1;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--desk);
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 2px,transparent 2px 6px);
+  color:var(--text);
+  font:16px/1.5 "Gill Sans","Gill Sans MT","Segoe UI",Calibri,system-ui,sans-serif;
+  min-height:100vh;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:16px 16px 80px}
+
+/* the sign */
+.signbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sign{margin:0;font:700 clamp(30px,6vw,52px)/1 "Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;letter-spacing:.02em;color:#ffd5ea;
+  text-shadow:0 0 4px #ff5fa8,0 0 14px #ff5fa8,0 0 30px rgba(255,95,168,.6)}
+.sign .dim{color:#7a4a62;text-shadow:none;animation:flick 5s infinite}
+.sign small{display:block;font:400 15px/1.4 "Gill Sans","Segoe UI",sans-serif;letter-spacing:0;color:var(--mute);text-shadow:none;margin-top:6px}
+@keyframes flick{0%,6%,9%,48%,52%,100%{color:#ffd5ea;text-shadow:0 0 4px #ff5fa8,0 0 14px #ff5fa8}7%,8%,50%{color:#7a4a62;text-shadow:none}}
+@media (prefers-reduced-motion:reduce){.sign .dim{animation:none;color:#b98aa3}}
+
+/* generic */
+h2,h3{margin:0 0 8px;font-family:"Trebuchet MS","Gill Sans",sans-serif}
+h2{font-size:22px} h3{font-size:18px}
+p{margin:0 0 10px}
+.mute{color:var(--mute)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.btn{min-height:44px;padding:8px 18px;border:2px solid var(--manila);background:transparent;color:var(--manila);border-radius:6px;cursor:pointer;font-weight:700}
+.btn:hover{background:rgba(216,179,106,.14)}
+.btn.main{background:var(--manila);color:#241b08}
+.btn.main:hover{background:#e6c382}
+.btn.pink{border-color:var(--pink);color:#ffd5ea}
+.btn.pink:hover{background:rgba(255,95,168,.15)}
+.btn.small{min-height:36px;padding:4px 12px;font-size:14px}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:16px}
+.folder{background:var(--manila);color:var(--ink);border-radius:2px 14px 4px 4px;padding:16px 16px 14px;position:relative;margin-top:14px}
+.folder::before{content:attr(data-tab);position:absolute;top:-24px;left:0;background:var(--manila);color:var(--ink);padding:3px 14px 2px;border-radius:8px 8px 0 0;font:700 14px "Trebuchet MS",sans-serif}
+.folder h3{color:#2b2210}
+.folder p{margin-bottom:8px}
+.chip{display:inline-block;padding:2px 10px;border:1px solid var(--line);border-radius:999px;font-size:14px;color:var(--mute)}
+.code{font:700 40px/1 "Courier New",monospace;letter-spacing:.2em;color:var(--cyan);text-shadow:0 0 12px rgba(91,231,255,.5)}
+.stamp{display:inline-block;border:4px solid var(--stamp);color:var(--stamp);font:900 26px/1 "Courier New",monospace;padding:6px 14px;transform:rotate(-5deg);letter-spacing:.08em;border-radius:4px;background:rgba(255,255,255,.55)}
+input[type=text],select,textarea{background:#1b2a2f;border:1px solid var(--line);border-radius:6px;padding:9px 11px;width:100%;min-height:44px}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-weight:700;margin:8px 0 4px}
+table{border-collapse:collapse;width:100%}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mute);font-weight:600}
+.err{color:#ffb4a8;font-weight:700}
+.ok{color:var(--green)}
+.timer{font:700 56px/1 "Courier New",monospace;color:var(--cyan)}
+.timer.done{color:var(--pink);animation:pulse 1s 3}
+@keyframes pulse{50%{opacity:.3}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+.tab{min-height:44px;padding:6px 16px;border:2px solid var(--line);background:transparent;border-radius:6px;cursor:pointer;font-weight:700}
+.tab.on{background:var(--panel2);border-color:var(--cyan);color:#d9fbff}
+.cand{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:12px}
+.cand b{font-size:17px}
+.bar{height:10px;border-radius:5px;background:#1b2a2f;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green)}
+.tagcount span{margin-right:10px;font-weight:700}
+.tagcount .f{color:var(--green)} .tagcount .a{color:var(--amber)} .tagcount .v{color:var(--cyan)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--cyan);color:#06242b;padding:8px 18px;border-radius:999px;font-weight:700;z-index:99}
+.note{border-left:4px solid var(--amber);padding:6px 12px;background:rgba(232,168,56,.1);margin:8px 0}
+
+/* dossier viewer */
+.viewer{position:fixed;inset:0;background:#1a272b;z-index:50;display:flex;flex-direction:column}
+.vbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:8px 12px;background:var(--panel);border-bottom:2px solid var(--line)}
+.vbar .grow{flex:1;min-width:140px;font-weight:700}
+.tool{min-height:44px;min-width:44px;padding:4px 12px;border:2px solid var(--line);background:transparent;border-radius:6px;cursor:pointer;font-weight:700}
+.tool.on{background:var(--panel2);border-color:var(--cyan)}
+.tool.tf.on{border-color:var(--green)} .tool.ta.on{border-color:var(--amber)} .tool.tv.on{border-color:var(--cyan)}
+.vbody{flex:1;overflow:auto;padding:14px;display:grid;gap:14px;grid-template-columns:minmax(0,1fr);align-content:start}
+.vbody.two{grid-template-columns:minmax(0,1fr)}
+@media (min-width:1000px){.vbody.two{grid-template-columns:minmax(280px,380px) minmax(0,1fr)}}
+.sheets{display:flex;flex-direction:column;gap:18px;align-items:center}
+.paper{background:var(--paper);color:var(--ink);width:100%;max-width:820px;padding:calc(30px*var(--z)) calc(34px*var(--z));font-size:calc(15px*var(--z));line-height:1.45;box-shadow:0 8px 24px rgba(0,0,0,.45);border-radius:2px;font-family:var(--pf,"Segoe UI",sans-serif)}
+.paper h4{margin:calc(16px*var(--z)) 0 calc(6px*var(--z));font-size:1em;letter-spacing:.04em;color:var(--pa,#244a9a);border-bottom:2px solid var(--pa,#244a9a);padding-bottom:2px}
+.paper .nm{font-size:1.7em;font-weight:700;margin:0 0 4px;color:var(--pn,#1c2428);line-height:1.2}
+.paper .ct{font-size:.92em;color:#4a5558}
+.paper .ln{cursor:pointer;border-radius:2px;padding:0 1px;display:inline}
+.paper .ln:hover{background:rgba(36,74,154,.12)}
+.paper .t-for{background:rgba(95,191,138,.45);box-shadow:inset 0 -2px 0 #2e9561}
+.paper .t-against{background:rgba(232,168,56,.5);box-shadow:inset 0 -2px 0 #b97d12}
+.paper .t-verify{background:rgba(91,231,255,.4);box-shadow:inset 0 -2px 0 #1b9fb8;text-decoration:underline dotted}
+.paper .t-for::after{content:" \2713";font-weight:700;color:#1d7a4c}
+.paper .t-against::after{content:" !";font-weight:700;color:#8a5a06}
+.paper .t-verify::after{content:" ?";font-weight:700;color:#0f7a90}
+.paper ul{margin:0;padding-left:1.2em}
+.paper li{margin:2px 0}
+.paper p{margin:0 0 .7em}
+.paper .rl{margin:.5em 0 .1em}
+.paper .rl b{font-weight:700}
+.paper .dt{color:#5b676a;font-style:italic}
+.paper.letter{font-family:Georgia,"Times New Roman",serif;line-height:1.6;--pa:#444;--pn:#222}
+.paper.letter p{margin-bottom:1em}
+.paper.hdr{border-top:calc(14px*var(--z)) solid var(--pa)}
+.cv1{--pf:"Segoe UI",Calibri,sans-serif;--pa:#244a9a}
+.cv2{--pf:"Palatino Linotype",Palatino,serif;--pa:#5a3b1f;--pn:#5a3b1f}
+.cv3{--pf:"Trebuchet MS",sans-serif;--pa:#1c6e5a}
+.cv4{--pf:Verdana,sans-serif;--pa:#a24a1b;font-size:calc(14px*var(--z))}
+.cv5{--pf:Candara,"Gill Sans",sans-serif;--pa:#b03a77;--pn:#b03a77}
+.cv6{--pf:Consolas,"Courier New",monospace;--pa:#0e6a4e;--pn:#0e6a4e}
+.cv7{--pf:"Gill Sans","Segoe UI",sans-serif;--pa:#6a5acd}
+.cv8{--pf:"Arial Narrow",Arial,sans-serif;--pa:#7a5200;--pn:#7a5200}
+.cv9{--pf:"Helvetica Neue",Helvetica,Arial,sans-serif;--pa:#222;--pn:#222}
+.cv10{--pf:Tahoma,sans-serif;--pa:#b3261e}
+.hint{font-size:14px;color:var(--mute)}
+.chipb{display:block;width:100%;text-align:left;min-height:44px;padding:8px 12px;margin:6px 0;border:2px solid var(--line);background:transparent;border-radius:6px;cursor:pointer;font:inherit;color:var(--text)}
+.chipb .cb{display:inline-block;min-width:104px;margin-right:8px;font-weight:700;font-size:13px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mute);text-align:center}
+.chipb.s-d{border-color:#6aa6ff;background:rgba(106,166,255,.12)} .chipb.s-d .cb{border-color:#6aa6ff;color:#bcd8ff}
+.chipb.s-m{border-color:var(--green);background:rgba(95,191,138,.14)} .chipb.s-m .cb{border-color:var(--green);color:#bff0d3}
+.chipb.s-n{border-color:var(--amber);background:rgba(232,168,56,.14)} .chipb.s-n .cb{border-color:var(--amber);color:#ffe0a0}
+.paper.advert{--pf:"Trebuchet MS","Gill Sans",sans-serif;--pa:#c0392b;--pn:#1c2428}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div id="overlay"></div>
+<div id="toastbox"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   DATA
+   ============================================================ */
+const N=(x,o)=>({t:'n',x,...o}), CT=(x,o)=>({t:'c',x,...o}), H=(x)=>({t:'h',x}),
+      P=(x,o)=>({t:'p',x,...o}), B=(x,o)=>({t:'b',x,...o}), R=(x,d,o)=>({t:'r',x,d,...o});
+
+const CANDS=[
+{id:1,name:'Jane Doe',first:'Jane',headline:'Final-year BSc Economics student, York',
+ secs:[{cls:'cv1 hdr',b:[
+  N('JANE DOE'),CT('123 Street Name, City, Postcode'),CT('Mobile: +44 XXXX XXXXXX     Email: jane.doe@email.com'),
+  H('PERSONAL STATEMENT'),
+  P('Final-year BSc Economics candidate from York University with a strong academic background, a passion for financial markets, and a keen interest in real estate investment. Proficient at quantitative analysis, financial modelling, and market research. Seeking an Investment Analyst position to apply my analytical skills and contribute to effective investment decision-making.'),
+  H('EDUCATION'),
+  R('BSc (Hons) Economics, York University, UK','September 2023 - June 2025 (exp)',{chk:'A BSc that runs only two years (Sept 2023 to June 2025) is unusual for a UK honours degree. Worth asking.'}),
+  B('Expected Second-Upper Class Honours.'),
+  B('Dissertation Topic: "The Impact of Brexit on UK Regional Housing Markets"'),
+  B('Relevant Modules: Housing Economics, Advanced Microeconomics, Investment and Portfolio Management.'),
+  R('A-Levels, College XYZ','September 2021 - June 2023'),
+  B('Economics (A), Mathematics (B), Business Studies (A).'),
+  H('EXPERIENCE'),
+  R('Intern, Market Research and Consultancy, Marketing Co., Leeds','June 2024 - August 2024'),
+  B('Conducted market analysis on retailing market trends and consumer online spending behaviour, identifying potential business opportunities for executive decision-making.'),
+  B("Presented findings to the team, enhancing the department's understanding of current market conditions."),
+  R('Part-Time Assistant (volunteer), Oxfam Harrogate','October 2021 - May 2023'),
+  B('Weekly shop inventory tracking and updates with supervisors'),
+  B('Collaborated with student volunteers to manage and allocate funds for various events'),
+  H('SKILLS'),
+  B('Financial Modelling: Proficient modelling skills in corporate valuation and financial analysis using Excel.'),
+  B('Data Analysis: Econometrics knowledge with Stata. Dissertation project uses panel regression model.'),
+  B('Market Research: Capable of interpreting market dynamics and identifying opportunities.'),
+  B('Communication: Effective at presenting findings and collaborating with cross-functional teams.'),
+  H('EXTRA-CURRICULAR ACTIVITIES'),
+  R('Founder and Associate President, University Book Club','September 2023 - Now'),
+  B('Start the society in a leading role. Organised guest speaker events and monthly book recommendation activities, facilitating interactions between students and public.'),
+  H('LANGUAGES'),
+  B('English (Fluent), German (Intermediate), Latin (basic)')
+ ]}],
+ strengths:['Excel valuation modelling and Stata econometrics','Housing-market dissertation and a market-research internship','Numerate, quick-learning graduate profile'],
+ gaps:['No professional property valuation exposure','Little client-facing experience','Degree not yet awarded'],
+ grow:['Year 1: shadow valuation reports and learn Land Registry data handling','Year 3: start a valuation pathway and own part of the model','Year 5: lead development of the valuation app']},
+
+{id:2,name:'Dr Kwame Adjei',first:'Kwame',headline:'Civil engineer, PhD, 15+ years; teaches real estate valuation',
+ secs:[{cls:'letter',b:[
+  P('To Whom It May Concern,'),
+  P('Pray permit me to introduce myself. I am a distinguished engineer with a career spanning over fifteen years, dedicated to infrastructure and civil engineering undertakings across the African continent. In the recent past, I have obtained a doctoral degree in sustainable urban evolution.'),
+  P('I have also established my career expertise in real estate for three years.',{chk:'The letter claims three years of real estate expertise; the CV shows a part-time (0.6 FTE) teaching post, not practice.'}),
+  P('With the expertise I\'ve garnered, it is my ardent desire to champion both innovative and sustainable stratagems within the esteemed real estate sector of the United Kingdom. I am seeking to broaden my affiliations within the UK market. Furthermore, I would be profoundly gratified to harness my engineering pedigree in the realm of commerce.'),
+  P('You shall find my curriculum vitae enclosed. Should you require any additional particulars, I am at your disposal.'),
+  P('I am eagerly anticipating your correspondence,'),
+  P('Kwame Adjei')
+ ]},{cls:'cv2 hdr',b:[
+  N('DR. KWAME ADJEI, PhD, CEng, IStructE'),CT('76 Park Lane, City, Postcode, UK'),CT('Mobile: +44 XXXX XXXXXX     Email: kwame.adjei@email.com'),
+  H('EDUCATION'),
+  R('PhD in Civil Engineering - Birmingham City University, Birmingham, UK','2017-2020'),
+  B('Thesis: "Sustainable Urban Development: Leveraging Modern Engineering Techniques in African Metropolises".'),
+  B('Collaborated with renowned experts in the field of sustainable architecture and urban planning.'),
+  R('MSc in Civil Engineering - The University of Ghana, Acca, Ghana','2004-2006'),
+  R('BEng in Civil Engineering - The University of Ghana, Acca, Ghana','September 1999 - June 2003',{nj:'Dates reveal approximate age'}),
+  H('PROFESSIONAL EXPERIENCE'),
+  R('Teaching Fellow in Real Estate 0.6FTE - HE Education Ins.','2020 - Now'),
+  B('Lecturer in real estate valuation. Familiar with RICS valuation standards and valuation models.'),
+  B("Coaching professional students according to University's Teaching Excellence Framework and RICS standards."),
+  R('Chief Civil Engineer - Engineering Co., Acca, Ghana','June 2006 - August 2017'),
+  B('Managed a team of 20 engineers on large-scale infrastructure projects worth over $50 million.'),
+  B('Collaborated with government bodies and private developers to ensure projects met sustainability and quality benchmarks.'),
+  B('Pioneered the use of local materials, reducing project costs by 15%.'),
+  R('Founder, Engineers for Sustainable Development Ghana','January 2010 - Present'),
+  B('Led community projects focused on developing sustainable housing for underprivileged communities.'),
+  B('Collaborated with international NGOs to source funding and expertise.'),
+  H('SKILLS'),
+  B('Project Management: Proven track record of completing projects on time and within budget.'),
+  B('Sustainable Engineering: Expertise in sustainable materials and methods.'),
+  B('Collaboration: Experienced in working with cross-functional teams, including architects, planners, and government officials.'),
+  B('Software Proficiency: Skilled in AutoCAD, Revit, Civil 3D; Excel valuation modelling'),
+  B('Multilingual: English (Fluent), Akan (Native), French (Intermediate)')
+ ]}],
+ strengths:['PhD in sustainable urban development; chartered engineer','Led 20 engineers on projects worth over $50 million','Teaches valuation to RICS standards and builds Excel valuation models'],
+ gaps:['No UK commercial valuation practice (teaching only)','Seniority and pay expectations may exceed a junior brief','No hotel- or data-centre-specific experience'],
+ grow:['Year 1: UK market practice and RICS standards with a mentor','Year 3: publish guidance on valuing energy-efficient retrofits','Year 5: lead a specialist research and advisory team']},
+
+{id:3,name:'Lucas Montague',first:'Lucas',headline:'AssocRICS, assistant surveyor in Glasgow',
+ secs:[{cls:'letter',b:[
+  P('Dear sir/madam,'),
+  P('I hope this letter finds you well. I am writing to express my keen interest in transitioning more deeply into the real estate investment sector with your team, drawing from my experiences in real estate surveying and inspection.'),
+  P('My tenure as a Trainee Real Estate Surveyor in the current job provided me with a robust understanding of the UK property landscape. I\'ve had the privilege to conduct numerous property inspections, gaining an intimate knowledge of buildings, their structures, and potential value points that often go unnoticed. This hands-on experience has given me a unique perspective on property valuation, understanding the potential of an asset beyond its current state.',{chk:'The letter says "Trainee" surveyor; the CV title is "Assistant Real Estate Surveyor".'}),
+  P('Having been extensively involved in data collection, analysis, and reporting, I\'ve developed a keen eye for identifying business opportunities and risks. I\'ve come to appreciate the intricate balance between current property conditions, market trends, and future projections. My skills, I believe, align perfectly with the analytical demands of real estate investment and strategic consulting.'),
+  P('Moreover, I have cultivated strong relationships within the real estate community, which I believe can be beneficial in terms of sourcing and validating potential investment opportunities. My background in inspection has taught me the importance of due diligence, a principle I am eager to carry into the investment domain.'),
+  P('Joining the esteemed team would be a significant step in my professional journey. I am keen to leverage my foundational knowledge in real estate, combined with my passion for investment, to contribute meaningfully to your team\'s ongoing and future projects.'),
+  P('Thank you for considering my application. I am eager to discuss how my background and your team\'s needs can align to create mutual value. Please find my CV attached for your reference. I look forward to the possibility of discussing my application further.'),
+  P('Warm regards,'),P('Lucas Montague')
+ ]},{cls:'cv3 hdr',b:[
+  N('LUCAS MONTAGUE, BSc (Hon), AssoRICS'),CT('Mobile: +44 XXXX XXXXXX     Email: lucas.monty@email.com'),
+  H('PROFESSIONAL EXPERIENCE'),
+  R('Assistant Real Estate Surveyor - Property Consultancy Co., Glasgow','July 2023 - Present'),
+  B('Conducted over 150 property inspections, ensuring compliance with regulatory standards and identifying potential issues for clients.'),
+  B('Assisted senior surveyors in preparing detailed property reports, highlighting valuation metrics and potential investment opportunities.'),
+  B('Liaised with estate agents, property developers, and other professionals to facilitate seamless property transactions.'),
+  B('Attended workshops and training sessions to stay updated with industry trends, tools, and best practices.'),
+  R('Intern, Office Agency and Consultant - Real Estate Agency & Partners., Glasgow','June 2021 - August 2022',{chk:'A 14-month internship that overlaps a full-time degree (to June 2023).'}),
+  B('Conducted research on local property markets, analysing trends and prices.'),
+  B('Supported the agency team in preparing promotional materials for property listings.'),
+  B('Assisted in organising property viewings and liaising with potential buyers.'),
+  H('EDUCATION AND PROFESSIONAL MEMBERSHIPS'),
+  B('BSc (Hons) Real Estate Surveying with High 2:1 final grade (67), University of West Scotland, Paisley, Scotland; September 2019 - June 2023'),
+  B('Associate Member of Royal Institution of Chartered Surveyors (RICS); Jan 2024'),
+  B('Applying Chartered Member of RICS (Jan 2025 exp.)'),
+  H('SKILLS'),
+  B('Property Surveying: Proficient in conducting thorough and systematic property inspections.'),
+  B('Valuation: Skilled in using a variety of valuation methods to estimate property value (DCF, T&R, residual)'),
+  B('Report Writing: Capable of preparing detailed and comprehensive property reports. Proficient with MS Office.'),
+  B('Communication: Effective in liaising with clients, stakeholders, and professionals in the property sector.'),
+  B('Software Proficiency: Proficient in property management software and tools e.g. CoStar.'),
+  H('PERSONAL INTERESTS'),
+  B('Triathlon; Mountaineering'),
+  P('References from the current employer are available upon request.')
+ ]}],
+ strengths:['AssocRICS with 150+ property inspections','DCF, T&R and residual valuation methods','Report writing and CoStar experience'],
+ gaps:['About two years of post-graduation experience','Letter claims more relationship-building than the CV supports','Based in Glasgow; relocation unclear'],
+ grow:['Year 1: complete the chartered pathway','Year 3: specialise (hotel, student or digital assets)','Year 5: lead a valuation team']},
+
+{id:4,name:'Siriya Jirapat',first:'Siriya',headline:'MSc Real Estate (Reading); hospitality background in Thailand',
+ secs:[{cls:'letter',b:[
+  P('Siriya Jirapat'),P('12 Shinfield Road, Reading, [Postcode], UK'),P('[Email Address]   [Phone Number]   [Date]   [Recruiter\'s info TBU]'),
+  P('Dear sir/madam,'),
+  P('I wish to tell you of my interest to work at your company. I study MSc in Real Estate at the University of Reading and before, I study BSc in Hospitality at Kasetsart University. I think my experience can contribute to the role posted in several aspects.'),
+  P('In Thailand, I worked at an international resort, InterContinental Chiang Mai. It teaches me how to give good service and understand what customer wants. I believe in real estate job, I must also bring customers the best experience, like in hospitality. I want to use my experience to help people find good property that they like.'),
+  P('I learn many things in UK about real estate market. In my master study, I know about how to track property value and understand the market drivers. This knowledge can be useful for the international clients. UK property market is different from Thailand, but I learn fast and want to help both UK people and people from other countries.'),
+  P('I also think using technology is very important. In Thailand, many hotels use online promotion and social media to make customers interested. It has help my previous company improving the business, so I hope to bring this idea to the UK real estate too.'),
+  P('I hope you will consider my letter and CV attached. I am excited to join the group and show how I can help. Please let me know if you have questions or want to talk more.'),
+  P('Thank you for your time. I am looking forward to hear from you.'),
+  P('Best regards,'),P('Siriya Jirapat')
+ ]},{cls:'cv4 hdr',b:[
+  N('SIRIYA JIRAPAT'),CT('12 Shinfield Road, Reading, Postcode, UK'),CT('Mobile: +44 XXXX XXXXXX     Email: siriyajirapat@email.com'),
+  H('PERSONAL HIGHLIGHTS'),
+  P('Currently studying MSc Real Estate in UK. Knowledge about real estate valuation and investment, development etc. With T4 Post Study Working visa valid till 2027.',{nj:'Visa / right-to-work status (check legally, but it is not a judgement of ability)',chk:'"T4 Post Study Working" is not a current visa name. Right to work should be verified properly.'}),
+  P('Working experience in international hotel in Thailand; good knowledge about hotel service industry and international client care.'),
+  P('Proficient in English (IELTs 6.5), Thai (Native), Teochew (Native).'),
+  H('EDUCATION'),
+  R('MSc in Real Estate, University of Reading, UK','Sep 2024 - Jun 2025'),
+  B('Merit Degree 2024',{chk:'"Merit Degree 2024" but the course runs to June 2025. Is it awarded or expected?'}),
+  B('Modules: Real Estate Development, Property Valuation, International Real Estate Markets, Real Estate Investment and Finance.'),
+  B('International Fieldtrip to European countries.'),
+  B('Final Project: "Impact of International Tourism on Local Real Estate Markets: A Case Study of Phuket."'),
+  R('BSc in Hospitality Management, Kasetsart University, Bankok, Thailand','May 2016 - Apr 2020'),
+  B('GPA 3.7/4 (first-degree equivalent)'),
+  B('Programme Focus: Hotel Management, Service Excellence, and International Hospitality Operations.'),
+  H('WORKING EXPERIENCE'),
+  R('Guest Relations Officer, InterContinental Chiang Mai the Mae Ping, Thailand','Jul 2020 - Jul 2023'),
+  B('Managed guest experiences, ensuring top-tier service standards and addressing client requests with promptness.'),
+  B('Liaised with international clients, offering tailored services based on cultural nuances and preferences.'),
+  B('Collaborated with the marketing team to strategise promotional activities targeting international travellers.'),
+  B('Analysed guest feedback to drive continuous improvements in service quality.'),
+  R('Associate, Property Management, Hotel Family Co., Pattaya City, Thailand','May 2017 - Aug 2019',{chk:'Full-time job in Pattaya overlapping a full-time degree in Bangkok (to April 2020).'}),
+  B('Marketing and leasing plan of premium properties to both local and international clients.'),
+  B('Conducted market research to gauge property trends and investment opportunities in popular tourist destinations.'),
+  B('Facilitated property viewings and collaborated with legal teams to ensure smooth transaction processes.'),
+  H('SKILLS AND SOFTWARE'),
+  B('Real Estate Modelling: valuation, investment and development model with Excel and Altus'),
+  B('Client Relationship Management: Proficient in building and maintaining rapport with an international clientele.'),
+  B('Market Analysis: Skilled in assessing real estate market trends and investment opportunities. Familiar with Booking.com, TripAdvisor, Ctrip.com with business contacts in Thailand'),
+  B('Cultural Diversity: Adept at catering to a diverse client base, understanding and respecting cultural intricacies.')
+ ]}],
+ strengths:['International client care and hospitality operations','MSc Real Estate with a tourism-market dissertation','Excel and Altus modelling; Southeast Asian business contacts'],
+ gaps:['Limited UK market, tax and legal knowledge','Written English in the letter needs polish (IELTS 6.5)','Gap from July 2023 to September 2024; sponsorship needed later'],
+ grow:['Year 1: UK transactions, tax and leasing training','Year 3: own a client portfolio','Year 5: lead the Southeast Asia to UK desk']},
+
+{id:5,name:'Layla Al-Hashem',first:'Layla',headline:'Architect from Aleppo, urban design focus',
+ secs:[{cls:'cv5 hdr',b:[
+  N('LAYLA AL-HASHEM'),CT('27 Rose Lane, City, Postcode, UK'),CT('Email: layla.alhashem@email.com     Instagram: @laylanewlifeuk'),
+  H('PERSONAL STATEMENT'),
+  P('I am a driven and innovative architect with a rich background in Syrian architectural design and urban planning. Offering over six years of experience in conceptualising and executing diverse architectural projects.',{chk:'Claims six-plus years of experience, but only one role (2018-2019) is listed.'}),
+  P('As a mother, I possess a unique perspective on family-centric spaces and their importance in today\'s life.',{nj:'Parental status'}),
+  P('As an architect with a deep-rooted passion for urban design, I am driven by the interplay of form, function, and the human experience. Despite of the disturbance of the war in Syria, since my arrival in the UK, I\'ve harnessed the power of visual storytelling through my Instagram account, using it as a platform to showcase my sketches and works, and simultaneously creating a communal space for those sharing a similar journey. This digital window has not only amplified my designs but also underscored the significance of inclusive spaces in the area I am living. I am determined to contribute to the UK\'s urban landscape by infusing it with designs that are both aesthetically pleasing and socially resonant.'),
+  H('PROFESSIONAL EXPERIENCE'),
+  R('Architectural Designer, Architecture Firm, Aleppo, Syria','2018 - 2019'),
+  B('Led a team of five in the design and execution of residential projects and public facilities, ensuring integration of traditional Syrian elements with contemporary requirements.'),
+  B('Collaborated with clients to develop design briefs, ensuring their visions were realised while adhering to safety standards and budget constraints.'),
+  B('Utilised CAD, SketchUp, and Revit for detailed architectural drawings and 3D visualisations.'),
+  B('Regularly liaised with builders, contractors, and suppliers to guarantee timely project completion.'),
+  H('EDUCATION'),
+  R('Bachelor of Architecture, Dokuz Eylul University, Izmir, Turkey','2013 - 2016'),
+  B('Thesis: " Traditional Ottoman Elements in Modern Architecture".'),
+  B('Relevant Courses: Sustainable Design, Urban Planning, Interior Design.'),
+  R('Bachelor of Architecture, University of Aleppo, Syria','2010 - 2012'),
+  H('CERTIFICATES'),
+  B('IELTS (Academic) overall 6.5'),
+  H('SKILLS'),
+  B('Architectural Design: Proficient in creating designs that blend traditional elements with modern requirements.'),
+  B('Software: Adept at CAD, SketchUp, Revit, and other architectural design tools.'),
+  B('Project Management: Experienced in leading teams, coordinating with clients, and ensuring project delivery within set parameters.'),
+  B('Cultural Insight: Deep understanding of Syrian cultural elements and their potential appeal in the global property market.'),
+  B('Language: Arabic (Native), English (Intermediate), Turkish (conversation)'),
+  B('Personal Interests: Family-centred activities, Syrian art and culture, Sustainable design.',{nj:'Family status'})
+ ]}],
+ strengths:['Team-lead experience in residential and public-facility design','Urban design training with sustainability focus','Lived experience that informs inclusive design; strong visual communication'],
+ gaps:['No UK registration or UK planning experience','English still developing (IELTS 6.5)','Only one role listed since 2019'],
+ grow:['Year 1: UK planning system course and registration advice','Year 3: lead community-based design projects','Year 5: head an inclusive-design programme']},
+
+{id:6,name:'Lorenzo Bianchi',first:'Lorenzo',headline:'Lead software developer at a rental PropTech',
+ secs:[{cls:'cv6 hdr',b:[
+  N('LORENZO BIANCHI'),CT('49 Digital Avenue, City, Postcode, UK'),
+  CT('Mobile: +39 XXXX XXXXXX     Email: lorenzo.bianchi@email.com',{chk:'Italian phone number with a UK address. Where is he actually based?'}),
+  CT('GitHub: https://github.com/bianchihelps     LinkedIn: www.linkedin.com/in/lorenzobianchi'),
+  H('PERSONAL STATEMENT'),
+  P("I am a results-driven computer scientist with over 7 years of programming and software development experience. Combines deep technical expertise with a keen understanding of user-centric design, making tech solutions both intuitive and efficient. With a passion for leveraging technology to revolutionise industries, I'm enthusiastic about applying my skills to the PropTech sector, driving innovation in property and real estate solutions."),
+  H('PROFESSIONAL EXPERIENCE'),
+  R('Lead Software Developer - FlatmateMatch, Milton Keynes, UK','July 2018 - Present'),
+  B('Spearheaded a team of 10 developers, coordinating efforts to design, develop, and optimise smart rent platforms.'),
+  B('Implemented machine learning algorithms to personalise user experiences and reference function, resulting in a 20% increase in platform engagement.'),
+  B('Collaborated with UX designers to create user-friendly interfaces, ensuring easy navigation and functionality.'),
+  R('Assistant Software Developer - Rent.com, Milan, Italy','April 2014 - September 2016'),
+  B("Developed modular software components for the company's main app, contributing to its swift market launch."),
+  B('Assisted in troubleshooting and debugging software issues, ensuring optimal performance and user satisfaction.'),
+  R('Part-time IT Technitian, the Student Union, University of Perugia','2011-2014'),
+  B('Supporting students IT queries. Website development and daily management for the student union.'),
+  H('EDUCATION'),
+  B('MSc in Computer Science - Politecnico di Milano, Milan, Italy - 2016 - 2018'),
+  B('BSc in Computer Science - University of Perugia, Italy - 2010-2014'),
+  H('SKILLS'),
+  B('Programming: Proficient in Java, Python, C++, SQL, and JavaScript.'),
+  B('Database Management: Adept at MySQL, PostgreSQL, and MongoDB.'),
+  B('Machine Learning: Experienced in using AI to enhance user experiences and system efficiency.'),
+  B('UX/UI Design: Knowledgeable in creating and optimising user interfaces for diverse applications.'),
+  H('LANGUAGES'),
+  B('Italian (Native); English (Fluent)'),
+  H('PERSONAL INTERESTS'),
+  B('Smart home technologies, Augmented Reality (AR) solutions, Travelling.')
+ ]}],
+ strengths:['Lead developer with smart-rent platform experience','Machine learning and UX design','Managed a team of ten'],
+ gaps:['No real-estate operations or user-research experience','Duplicates skills the existing team already has','Salary expectations likely high'],
+ grow:['Year 1: spend time in the field with property teams','Year 3: product owner for a PropTech product','Year 5: head of product']},
+
+{id:7,name:"Aoife O'Sullivan",first:'Aoife',headline:'Care-home caregiver, studying Business at the Open University',
+ secs:[{cls:'cv7 hdr',b:[
+  N("AOIFE O'SULLIVAN"),CT('[Address] | [Phone Number] | [Email Address]'),
+  H('SUMMARY'),
+  P('Dedicated and diligent professional with a diverse background in caregiving and a keen interest in the property sector. Passionate about continuous learning, as evidenced by self-taught programming skills and ongoing property business studies with the Open University. Motivated and resilient, looking to bring my unique blend of experience and education to a role in the real estate sector. I am willing to adapt to required qualifications in the property sector.'),
+  H('EDUCATION'),
+  R('BSc in Business Management, Open University','2021 - Present'),
+  B('Engaging in comprehensive studies with projects the intricacies of the property business in the UK.'),
+  R("St. Brigid's College, Co. Galway, Ireland",'2012',{chk:'Qualification in 2012 and caregiving from 2015: three years unaccounted for.'}),
+  B('NVQ Level 3 in Health and Social Care. Secondary education with humanities and social science topics. Achieved passing grades in core subjects.'),
+  H('PROFESSIONAL EXPERIENCE'),
+  R("Caregiver | St Mary's Apartment, CareHome Group | Belfast, NI",'2015 - Now'),
+  B('Cooperating with facility manager in the apartment on regular check and maintenance.'),
+  B('Provided compassionate and dedicated care to individuals, ensuring their comfort and well-being.'),
+  B('Managed schedules, medications, and coordinated with medical professionals to ensure optimal care.'),
+  B('Developed strong interpersonal skills, understanding the importance of patience and effective communication.'),
+  H('SKILLS'),
+  B('Basic Python Programming: Self-taught through online resources, with an ability to understand and modify simple scripts.'),
+  B('Property Business Fundamentals: Acquired foundational knowledge through Open University studies.'),
+  B('Caretaking: long-term engagement with vulnerable people, professional knowledge about physical and mental healthcare.',{chk:'"Professional knowledge" of physical and mental healthcare is a big claim for an NVQ Level 3. What evidence is there?'}),
+  B('Communication: Skilled in interacting with diverse individuals, both in the caregiving realm and in day-to-day interactions.'),
+  H('ACTIVITIES AND PERSONAL INTERESTS'),
+  B('Continuous learning, particularly in the realms of technology and real estate.'),
+  B('Volunteering with senior groups in the community, fostering intergenerational connections. Have organised several community events with local church.'),
+  B('Family-oriented activities, spending quality time with my child and the neighbourhood.',{nj:'Parental status'})
+ ]}],
+ strengths:['Years of day-to-day work with vulnerable older people','Works with the facility manager on maintenance checks','Self-taught Python; studying business at the Open University'],
+ gaps:['No formal property or software-development qualifications','Limited exposure to commercial settings','Part-time study limits how quickly she can upskill'],
+ grow:['Year 1: user-research training and shadowing the developers','Year 3: lead user research on the product','Year 5: head of accessibility and ageing-tech programme']},
+
+{id:8,name:'Jack Taylor',first:'Jack',headline:'Building surveyor, ten years in a family construction firm',
+ secs:[{cls:'cv8 hdr',b:[
+  N('JACK TAYLOR'),CT("37 Builder's Lane, City, Postcode, UK     Mobile: +44 XXXX XXXXXX"),CT('Email: jack.taylor@email.com     LinkedIn: www.linkedin.com/in/jacktaylor'),
+  H('PERSONAL STATEMENT'),
+  P('A dedicated building surveyor with over 5 years of hands-on experience in the independent business, I possess in-depth knowledge of construction processes, building regulations, and survey methodologies. With a genuine passion for the industry and a track record of delivering accurate and efficient surveys, I am eager to bring my expertise to a larger platform and contribute to the growth of an established organisation.',{chk:'Says "over 5 years", but the dates (March 2016 to present) imply considerably longer.'}),
+  H('PROFESSIONAL EXPERIENCE'),
+  R('Building Surveyor - Taylor & Sons Construction, City','March 2016 - Present',{chk:'Same firm for apprenticeship and role, and it shares his surname. References would be hard to verify independently.'}),
+  B('Led building surveys for over 200 projects, ranging from residential properties to small commercial buildings.'),
+  B('Collaborated closely with architects, builders, and property buyers to provide detailed feedback and actionable recommendations.'),
+  B('Conducted in-depth analysis of structures, identified potential issues, and suggested preventive measures.'),
+  B('Assisted in business development, contributing to a 30% increase in project acquisition over a two-year span.'),
+  R('Junior Surveyor (Apprenticeship) - Taylor & Sons Construction, City','January 2014 - February 2016'),
+  B('Supported senior surveyors in fieldwork, including measurements, data recording, and report preparation.'),
+  B('Learned hands-on about construction materials, quality control, and structural integrity checks.'),
+  H('EDUCATION'),
+  B('BTEC Level 3 National Diploma in Construction and the Built Environment - Local College, September 2011 - June 2013; Grade: Distinction* Distinction* Merit'),
+  H('SKILLS'),
+  B('Surveying Tools: Proficient in using modern surveying equipment including total stations, GPS devices, and laser scanners.'),
+  B('Software Proficiency: Competent in AutoCAD, Revit, and other surveying software.'),
+  B('Analytical Skills: Strong ability to analyse structural integrity, detect faults, and offer solutions.'),
+  B('Communication: Excellent verbal and written skills, with a track record of working seamlessly with construction teams and clients.'),
+  H('PERSONAL INTERESTS'),
+  B('Local history, Architectural design, DIY projects.')
+ ]}],
+ strengths:['200+ building surveys and strong technical diagnosis','Laser scanners, total stations, CAD and Revit','Good at working with contractors; contributed to business growth'],
+ gaps:['No degree or RICS route yet','Experience only in a family firm','No financial or asset-management background'],
+ grow:['Year 1: part-time degree or RICS pathway','Year 3: lead retrofit and energy audits','Year 5: head of technical due diligence']},
+
+{id:9,name:'Jordan Rivers',first:'Jordan',headline:'Urban planning researcher, MPhil Manchester',
+ secs:[{cls:'cv9 hdr',b:[
+  N('JORDAN RIVERS (They/Them)',{nj:'Pronouns'}),CT('45 Urban Street, City, Postcode, UK     Mobile: +44 XXXX XXXXXX'),CT('Email: jordan.rivers@email.com     LinkedIn: www.linkedin.com/in/jordanrivers'),
+  H('SUMMARY'),
+  P('An enthusiastic researcher with a robust academic foundation in geography and planning. With over 3 years of dedicated research experience and a deep interest in public policy development, I am keen to contribute towards shaping the urban and rural landscapes of tomorrow. My analytical skills, combined with my passion for community-centric development, drive my ambition to influence policy that is both sustainable and inclusive.'),
+  H('PROFESSIONAL EXPERIENCE'),
+  R('Research Assistant, Manchester University Research Institute, Manchester','September 2020 - Present'),
+  B('Assisted in the research of urban planning models, resulting in 3 published papers in peer-reviewed journals.'),
+  B('Collaborated with a team to conduct extensive field studies, gathering and analysing data to inform sustainable development initiatives.'),
+  B('Presented findings at 2 international conferences, fostering collaborations with global experts.'),
+  R('Intern, Urban Development Team, Urban Development Firm, Bolton','June 2019 - August 2019'),
+  B('Participated in policy drafting and revision based on extensive data analysis and geographical considerations.'),
+  B('Conducted spatial analysis using GIS tools to provide visual representations of urban growth patterns.'),
+  B('Engaged with community stakeholders to gather feedback on proposed planning initiatives.'),
+  H('EDUCATION'),
+  R('MPhil in Urban and Regional Planning, The University of Manchester, UK','2018 - 2020'),
+  B('Focus: Sustainable Development and Geographic Information Systems (GIS).'),
+  B('Dissertation: "Public Participation in Urban Development: A Case Study of Prescot."'),
+  R('BSc (Hons) in Geography - The University of Manchester, UK','2015-2018'),
+  B('Achieved: First Class Honours'),
+  B('Undertook modules on public policy, environmental planning, and urban sociology.'),
+  H('SKILLS'),
+  B('Research: Proficient in both qualitative and quantitative research methodologies.'),
+  B('GIS Tools: Experienced in ArcGIS, QGIS, and other spatial analysis software.'),
+  B('Policy Analysis: Capable of assessing and crafting policy recommendations based on thorough research.'),
+  B('Team Collaboration: Effective in interdisciplinary team settings, contributing diverse expertise and perspectives.'),
+  H('OTHER EXPERIENCE'),
+  P('I am an urban photographer interested in post-industrial city and life. See my exhibition Young Wanderers in Gallery ABC.')
+ ]}],
+ strengths:['MPhil in Urban and Regional Planning; first-class BSc','GIS and public-participation research experience','Published and presented internationally'],
+ gaps:['Academic rather than practitioner experience','No budget or delivery management yet','Limited exposure to property markets'],
+ grow:['Year 1: shadow council planners and delivery teams','Year 3: work towards chartered planner status','Year 5: lead strategic regeneration']},
+
+{id:10,name:'Jiamei (Rita) Lee',first:'Jiamei',headline:'Accountancy and Law graduate, Singapore; real estate podcaster',
+ secs:[{cls:'cv10 hdr',b:[
+  N('JIAMEI (RITA) LEE'),CT('52 Marina View, City, Postcode, Singapore     Mobile: +65 XXXX XXXX     Email: jm.r.lee@email.sg'),
+  CT('LinkedIn: www.linkedin.com/in/jamielee     Podcast: Drunkonomics',{chk:'Name is "Jiamei" but the LinkedIn address says "jamielee".'}),
+  P('Hi! I am a meticulous and dedicated professional with a major in Real Estate related subject and a minor in Law. With a solid foundation in both financial and legal frameworks, I am keen to leverage this unique combination in the real estate asset management and investment sector. Fluent in multiple Asian languages, I can bring a diverse and multifaceted approach to international real estate investment opportunities.',{chk:'Claims a Real Estate major, but the degree listed is Accountancy with a minor in Law.'}),
+  P('I can adapt to the new trends even working under pressure - this can be shown by the podcast I started to run during my maternity leave.',{nj:'Maternity leave'}),
+  H('PROFESSIONAL EXPERIENCE'),
+  R('Freelance Writer and Podcaster, Drunkonomics','January 2023 - till now'),
+  B('Podcast updated on weekly basis on real estate investment market insights and commentary. Episodes being reposted by major market media.'),
+  B('Multitasking on topic selection and drafting, podcast recording, editing and marketing.'),
+  R('Finance Analyst Intern - Real Estate Investment Firm, London, UK','June 2021 - December 2021'),
+  B('Assisted in the analysis and valuation of potential real estate investments across Southeast Asia.'),
+  B('Collaborated with the legal team to ensure compliance with local property laws and regulations.'),
+  B('Utilised multilingual skills to facilitate communication with foreign partners and stakeholders.'),
+  R('Assistant Surveyor - Deloitte Real Estate, Singapore','January 2020 - May 2021',{chk:'A "Surveyor" title with duties that are financial records and audits; and a job that overlaps the degree (to July 2021).'}),
+  B('Managed financial records for a diverse clientele, including several local real estate developers and investors.'),
+  B("Collaborated with the firm's legal department to address potential tax implications related to property acquisitions."),
+  B('Conducted financial audits, ensuring accuracy and adherence to established regulations.'),
+  H('EDUCATION'),
+  R('Bachelor of Accountancy with Minor in Law; Singapore Institute of Management and University of Manchester','August 2017 - July 2021'),
+  B('Engaged in coursework on real estate finance, property valuation, and contract law.'),
+  B('Completed a dissertation on "On the Cost of Tax Relief: Impact of 90% distribution rule to REITs financing strategies"'),
+  B("Active member of the university's Real Estate Investment Club."),
+  H('SKILLS'),
+  B('Financial Analysis: Proficient in evaluating the viability and potential returns of real estate investments.'),
+  B('Legal Compliance: Well-versed in property laws and regulations across various Asian jurisdictions.'),
+  B('Multilingual: Native in Mandarin and Hindi, Fluent in English, and conversational in Thai and Bahasa Indonesia.'),
+  B('Software Proficiency: Competent in accounting software such as QuickBooks and financial modelling tools.'),
+  B('Podcast and social media: good sense in new topics and market insights'),
+  H('PERSONAL INTERESTS'),
+  B('Cross-border real estate trends, Asian art and culture, Financial technology.')
+ ]}],
+ strengths:['Accountancy and law grounding; REIT-finance dissertation','Multilingual with Southeast Asian investment exposure','Started and runs a weekly market podcast'],
+ gaps:['Job titles do not match the listed duties','UK experience limited to a six-month internship','Singapore-based: relocation and right to work to resolve'],
+ grow:['Year 1: UK tax and property law upskilling','Year 3: own a client portfolio','Year 5: lead cross-border advisory']}
+];
+
+/* Assign line ids */
+CANDS.forEach(c=>{let i=0;c.lines={};c.secs.forEach(s=>s.b.forEach(b=>{if(b.t!=='h'){b.id=c.id+'.'+(i++);c.lines[b.id]=b;}}));});
+const CAND=id=>CANDS.find(c=>c.id===+id);
+
+/* Attributes used by stakeholder cards */
+const ATTR={1:{ready:2,pot:3,client:1,cred:1,cost:1},2:{ready:2,pot:2,client:2,cred:3,cost:3},3:{ready:3,pot:2,client:2,cred:3,cost:1},
+4:{ready:2,pot:3,client:3,cred:1,cost:1},5:{ready:1,pot:3,client:2,cred:1,cost:1},6:{ready:3,pot:2,client:1,cred:2,cost:3},
+7:{ready:1,pot:3,client:3,cred:1,cost:1},8:{ready:3,pot:1,client:2,cred:1,cost:2},9:{ready:2,pot:3,client:2,cred:2,cost:1},10:{ready:2,pot:3,client:3,cred:2,cost:2}};
+
+const VAC=[
+{id:'A',org:'Company A',role:'Junior valuation-data support',sector:'Leading residential agency in the North East',gem:null,decoys:[6,2],
+ text:'Your company is a leading residential agency in the North East. As part of a strategic change, the company aims to offer online housing valuation consultancy services. This includes managing a housing price valuation and forecasting app. The team is looking for a junior-level individual to support data collection, specifically focusing on housing listings and transaction information in the local area. Aside from the typical agency works, the new member will collect data from the Land Registry and comparing it with information from other regional agency competitors. The ideal candidate should possess decent numerical skills and have a basic understanding of property valuation, as their duties will include entering client housing details into the model to produce results and then explaining these outcomes to clients. The person should be a fast learner. While programming skills are not required, the candidate should be capable of maintaining regular contact with the tech support team of the valuation model.'},
+{id:'B',org:'Company B',role:'Asset manager, new student-accommodation submarket',sector:'Student accommodation company listed on the Irish Stock Exchange',gem:2,decoys:[1,5],
+ text:'You work in the asset management department in a student accommodation company that listed on Irish Stock Exchange. As the company\'s portfolio expands in a few major university towns, the team looks for an asset manager to cover one new submarket with some accommodations acquired from another brand, and a few newly innovated blocks. The asset manager would regularly engage with the property managers in respective buildings for operational updates. He/she will also collect the leasing information and financial performance reports for the finance team regularly. Addressing the energy efficiency goal has become one key strategy of the company recently, not only for the shareholders\' expectation but also for the purpose of cutting property operating costs. The company has also been discussing installing sensor facilities in the flat shared area to monitor the electricity and water usage, where the new submarket will be a test field to evaluate the cost and benefits. The new asset manager will also be involved with the sensor facility project.'},
+{id:'C',org:'Company C',role:'Entry-level adviser for Southeast Asian investors in UK property',sector:'Financial adviser for high-net-worth clients',gem:4,decoys:[1,3],
+ text:'Your company work as a financial advisor that helps High Net Worth clients from Southeast Asia invest in the UK. With more clients going overseas into the UK, your team need someone who understands both UK and Southeast Asian markets. The clients need advisory not only on where to invest a house, but usually it would involve with leasing property management, as some clients wouldn\'t be based in the UK. Someone at the entry-level can assist the senior manager with the daily role and client care. Travelling between countries would be common. In some cases the clients could also be interested in immigration, children\'s education and legal consultancy in the UK. It will be an advantage if the person knows a bit about immigration law and tax regulations, and contacts the solicitor partners when suits.'},
+{id:'D',org:'Institution D',role:'Town-centre planner',sector:'Gnawtown local council',gem:5,decoys:[2,8],
+ text:'The Gnawtown local council is grappling with a few challenges regarding its town centre. After the COVID-19 pandemic, there has been a noticeable drop in the number of people working or just strolling on the high street. Then there\'s the issue of the overpowering neon lights, which used to be what the council promoted in the late 90s to attract people to the public space. But many facilities have not been appropriately maintained, and it seems they are more off-putting than inviting the local residents. The rundown buildings and the high street look even depressed with many shops closed down since the pandemic. On top of all that, the town has started to accommodate an influx of refugees in recent years, and there\'s a pressing need to create spaces to make both locals and the new residents feel at home. The council plans to establish a strategic team for town centre renovation. The board is seeking a planner who can help navigate these issues, transforming the town centre into an inclusive and welcoming space for all.'},
+{id:'E',org:'Company E',role:'Hospitality valuer (senior level)',sector:'Top-notch property consultancy, valuation team',gem:2,decoys:[3,6],
+ text:'The valuation team of a top-notch property consultancy firm is in a bit of a pickle. They are looking for a valuer for the hospitality branch - from swanky ones to hostels and even remote resorts. Many of these spots are in some remote areas so driving for inspection is essential. The person needs to know hotel valuation practice, but would also be able to be innovative: the recent question the team faces very often is how to value old hotel buildings that have been renovated and reach a higher energy efficiency, especially since there aren\'t many industry standards to lean on. So they\'re really hoping to find someone who\'s not only comfortable with the general routine, but has that spark of "research spirit". The company is willing to pay for a senior-level salary or even an associate director if the candidate is really competitive. They hope the new member not just "go by the book", but to help the team come up with guidance that could set the tone as an industry lead in hotel valuation practice in the future.'},
+{id:'F',org:'Company F',role:'User-needs liaison for an elderly smart-home app',sector:'PropTech start-up',gem:7,decoys:[6,5],
+ text:'You are one of the founders of a PropTech startup. A recent project you are planning with the team is to develop a smart home app specially designed for vulnerable elderly people to monitor their indoor activities in their homes. It could provide convenience on remote control, indoor safety, pet feeding etc. You\'ve been engaging a with few senior housing sites and care homes to learn the features and design, but still need to understand the real-life needs of elderly and vulnerable groups. Your colleagues, as a group of programmers, reckon there should be someone with a different background to help out, rather than all of you staying indoors brainstorming. The team hopes to find someone who can work with the property management team, have a close connection with the senior residents, and really get to the bottom of what they need. It will be great if this person also knows a bit about app development so he/she can pass it on to the programmers in a way that makes sense to them.'},
+{id:'G',org:'Company G',role:'Asset manager, data-centre portfolio',sector:'Global real estate investment fund',gem:2,decoys:[1,8],
+ text:'Your company is a global real estate investment fund that has recently completed the acquisition of a mid-sized data centre portfolio across the UK. The fund has traditionally focused on office and logistics assets, so this is its first foray into digital infrastructure. A dedicated asset management team is being formed to oversee the performance of these facilities and to work closely with the fund\'s technical partners and tenants, ranging from cloud-service providers to AI computing firms. As the fund explores a "green digital" investment strategy, the asset manager will contribute to identifying and evaluating efficiency technologies (e.g. liquid cooling or renewable-powered systems) and translating technical outcomes into financial impacts. A main challenge is to get someone who understands the "business": existing members from the investment and real estate background don\'t know much beyond tenancy structures and service-charge budgets, while the key performance indicators like power usage effectiveness (PUE), uptime, and other sustainability compliance remain crucial when liaising with the fund\'s ESG and investment teams on retrofit opportunities. The team is looking for someone who has the capacities to bridge real-estate and infrastructure knowledge -- ideally with experience in high-spec commercial or industrial buildings, solid financial modelling skills, and curiosity about the fast-changing digital economy.'}
+];
+
+/* Fit of candidates 1..10 for each vacancy (0 = no fit, 5 = excellent). Facilitator-adjustable. */
+const FIT={A:[5,1,4,2,0,2,1,1,2,3],B:[2,4,2,1,0,2,1,3,1,4],C:[1,1,2,4,0,0,0,0,1,5],D:[0,3,0,0,4,0,2,1,5,0],
+           E:[0,4,3,3,0,0,0,2,1,1],F:[0,1,0,1,2,2,5,1,3,0],G:[2,4,3,1,0,3,0,2,1,3]};
+
+const WHY={
+A1:'Numerate, with Excel modelling and housing-market research. A fast-learning junior profile that matches the brief closely.',
+A3:'Real valuation methods and report writing, so productive quickly. The role is more data-led than inspection-led.',
+A10:'Strong numbers and finance, but this is junior data work. Likely overqualified and a flight risk.',
+A6:'Excellent technical skills, but programming is explicitly not required and the role may bore a lead developer.',
+A2:'Valuation knowledge, but too senior for a junior data role. A flight risk.',
+B2:'Sustainability and large-project management fit the energy-efficiency pilot. No asset-management track record.',
+B10:'Finance and reporting strengths match the asset-manager duties. No sensor or energy experience.',
+B8:'Understands buildings, retrofit and technical systems. Needs finance and reporting upskilling.',
+B1:'Good with numbers but little operational or property-management exposure.',
+B5:'Design skills, but a weak match to operations, reporting and finance duties.',
+C4:'Service mindset from hospitality, Southeast Asian contacts, Excel/Altus modelling and a real-estate MSc. Lacks UK legal and tax knowledge.',
+C10:'Finance, a law minor, tax exposure and Southeast Asian languages match the brief. UK presence needs resolving.',
+C1:'UK housing research, but no cross-border or client-facing experience.',
+C3:'Useful inspection experience, but this role is advisory and cross-border.',
+D9:'Planning research, public-participation focus and GIS are directly on brief. Lacks delivery experience.',
+D5:'Inclusive design and lived experience of displacement are valuable. UK planning credentials are missing.',
+D2:'Sustainable urban development expertise, but a senior engineer rather than a town-centre planner.',
+D8:'Strong on buildings, little on public space, policy or inclusion.',
+E2:'Valuation teaching plus sustainability research suits the retrofit-valuation puzzle. Lacks hotel practice.',
+E3:'Valuation methods and inspections, but junior against a senior-level post.',
+E4:'Hospitality knowledge plus valuation training. Lacks seniority and inspection track record.',
+E6:'Technically excellent, but nothing to do with valuation.',
+F7:'Daily contact with vulnerable older people, works with facility managers, and has basic Python. Everything on the brief.',
+F9:'Field research and stakeholder engagement help understand users. No property-management link.',
+F6:'Great app skills, but the team already has programmers and asked for a different background.',
+F5:'User-centred design instincts, but no contact with elderly users or property teams.',
+G2:'Infrastructure engineering plus Excel valuation models bridge real estate and technical assets. Needs data-centre KPIs.',
+G3:'Property valuation and reporting. Limited technical or infrastructure grounding.',
+G6:'Understands technology and ML, but not leases, funds or financial modelling.',
+G10:'Financial modelling and REIT knowledge fit. No infrastructure exposure.',
+G1:'Modelling skills, but no asset-management or infrastructure background.',
+G8:'Strong building knowledge, weak on financial modelling and fund reporting.'};
+
+
+/* ---------- Job-post drafting task ---------- */
+const LEVELS=['Entry or junior level','Mid level','Senior level'];
+const GENERIC=[
+ ['Native English speaker','x','Fluent English may be needed, but "native" excludes capable people and can be discriminatory.'],
+ ['Digital native, ideally under 30','x','This is an age requirement. It is not about the job.'],
+ ['Able to work any hours with no family commitments','x','This assumes something about family status and is not job-related.'],
+ ['Degree from a top-ranked university only','x','Not in the brief, and narrows the pool without evidence the job needs it.']];
+const DRAFT={
+A:{titles:['Junior Valuation Data Assistant','Senior Surveyor','Software Support Analyst'],level:[0],chips:[
+ ['Collect housing listing and transaction data in the local area','d'],
+ ['Gather Land Registry data and compare it with regional competitor agencies','d'],
+ ['Enter client housing details into the valuation model to produce results','d'],
+ ['Explain valuation results to clients','d'],
+ ['Keep regular contact with the valuation model\'s tech support team','d'],
+ ['Decent numerical skills','m'],['Basic understanding of property valuation','m'],['Fast learner','m'],
+ ['Comfortable working with spreadsheets or data tools','n'],
+ ['Programming skills','x','The brief says programming skills are not required.'],
+ ['Several years of valuation experience','x','This is a junior role.']]},
+B:{titles:['Asset Manager, Student Accommodation','Property Manager (single building)','Energy Systems Engineer'],level:[1],chips:[
+ ['Cover the new submarket, including acquired and newly renovated blocks','d'],
+ ['Engage regularly with property managers on operational updates','d'],
+ ['Collect leasing information and financial performance reports for the finance team','d'],
+ ['Contribute to the company\'s energy-efficiency strategy','d'],
+ ['Take part in the sensor project and evaluate its costs and benefits','d'],
+ ['Asset management or property management knowledge','m'],
+ ['Able to build working relationships with on-site property managers','m'],
+ ['Able to read leasing and financial performance reports','m'],
+ ['Familiarity with building sensors or smart metering','n'],
+ ['Experience in student accommodation or purpose-built housing','n'],
+ ['Qualified electrical engineer','x','The sensor project is something to take part in, not a technical qualification the job needs.'],
+ ['Experience preparing stock exchange filings','x','The company is listed, but this role collects reports for the finance team.']]},
+C:{titles:['Investment Adviser (Entry Level)','Immigration Solicitor','Estate Agent'],level:[0],chips:[
+ ['Assist the senior manager with daily work and client care','d'],
+ ['Advise clients on where to invest in UK property','d'],
+ ['Coordinate leasing and property management for clients based overseas','d'],
+ ['Travel between countries','d'],
+ ['Contact solicitor partners when needed','d'],
+ ['Understanding of both UK and Southeast Asian markets','m'],
+ ['Client-care and relationship skills','m'],
+ ['Willing to travel internationally','m'],
+ ['Basic knowledge of immigration law and tax regulations','n'],
+ ['Awareness of UK education and legal needs of overseas families','n'],
+ ['Qualified immigration solicitor','x','Far too senior. The brief asks for entry level and says legal knowledge is an advantage, not a requirement.'],
+ ['Ten years of advisory experience','x','This is an entry-level role.']]},
+D:{titles:['Town Centre Planner','Highways Engineer','Council Press Officer'],level:[1],chips:[
+ ['Develop a strategy to bring people back to the high street after the pandemic','d'],
+ ['Review the neon lighting and poorly maintained public facilities','d'],
+ ['Address empty shops and run-down buildings','d'],
+ ['Create spaces where locals and new refugee residents feel at home','d'],
+ ['Work in the new town-centre renovation strategic team','d'],
+ ['Knowledge of town or urban planning','m'],
+ ['Able to engage communities and understand different needs','m'],
+ ['Commitment to inclusive public space','m'],
+ ['Experience with GIS or spatial analysis','n'],
+ ['Experience drafting policy','n'],
+ ['Must have lived in Gnawtown for ten years','x','Residency length is not related to doing the job and could exclude the new residents the council wants to serve.'],
+ ['Registered architect','x','The brief asks for a planner, not a registered architect.']]},
+E:{titles:['Hospitality Valuer','Hotel General Manager','Facilities Manager'],level:[2],chips:[
+ ['Value hospitality assets, from luxury hotels to hostels and remote resorts','d'],
+ ['Drive to remote sites for inspections','d'],
+ ['Work out how to value renovated, energy-efficient older hotels','d'],
+ ['Help the team write guidance that sets industry practice','d'],
+ ['Knowledge of hotel valuation practice','m'],
+ ['Able to drive to remote locations','m'],
+ ['Innovative, with a research mindset','m'],
+ ['Experience at senior level','m'],
+ ['Knowledge of energy efficiency and sustainability in buildings','n'],
+ ['Published research or guidance','n'],
+ ['Follows standard methods only','x','The brief wants someone who does not just "go by the book".'],
+ ['No experience necessary','x','This is a senior post, paid at senior or associate director level.']]},
+F:{titles:['User Research Liaison, Elderly Smart Home','Senior Software Developer','Care Home Manager'],level:[1],chips:[
+ ['Work with the property management team at senior housing sites and care homes','d'],
+ ['Build close contact with senior residents to learn their real needs','d'],
+ ['Pass user needs to the programmers in a way that makes sense to them','d'],
+ ['Contribute to features such as remote control, indoor safety and pet feeding','d'],
+ ['Close connection with older and vulnerable people','m'],
+ ['Able to work with property managers','m'],
+ ['Clear communication with technical colleagues','m'],
+ ['Basic knowledge of app development','n'],
+ ['Experience in user research','n'],
+ ['Understanding of care settings','n'],
+ ['Senior software engineering experience','x','The team already has programmers and asked for someone with a different background.'],
+ ['Machine-learning expertise','x','Not in the brief. The gap is user insight, not more engineering.']]},
+G:{titles:['Asset Manager, Digital Infrastructure','Data Centre Technician','Retail Property Surveyor'],level:[1,2],chips:[
+ ['Oversee the performance of the data-centre portfolio','d'],
+ ['Work with technical partners and tenants such as cloud and AI computing firms','d'],
+ ['Identify and evaluate efficiency technologies such as liquid cooling and renewable power','d'],
+ ['Translate technical outcomes into financial impacts','d'],
+ ['Liaise with ESG and investment teams on retrofit opportunities','d'],
+ ['Solid financial modelling skills','m'],
+ ['Able to bridge real estate and infrastructure knowledge','m'],
+ ['Understanding of KPIs such as PUE and uptime','m'],
+ ['Experience in high-spec commercial or industrial buildings','n'],
+ ['Curiosity about the fast-changing digital economy','n'],
+ ['Knowledge of sustainability compliance','n'],
+ ['Certified data-centre electrical engineer','x','The role translates technical outcomes into finance. It is not a hands-on engineering post.'],
+ ['Experience only in retail property','x','The fund needs someone to bridge into infrastructure.']]}
+};
+const STLAB={d:'Duty',m:'Must-have',n:'Nice-to-have'};
+const specCache={};
+function draftSpec(d){
+  if(specCache[d.code])return specCache[d.code];
+  const dr=DRAFT[d.vac.id],r=rngFor(d.code+'D');
+  const gen=shuffle(GENERIC,r).slice(0,2);
+  const items=shuffle(dr.chips.concat(gen),r).map((c,i)=>({i,text:c[0],kind:c[1],why:c[2]||''}));
+  const titles=shuffle(dr.titles.map((t,k)=>({t,ok:k===0})),r);
+  return specCache[d.code]={items,titles,okLevels:dr.level};
+}
+function scoreDraft(spec,title,level,st){
+  let pts=0,max=0;const traps=[],missed=[],misfiled=[];
+  spec.items.forEach(it=>{const x=st(it.i)||'0';
+    if(it.kind==='x'){if(x!=='0'){pts-=1;traps.push(it);}}
+    else{max++;if(x===it.kind)pts++;else if(x==='0')missed.push(it);else misfiled.push({it,x});}});
+  const t=spec.titles[title];max++;const titleOk=!!(t&&t.ok);if(titleOk)pts++;
+  max++;const levelOk=level!==''&&level!=null&&spec.okLevels.includes(+level);if(levelOk)pts++;
+  return {score:clamp(Math.round(10*pts/max),0,10),traps,missed,misfiled,titleOk,levelOk};
+}
+function postDoc(d,spec,title,level,st){
+  const T=spec.titles[title]?spec.titles[title].t:'(job title not chosen)';
+  const L=(level!==''&&level!=null&&LEVELS[level])?LEVELS[level]:'(level not chosen)';
+  const g=k=>spec.items.filter(it=>(st(it.i)||'0')===k).map(it=>it.text);
+  const secs=[['Key responsibilities',g('d')],['Essential requirements',g('m')],['Desirable',g('n')]];
+  const tail='Visa sponsorship is available where needed. We welcome applications from all backgrounds.';
+  let html=`<article class="paper advert hdr" aria-label="Job post"><div class="nm">${esc(T)}</div><div class="ct">${esc(L)}. ${esc(d.vac.org)}, ${esc(d.vac.sector)}</div>`;
+  let text=T+' ('+L+')\n'+d.vac.org+', '+d.vac.sector+'\n';
+  secs.forEach(([h,a])=>{
+    html+=`<h4>${esc(h)}</h4>`+(a.length?`<ul>${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p class="dt">Nothing added yet.</p>');
+    text+='\n'+h+'\n'+(a.length?a.map(x=>'- '+x).join('\n'):'- (none)')+'\n';
+  });
+  html+=`<p class="dt" style="margin-top:12px">${esc(tail)}</p></article>`;text+='\n'+tail+'\n';
+  return {html,text};
+}
+function fbHTML(sc){
+  const ess=sc.missed.filter(i=>i.kind==='m').concat(sc.misfiled.filter(m=>m.it.kind==='m').map(m=>m.it));
+  const wrong=sc.misfiled.map(m=>`<li>${esc(m.it.text)} <span class="mute">(better as: ${STLAB[m.it.kind]})</span></li>`).join('');
+  return `<p><b>Job post score: ${sc.score} out of 10</b></p>
+   <p>${sc.titleOk?'Good job title.':'The job title does not match the brief.'} ${sc.levelOk?'Seniority level fits.':'Check the seniority level against the brief.'}</p>
+   ${sc.traps.length?`<p><b>Included, but should not be:</b></p><ul>${sc.traps.map(t=>`<li>${esc(t.text)}: <span class="mute">${esc(t.why)}</span></li>`).join('')}</ul>`:'<p>No traps included.</p>'}
+   ${ess.length?`<p><b>Essential requirements not filed as must-haves:</b></p><ul>${ess.map(i=>`<li>${esc(i.text)}</li>`).join('')}</ul>`:'<p>All essential requirements captured.</p>'}
+   ${wrong?`<p><b>Filed under a different heading from the brief:</b></p><ul>${wrong}</ul>`:''}`;
+}
+function buildGroup(h){
+  const d=h.deal,spec=draftSpec(d),ps=h.players.filter(p=>p.draft);
+  if(!ps.length)return null;
+  const need=Math.ceil(ps.length/2);
+  const stArr=spec.items.map(it=>{const v={};let tot=0;ps.forEach(p=>{const x=p.draft.states[it.i]||'0';if(x!=='0'){v[x]=(v[x]||0)+1;tot++;}});
+    if(tot<need)return '0';return ['m','d','n'].sort((a,b)=>(v[b]||0)-(v[a]||0))[0];});
+  const maj=key=>{const c={};ps.forEach(p=>{const x=p.draft[key];if(x!==''&&x!=null)c[x]=(c[x]||0)+1;});const k=Object.keys(c).sort((a,b)=>c[b]-c[a])[0];return k===undefined?'':k;};
+  const title=maj('title'),level=maj('level');
+  const sc=scoreDraft(spec,title,level,i=>stArr[i]);
+  const diffs=spec.items.filter(it=>new Set(ps.map(p=>p.draft.states[it.i]||'0')).size>1);
+  return {spec,stArr,title,level,sc,diffs,n:ps.length};
+}
+function groupDoc(h){const g=h.group;return postDoc(h.deal,g.spec,g.title,g.level,i=>g.stArr[i]);}
+function playerDraftCode(){const p=S.pl,spec=draftSpec(p.deal),dr=p.draft;
+  return `${p.deal.code}.D${dr.title===''?'-':dr.title}${dr.level===''?'-':dr.level}.${spec.items.map(it=>dr.st[it.i]||'0').join('')}`;}
+function postPanel(reader){
+  const d=reader==='host'?S.host.deal:S.pl.deal;
+  if(reader==='host'){if(!S.host.group)return '';return `<h3 style="margin-top:14px">Your group's job post</h3>${groupDoc(S.host).html}`;}
+  const dr=S.pl.draft;if(!dr||(!Object.values(dr.st).some(v=>v&&v!=='0')))return '';
+  return `<h3 style="margin-top:14px">Your job post</h3>${postDoc(d,draftSpec(d),dr.title,dr.level,i=>dr.st[i]).html}`;
+}
+function playerPost(d){
+  const p=S.pl,spec=draftSpec(d),dr=p.draft,st=i=>dr.st[i];
+  const sel=Object.values(dr.st).filter(v=>v&&v!=='0').length;
+  const doc=postDoc(d,spec,dr.title,dr.level,st);
+  const chip=it=>{const x=dr.st[it.i]||'0';return `<button class="chipb s-${x}" data-act="chip" data-i="${it.i}" aria-label="${x==='0'?'Not included':STLAB[x]}: ${esc(it.text)}"><span class="cb">${x==='0'?'Off':STLAB[x]}</span> ${esc(it.text)}</button>`;};
+  return `<div class="panel"><h2>Draft the job post</h2>
+   <p>Read the vacancy brief, then build the advert. Tap an item to cycle: <b>Duty</b>, <b>Must-have</b>, <b>Nice-to-have</b>, then off. Some items do not belong in the post: they are not in the brief, or they are not about the job.</p>
+   <label for="jt">Job title</label><select id="jt" data-in="pl.draft.title" data-render="1"><option value="">Choose...</option>${spec.titles.map((t,k)=>`<option value="${k}" ${String(dr.title)===String(k)?'selected':''}>${esc(t.t)}</option>`).join('')}</select>
+   <label for="jl">Seniority</label><select id="jl" data-in="pl.draft.level" data-render="1"><option value="">Choose...</option>${LEVELS.map((l,k)=>`<option value="${k}" ${String(dr.level)===String(k)?'selected':''}>${esc(l)}</option>`).join('')}</select>
+   <h3 style="margin-top:14px">Key information (${sel} chosen)</h3>${spec.items.map(chip).join('')}</div>
+   <div style="margin-top:14px"><h3>Your job post so far</h3>${doc.html}</div>
+   <div class="panel" style="margin-top:14px"><h3>Share with your host</h3><p class="hint">Your host can combine everyone's drafts into one group post.</p>
+    <div class="code" style="font-size:18px;letter-spacing:.06em;word-break:break-all">${esc(playerDraftCode())}</div>
+    <div class="row" style="margin-top:10px"><button class="btn small" data-act="copyDraftCode">Copy code</button><button class="btn small" data-act="copyPost">Copy job post text</button><button class="btn small" data-act="toggleCheck">${p.check?'Hide feedback':'Check my draft'}</button></div>
+    ${p.check?`<div class="note" style="margin-top:12px">${fbHTML(scoreDraft(spec,dr.title,dr.level,st))}</div>`:'<p class="hint">Check your draft after the group has compared drafts. It shows the answers.</p>'}</div>`;
+}
+function hostDraft(){
+  const h=S.host,d=h.deal;
+  const have=h.players.filter(p=>p.draft).length;
+  let grp='';
+  if(h.group){
+    const g=h.group;
+    grp=`<div class="panel" style="margin-top:14px"><h3>Group job post (${g.n} drafts combined)</h3><p class="hint">An item is included when at least half of the drafts include it, under the heading most drafts chose.</p>${groupDoc(h).html}
+     <div style="margin-top:12px">${fbHTML(g.sc)}</div>
+     ${g.diffs.length?`<p><b>Where the drafts differed (worth discussing):</b></p><ul>${g.diffs.map(it=>`<li>${esc(it.text)}</li>`).join('')}</ul>`:'<p>The drafts agreed on every item.</p>'}</div>`;
+  }
+  return `<div class="grid g2">${timerPanel('Draft the job post')}<div>${vacancyCard(d)}</div></div>
+  <div class="panel" style="margin-top:14px"><h3>Collect drafts (${have} of ${h.players.length})</h3>
+   <p class="hint">Players open the <b>Job post</b> tab on their own device, build the advert, and share their code. Paste each code here. Then compile one group post to read the candidates against.</p>
+   <div style="overflow:auto"><table>${h.players.map((p,i)=>`<tr><td><b>${esc(p.name)}</b><div class="hint">${p.draft?'<span class="ok">draft received</span>':'waiting'}</div></td>
+     <td><label class="hint" style="margin:0" for="dc${i}">Paste job-post code</label><div class="row" style="flex-wrap:nowrap"><input id="dc${i}" type="text" placeholder="${d.code}.D12.0dm..."><button class="btn small" data-act="fillDraft" data-i="${i}">Fill</button></div></td></tr>`).join('')}</table></div>
+   <div class="row" style="margin-top:12px"><button class="btn" data-act="compileGroup">Compile group post</button><button class="btn main" data-act="startRead">Continue to the candidates</button></div></div>${grp}`;
+}
+
+const TWISTS=[
+{id:'budget',title:'Budget squeeze',text:'Finance has cut the salary band. Anyone likely to expect higher pay is a risk.',mod:c=>({2:-1,6:-1}[c]||0),modText:'Salary-expectation penalty for Kwame and Lorenzo (-1)'},
+{id:'scope',title:'The role will double in scope',text:'Within three years this job will be twice as big. Who can grow into it?',mod:c=>([1,4,5,7,9,10].includes(c)?1:0),modText:'Growth-potential bonus (+1) for candidates with strong potential'},
+{id:'clock',title:'A rival is calling',text:'A competitor is about to interview your favourite. Discussion is cut to two minutes.',clock:120},
+{id:'withdraw',title:'The favourite withdraws',text:'The most popular first choice has accepted another offer. Re-decide without them.',effect:'withdraw'},
+{id:'pressure',title:'A word from the boss',text:'A director says one candidate "comes highly recommended". Check the CV, not the name-dropping.',effect:'pressure'},
+{id:'quiet',title:'No twist',text:'A straight decision this round. Let the evidence do the talking.'}];
+
+const STAKE=[
+{id:'cfo',name:'Finance Director',says:'Keep salary and onboarding cost down.',test:c=>ATTR[c].cost<=1,why:'low salary expectations'},
+{id:'innov',name:'Head of Innovation',says:'Give me someone with spark and room to grow.',test:c=>ATTR[c].pot>=3,why:'strong growth potential'},
+{id:'client',name:'Client Partner',says:'This person will be in front of clients quickly.',test:c=>ATTR[c].client>=3,why:'strong client-facing skills'},
+{id:'comp',name:'Compliance Lead',says:'Credentials and an audit trail matter most.',test:c=>ATTR[c].cred>=3,why:'solid credentials'},
+{id:'ops',name:'Operations Director',says:'I need someone productive from week one.',test:c=>ATTR[c].ready>=3,why:'ready to be productive immediately'}];
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function xmur3(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return function(){h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return(h^=h>>>16)>>>0;};}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const rngFor=code=>mulberry32(xmur3(code.toUpperCase())());
+function shuffle(a,r){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const ALPHA='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const newCode=()=>Array.from({length:4},()=>ALPHA[Math.floor(Math.random()*ALPHA.length)]).join('');
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+
+/* Deterministic deal: the same round code gives every device the same round */
+function deal(code){
+  code=code.toUpperCase();
+  const r=rngFor(code);
+  const vac=VAC[Math.floor(r()*VAC.length)];
+  const twist=TWISTS[Math.floor(r()*TWISTS.length)];
+  const sh=STAKE[Math.floor(r()*STAKE.length)];
+  const fit=FIT[vac.id];
+  let best=0;fit.forEach((f,i)=>{if(f>fit[best])best=i;});
+  const ids=new Set([best+1]);
+  if(vac.gem)ids.add(vac.gem);
+  const dec=vac.decoys.filter(d=>!ids.has(d));
+  if(dec.length)ids.add(dec[Math.floor(r()*dec.length)]);
+  const rest=shuffle([1,2,3,4,5,6,7,8,9,10].filter(i=>!ids.has(i)),r);
+  while(ids.size<6)ids.add(rest.shift());
+  const cands=shuffle([...ids],r);
+  let pressured=null;
+  if(twist.effect==='pressure'){
+    let low=cands.filter(c=>fit[c-1]<=1);if(!low.length)low=cands.filter(c=>fit[c-1]<=2);if(!low.length)low=cands;
+    pressured=low[Math.floor(r()*low.length)];
+  }
+  return {code,vac,twist,sh,cands,best:best+1,pressured};
+}
+const adjFit=(d,c)=>clamp(FIT[d.vac.id][c-1]+(d.twist.mod?d.twist.mod(c):0),0,5);
+const whyText=(d,c)=>WHY[d.vac.id+c]||(FIT[d.vac.id][c-1]>=2?'Some relevant skills, but the core requirements are only partly met.':'Little evidence of the core requirements in this brief.');
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const S={view:'home',zoom:1,tool:'for',showBrief:false,viewer:null,tags:{host:{},player:{}},err:'',
+ host:{n:3,names:['','','',''],readMin:4,discMin:6,deal:null,stage:'draw',players:[],roles:[],timer:{secs:0,running:false,end:0},
+   withdrawn:null,tie:null,decision:null,result:null,rounds:[],roundNo:0},
+ pl:{code:'',name:'',deal:null,tab:'brief',draft:{title:'',level:'',st:{}},check:false,r1:'',r2:'',rej:'',locked:false,finalPick:'',reason:'',ref1:'',ref2:''}};
+
+function setPath(path,val){const p=path.split('.');let o=S;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=val;}
+
+/* ============================================================
+   TIMER
+   ============================================================ */
+let tInt=null;
+function beep(){try{const a=new (window.AudioContext||window.webkitAudioContext)();[0,0.25,0.5].forEach(t=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=880;g.gain.value=.15;o.connect(g);g.connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+.15);});}catch(e){}}
+function updTimer(){const el=document.getElementById('timerText');if(el)el.textContent=fmt(S.host.timer.secs);}
+function tick(){const t=S.host.timer;if(!t.running)return;t.secs=Math.max(0,Math.ceil((t.end-Date.now())/1000));updTimer();
+  if(t.secs<=0){t.running=false;clearInterval(tInt);beep();const b=document.getElementById('timerBox');if(b)b.classList.add('done');}}
+function startTimer(secs){clearInterval(tInt);const t=S.host.timer;t.secs=secs;t.running=true;t.end=Date.now()+secs*1000;tInt=setInterval(tick,250);updTimer();}
+function stopTimer(){clearInterval(tInt);S.host.timer.running=false;}
+
+/* ============================================================
+   RENDER HELPERS
+   ============================================================ */
+const sign=()=>`<div class="signbar"><h1 class="sign">Match <span class="dim">D</span>esk<small>Gnawtown Employment Bureau. Open late, lights dimming.</small></h1></div>`;
+
+function vacancyCard(d){return `<div class="folder" data-tab="Vacancy ${esc(d.vac.org)}"><h3>${esc(d.vac.role)}</h3><p><em>${esc(d.vac.sector)}</em></p><p>${esc(d.vac.text)}</p></div>`;}
+function twistCard(d){return `<div class="folder" data-tab="Twist" style="background:#e9c5d8"><h3>${esc(d.twist.title)}</h3><p>${esc(d.twist.text)}</p></div>`;}
+function stakeCard(d){return `<div class="folder" data-tab="Stakeholder" style="background:#bcd6e0"><h3>${esc(d.sh.name)}</h3><p>"${esc(d.sh.says)}"</p></div>`;}
+const countTags=(reader,cid,type)=>Object.keys(S.tags[reader]).filter(k=>k.startsWith(cid+'.')&&S.tags[reader][k]===type).length;
+
+function candCard(c,reader){
+  return `<div class="cand"><b>${esc(c.name)}</b><span class="mute">${esc(c.headline)}</span>
+   <span class="tagcount"><span class="f">&#10003; ${countTags(reader,c.id,'for')}</span><span class="a">! ${countTags(reader,c.id,'against')}</span><span class="v">? ${countTags(reader,c.id,'verify')}</span></span>
+   <button class="btn small main" data-act="open" data-cid="${c.id}" data-reader="${reader}">Read dossier</button></div>`;
+}
+function opts(d,sel,exclude){return `<option value="">Choose...</option>`+d.cands.filter(c=>c!==exclude).map(c=>`<option value="${c}" ${String(sel)===String(c)?'selected':''}>${esc(CAND(c).name)}</option>`).join('');}
+
+/* ============================================================
+   DOSSIER VIEWER
+   ============================================================ */
+function renderSection(c,sec,reader){
+  const T=S.tags[reader];
+  const ln=(b,inner)=>{const tg=T[b.id];return `<span class="ln ${tg?'t-'+tg:''}" tabindex="0" role="button" data-act="tag" data-id="${b.id}" data-reader="${reader}">${inner}</span>`;};
+  let html='',inList=false;
+  const closeList=()=>{if(inList){html+='</ul>';inList=false;}};
+  sec.b.forEach(b=>{
+    if(b.t==='b'){if(!inList){html+='<ul>';inList=true;}html+=`<li>${ln(b,esc(b.x))}</li>`;return;}
+    closeList();
+    if(b.t==='n')html+=`<div class="nm">${ln(b,esc(b.x))}</div>`;
+    else if(b.t==='c')html+=`<div class="ct">${ln(b,esc(b.x))}</div>`;
+    else if(b.t==='h')html+=`<h4>${esc(b.x)}</h4>`;
+    else if(b.t==='p')html+=`<p>${ln(b,esc(b.x))}</p>`;
+    else if(b.t==='r')html+=`<div class="rl">${ln(b,`<b>${esc(b.x)}</b> <span class="dt">${esc(b.d)}</span>`)}</div>`;
+  });
+  closeList();
+  const letter=sec.cls.includes('letter');
+  return `<article class="paper ${sec.cls}" aria-label="${letter?'Cover letter':'CV'}">${html}</article>`;
+}
+function renderViewer(){
+  const v=S.viewer;if(!v)return '';
+  const c=CAND(v.cid);const d=v.reader==='host'?S.host.deal:S.pl.deal;
+  const idx=d.cands.indexOf(c.id);
+  const T=S.tags[v.reader];
+  const cnt=t=>countTags(v.reader,c.id,t);
+  const tool=(k,sym,cls,label)=>`<button class="tool ${cls} ${S.tool===k?'on':''}" data-act="tool" data-t="${k}" aria-pressed="${S.tool===k}" title="${label}">${sym} ${label}</button>`;
+  return `<div class="viewer" role="dialog" aria-label="Dossier: ${esc(c.name)}" style="--z:${S.zoom}">
+   <div class="vbar">
+     <button class="btn small" data-act="closeViewer">Close</button>
+     <button class="btn small" data-act="navCand" data-d="-1" ${idx<=0?'disabled':''} aria-label="Previous candidate">&lsaquo; Prev</button>
+     <span class="grow">${esc(c.name)} <span class="mute">(${idx+1} of ${d.cands.length})</span></span>
+     <button class="btn small" data-act="navCand" data-d="1" ${idx>=d.cands.length-1?'disabled':''} aria-label="Next candidate">Next &rsaquo;</button>
+   </div>
+   <div class="vbar">
+     ${tool('for','&#10003;','tf','Evidence for')}${tool('against','!','ta','Concern')}${tool('verify','?','tv','Verify')}${tool('clear','&#10005;','','Clear')}
+     <span class="tagcount" style="margin-left:6px"><span class="f">&#10003; ${cnt('for')}</span><span class="a">! ${cnt('against')}</span><span class="v">? ${cnt('verify')}</span></span>
+     <span class="grow"></span>
+     <button class="tool" data-act="zoom" data-d="-0.1" aria-label="Zoom out">A-</button>
+     <button class="tool" data-act="zoom" data-d="0.1" aria-label="Zoom in">A+</button>
+     <button class="tool ${S.showBrief?'on':''}" data-act="toggleBrief" aria-pressed="${S.showBrief}">Show vacancy</button>
+   </div>
+   <div class="vbody ${S.showBrief?'two':''}">
+     ${S.showBrief?`<div>${vacancyCard(d)}${postPanel(v.reader)}</div>`:''}
+     <div class="sheets">${c.secs.map(s=>renderSection(c,s,v.reader)).join('')}
+       <p class="hint" style="max-width:820px">Pick a tool, then tap any line. Tap the same line again with the same tool to remove the mark. Pinch to zoom also works.</p></div>
+   </div></div>`;
+}
+
+/* ============================================================
+   HOME / SETUP
+   ============================================================ */
+function viewHome(){
+  return `${sign()}
+  <div class="grid g2">
+   <div class="panel"><h2>Host a table</h2><p>One screen per group. It draws the round, runs the timers, collects picks and reveals the result.</p>
+     <button class="btn main" data-act="goHostSetup">Host a table</button></div>
+   <div class="panel"><h2>Join as a player</h2><p>Type the four-letter round code shown on your host screen. You read the dossiers privately on your own device and make your own picks.</p>
+     <button class="btn pink" data-act="goJoin">Join a round</button></div>
+  </div>
+  <div class="panel" style="margin-top:14px"><h3>How a round works</h3>
+   <ol><li>The host draws a vacancy, a twist and a stakeholder, and shows the round code.</li>
+   <li>Optional: everyone drafts the job post alone by tapping key information from the brief, then the host combines the drafts into one group post.</li>
+   <li>Everyone reads the six dossiers alone. Tap lines to mark evidence for, concerns, or things to verify.</li>
+   <li>Each player locks a first choice, a second choice and one reject, then shows the host their pick code.</li>
+   <li>The host reveals all picks together. The group talks, with a chair, an evidence checker, a devil's advocate and a fairness watcher.</li>
+   <li>Everyone votes again. The majority decides. The result card shows how the hire fares a year later, who was the hidden fit, and what the dossiers did not say.</li></ol>
+   <p class="hint">All people and organisations are fictional. There may not be a perfect candidate for any vacancy. Nothing is saved when you close the page, so download your journal before leaving.</p></div>`;
+}
+function viewHostSetup(){
+  const h=S.host;
+  return `${sign()}<div class="panel"><h2>Table setup</h2>
+   <label>Players at this table</label>
+   <div class="row"><button class="tab ${h.n===3?'on':''}" data-act="setN" data-n="3">3 players</button><button class="tab ${h.n===4?'on':''}" data-act="setN" data-n="4">4 players</button></div>
+   <div class="grid g2">${Array.from({length:h.n},(_,i)=>`<div><label for="nm${i}">Player ${i+1} name</label><input id="nm${i}" type="text" data-in="host.names.${i}" value="${esc(h.names[i])}" placeholder="Player ${i+1}"></div>`).join('')}</div>
+   <div class="grid g2"><div><label for="rm">Silent reading (minutes)</label><select id="rm" data-in="host.readMin" data-num="1"><option ${h.readMin==3?'selected':''}>3</option><option ${h.readMin==4?'selected':''}>4</option><option ${h.readMin==5?'selected':''}>5</option><option ${h.readMin==6?'selected':''}>6</option></select></div>
+   <div><label for="dm">Discussion (minutes)</label><select id="dm" data-in="host.discMin" data-num="1"><option ${h.discMin==4?'selected':''}>4</option><option ${h.discMin==6?'selected':''}>6</option><option ${h.discMin==8?'selected':''}>8</option></select></div></div>
+   <div class="row" style="margin-top:16px"><button class="btn" data-act="home">Back</button><button class="btn main" data-act="drawRound">Draw first round</button></div></div>`;
+}
+
+/* ============================================================
+   HOST ROUND
+   ============================================================ */
+function newRound(){
+  const h=S.host;stopTimer();
+  h.roundNo++;
+  h.deal=deal(newCode());
+  h.stage='draw';h.group=null;h.withdrawn=null;h.tie=null;h.decision=null;h.result=null;
+  const n=h.n;
+  h.players=Array.from({length:n},(_,i)=>({name:(h.names[i]||'').trim()||'Player '+(i+1),r1:'',r2:'',rej:'',ev:null,nj:null,det:null,final:'',reason:'',draft:null}));
+  const roleNames=n===3?['Chair','Evidence checker and fairness watcher',"Devil's advocate"]:['Chair','Evidence checker',"Devil's advocate",'Fairness watcher'];
+  const order=shuffle(h.players.map((_,i)=>i),Math.random);
+  h.roles=roleNames.map((r,k)=>({role:r,player:order[k]}));
+  S.tags.host={};
+}
+function roleCard(h){
+  return `<div class="panel"><h3>Roles this round</h3><table>${h.roles.map(r=>`<tr><td><b>${esc(h.players[r.player].name)}</b></td><td>${esc(r.role)}</td></tr>`).join('')}</table>
+  <p class="hint">Chair keeps time and breaks ties. Checker asks "which line says that?". Advocate argues for a candidate nobody picked. Watcher flags reasons that are not about the job.</p></div>`;
+}
+function timerPanel(label){
+  const t=S.host.timer;
+  return `<div class="panel" id="timerBox"><h3>${esc(label)}</h3><div class="timer" id="timerText" aria-live="off">${fmt(t.secs)}</div>
+   <div class="row" style="margin-top:10px"><button class="btn small" data-act="timerToggle">${t.running?'Pause':'Resume'}</button><button class="btn small" data-act="timerAdd">+1 min</button></div></div>`;
+}
+function viewHost(){
+  const h=S.host,d=h.deal;
+  const head=`${sign()}<div class="row" style="justify-content:space-between;margin-bottom:6px"><div><span class="chip">Round ${h.roundNo}</span></div><div class="row"><span class="mute">Round code</span><span class="code" aria-label="Round code ${d.code.split('').join(' ')}">${d.code}</span><button class="btn small" data-act="copyCode">Copy</button></div></div>`;
+  if(h.stage==='draw')return head+hostDraw();
+  if(h.stage==='draft')return head+hostDraft();
+  if(h.stage==='read')return head+hostRead();
+  if(h.stage==='reveal')return head+hostReveal();
+  if(h.stage==='vote')return head+hostVote();
+  if(h.stage==='outcome')return head+hostOutcome();
+  return head+hostSummary();
+}
+function hostDraw(){
+  const h=S.host,d=h.deal;
+  return `<div class="grid g2">${vacancyCard(d)}<div>${twistCard(d)}${stakeCard(d)}</div></div>
+  <div class="grid g2" style="margin-top:18px">${roleCard(h)}<div class="panel"><h3>Start the round</h3><p>Tell players to choose <b>Join a round</b> and type <b>${d.code}</b>. Players without a device can read dossiers on this screen and make picks on paper.</p>
+   <div class="row"><button class="btn" data-act="redraw">Redraw</button><button class="btn pink" data-act="startDraft">Start job-post drafting</button><button class="btn main" data-act="startRead">Skip to silent reading</button></div></div></div>
+  <h3 style="margin-top:18px">Dossiers dealt (${d.cands.length})</h3><div class="grid g3">${d.cands.map(c=>candCard(CAND(c),'host')).join('')}</div>`;
+}
+function playerRow(h,p,i){
+  const d=h.deal;
+  return `<tr><td><b>${esc(p.name)}</b></td>
+   <td><label class="hint" for="r1${i}" style="margin:0">1st</label><select id="r1${i}" data-in="host.players.${i}.r1" data-render="1">${opts(d,p.r1)}</select></td>
+   <td><label class="hint" for="r2${i}" style="margin:0">2nd</label><select id="r2${i}" data-in="host.players.${i}.r2" data-render="1">${opts(d,p.r2)}</select></td>
+   <td><label class="hint" for="rj${i}" style="margin:0">Reject</label><select id="rj${i}" data-in="host.players.${i}.rej" data-render="1">${opts(d,p.rej)}</select></td>
+   <td><label class="hint" for="cd${i}" style="margin:0">Or paste pick code</label><div class="row" style="flex-wrap:nowrap"><input id="cd${i}" type="text" placeholder="e.g. ${d.code}.3-5-1.4.0.1"><button class="btn small" data-act="fillCode" data-i="${i}">Fill</button></div></td></tr>`;
+}
+function picksValid(p){return p.r1&&p.r2&&p.rej&&new Set([p.r1,p.r2,p.rej]).size===3;}
+function hostRead(){
+  const h=S.host,d=h.deal;
+  const ready=h.players.filter(picksValid).length;
+  return `<div class="grid g2">${timerPanel('Silent reading')}<div>${twistCard(d)}${stakeCard(d)}</div></div>
+  <div class="panel" style="margin-top:14px"><h3>Collect picks (${ready} of ${h.players.length} ready)</h3>
+   <p class="hint">Each player gets a pick code on their device after locking. Paste it, or choose their picks from the lists. 1st, 2nd and reject must be three different people.</p>
+   <div style="overflow:auto"><table>${h.players.map((p,i)=>playerRow(h,p,i)).join('')}</table></div>
+   ${S.err?`<p class="err" role="alert">${esc(S.err)}</p>`:''}
+   <div class="row" style="margin-top:12px"><button class="btn main" data-act="reveal">Reveal all picks</button></div></div>
+  <details style="margin-top:14px"><summary>Vacancy and dossiers</summary>${vacancyCard(d)}<div class="grid g3" style="margin-top:14px">${d.cands.map(c=>candCard(CAND(c),'host')).join('')}</div></details>`;
+}
+function top1Counts(h){const m={};h.players.forEach(p=>{m[p.r1]=(m[p.r1]||0)+1;});return m;}
+function hostReveal(){
+  const h=S.host,d=h.deal,n=id=>esc(CAND(id).name);
+  const c1=top1Counts(h);
+  const lines=[];
+  d.cands.forEach(c=>{
+    const firsts=h.players.filter(p=>p.r1==c),rejs=h.players.filter(p=>p.rej==c);
+    if(firsts.length&&rejs.length)lines.push(`<li><b>${n(c)}</b> is a first choice for ${firsts.map(p=>esc(p.name)).join(', ')} but a reject for ${rejs.map(p=>esc(p.name)).join(', ')}. Start here.</li>`);
+  });
+  const unpicked=d.cands.filter(c=>!h.players.some(p=>p.r1==c||p.r2==c));
+  if(unpicked.length)lines.push(`<li>Nobody ranked ${unpicked.map(n).join(', ')}. The devil's advocate should make a case for one of them.</li>`);
+  if(!lines.length)lines.push('<li>Little disagreement. Chair: ask each person for the one line in a CV that would change their mind.</li>');
+  const wd=h.withdrawn?`<div class="note"><b>Twist:</b> ${n(h.withdrawn)} has withdrawn. They are removed from the final vote.</div>`:'';
+  return `${wd}<div class="panel"><h2>Picks revealed</h2><div style="overflow:auto"><table><tr><th>Player</th><th>1st choice</th><th>2nd choice</th><th>Reject</th></tr>
+   ${h.players.map(p=>`<tr><td><b>${esc(p.name)}</b></td><td>${n(p.r1)}</td><td>${n(p.r2)}</td><td>${n(p.rej)}</td></tr>`).join('')}</table></div>
+   <p class="mute" style="margin-top:10px">First-choice tally: ${Object.keys(c1).map(k=>`${n(+k)} (${c1[k]})`).join(', ')}</p></div>
+  <div class="grid g2" style="margin-top:14px">${timerPanel('Discussion')}<div class="panel"><h3>Where to start</h3><ul>${lines.join('')}</ul></div></div>
+  <div class="grid g2" style="margin-top:14px">${roleCard(h)}<div class="panel"><h3>Ready to vote?</h3><p>Everyone votes again, in secret, for one candidate. Majority wins. The chair breaks ties.</p><button class="btn main" data-act="toVote">Go to final vote</button></div></div>
+  <details style="margin-top:14px"><summary>Re-open a dossier</summary><div class="grid g3" style="margin-top:14px">${d.cands.map(c=>candCard(CAND(c),'host')).join('')}</div></details>`;
+}
+function voteTally(h){
+  const m={};h.players.forEach(p=>{if(p.final)m[p.final]=(m[p.final]||0)+1;});
+  const mx=Math.max(0,...Object.values(m));const lead=Object.keys(m).filter(k=>m[k]===mx).map(Number);
+  return {m,mx,lead};
+}
+function hostVote(){
+  const h=S.host,d=h.deal;
+  const allVoted=h.players.every(p=>p.final);
+  const t=voteTally(h);
+  const chair=h.players[h.roles.find(r=>r.role==='Chair').player];
+  const tied=allVoted&&t.lead.length>1;
+  return `<div class="panel"><h2>Final vote</h2>
+   ${h.withdrawn?`<div class="note">${esc(CAND(h.withdrawn).name)} has withdrawn and cannot be chosen.</div>`:''}
+   <p class="hint">Paste each player's final code (looks like ${d.code}.F3), or choose from the list.</p>
+   <div style="overflow:auto"><table>${h.players.map((p,i)=>`<tr><td><b>${esc(p.name)}</b><div class="hint">first pick: ${esc(CAND(p.r1).name)}</div></td>
+     <td><label class="hint" style="margin:0" for="fv${i}">Final vote</label><select id="fv${i}" data-in="host.players.${i}.final" data-render="1">${opts(d,p.final,h.withdrawn)}</select></td>
+     <td><label class="hint" style="margin:0" for="fc${i}">Or paste code</label><div class="row" style="flex-wrap:nowrap"><input id="fc${i}" type="text" placeholder="${d.code}.F3"><button class="btn small" data-act="fillFinal" data-i="${i}">Fill</button></div></td>
+     <td><label class="hint" style="margin:0" for="fr${i}">Why change? (optional)</label><input id="fr${i}" type="text" data-in="host.players.${i}.reason" value="${esc(p.reason)}"></td></tr>`).join('')}</table></div>
+   ${allVoted?`<p style="margin-top:10px">Tally: ${Object.keys(t.m).map(k=>`${esc(CAND(+k).name)} (${t.m[k]})`).join(', ')}</p>`:''}
+   ${tied?`<div class="note"><b>Tie.</b> ${esc(chair.name)} (chair) has the casting vote.<label for="tie">Casting vote</label><select id="tie" data-in="host.tie" data-render="1" data-num="1"><option value="">Choose...</option>${t.lead.map(c=>`<option value="${c}" ${h.tie==c?'selected':''}>${esc(CAND(c).name)}</option>`).join('')}</select></div>`:''}
+   <div class="row" style="margin-top:12px"><button class="btn" data-act="backReveal">Back to discussion</button><button class="btn main" data-act="decide" ${(!allVoted||(tied&&!h.tie))?'disabled':''}>Confirm decision</button></div></div>`;
+}
+
+/* ---------- scoring ---------- */
+function scoreRound(h){
+  const d=h.deal,ch=h.decision.cand;
+  const fit=adjFit(d,ch);
+  const gem=d.vac.gem===ch?2:0;
+  const stk=d.sh.test(ch)?1:0;
+  const evs=h.players.filter(p=>p.ev!=null).map(p=>p.ev);
+  const avg=evs.length?evs.reduce((a,b)=>a+b,0)/evs.length:null;
+  const evPts=avg==null?0:avg>=3?2:avg>=2?1:0;
+  const det=h.players.reduce((a,p)=>a+(p.det||0),0);
+  const detPts=det>=2?1:0;
+  const njTot=h.players.reduce((a,p)=>a+(p.nj||0),0);
+  const fair=-Math.min(3,njTot);
+  const pres=(d.twist.effect==='pressure'&&d.pressured===ch)?-2:0;
+  const total=Math.max(0,fit+gem+stk+evPts+detPts+fair+pres);
+  return {fit,gem,stk,evPts,avg,det,detPts,njTot,fair,pres,total,max:11};
+}
+function outcomeText(c,fit){
+  const g=c.gaps[0].replace(/\.$/,'');
+  if(fit>=4)return `A year on, ${c.first} is delivering and the team can see it. The one thing to keep an eye on: ${g.toLowerCase()}.`;
+  if(fit===3)return `A year on, ${c.first} has settled in but needed more support than planned before the role clicked. The biggest gap to close: ${g.toLowerCase()}.`;
+  if(fit===2)return `A year on, ${c.first} works hard, but the role keeps exposing the same gap: ${g.toLowerCase()}. The team spends more time coaching than expected.`;
+  return `Six months in, ${c.first} is struggling. The brief and the background barely overlap, and the team quietly reopens the search.`;
+}
+function hostOutcome(){
+  const h=S.host,d=h.deal,r=h.result,ch=CAND(h.decision.cand);
+  const rank=d.cands.slice().sort((a,b)=>adjFit(d,b)-adjFit(d,a));
+  const flagged=[];
+  d.cands.forEach(c=>{const cd=CAND(c);Object.values(cd.lines).forEach(b=>{if(b.nj||b.chk)flagged.push({c:cd.name,x:b.t==='r'?b.x:b.x,nj:b.nj,chk:b.chk});});});
+  const njl=flagged.filter(f=>f.nj),chl=flagged.filter(f=>f.chk);
+  const short=s=>s.length>110?s.slice(0,107)+'...':s;
+  const changes=h.players.map(p=>{const ch2=p.final!=p.r1;return `<tr><td><b>${esc(p.name)}</b></td><td>${esc(CAND(p.r1).name)}</td><td>${esc(CAND(p.final).name)}</td><td>${ch2?'Changed':'Held'}${ch2&&p.reason?': '+esc(p.reason):''}</td></tr>`;}).join('');
+  const bd=(l,v,note)=>`<tr><td>${l}</td><td><b>${v>0?'+':''}${v}</b></td><td class="mute">${note}</td></tr>`;
+  return `<div class="panel"><div class="row" style="justify-content:space-between"><div><h2>Decision: ${esc(ch.name)}</h2><p>${esc(outcomeText(ch,r.fit))}</p></div><span class="stamp">${r.total>=8?'HIRED':r.total>=5?'HIRED, WITH RESERVATIONS':'HIRED, REGRETFULLY'}</span></div>
+   <h3 style="margin-top:12px">Panel score: ${r.total} out of ${r.max}</h3>
+   <table>${bd('Fit with the vacancy',r.fit,esc(whyText(d,ch.id))+(d.twist.mod&&d.twist.mod(ch.id)?' ('+esc(d.twist.modText)+')':''))}
+   ${bd('Spotted a transferable fit',r.gem,r.gem?'This was the hidden fit.':(d.vac.gem?'There was a less obvious strong fit on the table.':'No hidden fit in this round.'))}
+   ${bd(esc(d.sh.name)+' satisfied',r.stk,r.stk?'Chosen candidate has '+esc(d.sh.why)+'.':'Chosen candidate does not show '+esc(d.sh.why)+'.')}
+   ${bd('Evidence quality',r.evPts,r.avg==null?'No pick codes were entered.':'Average evidence marks per player for their first choice: '+r.avg.toFixed(1))}
+   ${bd('Document detective',r.detPts,r.det+' flagged inconsistencies were marked with "?" across the table')}
+   ${bd('Fairness radar',r.fair,r.njTot+' non-job signals were marked as evidence or concern')}
+   ${d.twist.effect==='pressure'?bd('Pressure from the boss',r.pres,r.pres?'The recommended candidate was chosen.':'The group held its ground.'):''}</table></div>
+  <div class="grid g2" style="margin-top:14px">
+   <div class="panel"><h3>Best fit on the table</h3>${rank.map(c=>`<div style="margin:10px 0"><b>${esc(CAND(c).name)}</b>${c===ch.id?' (your choice)':''}${c===d.vac.gem?' (hidden fit)':''}${d.twist.effect==='withdraw'&&c===h.withdrawn?' (withdrew)':''}
+     <div class="bar" aria-label="Fit ${adjFit(d,c)} of 5"><i style="width:${adjFit(d,c)*20}%"></i></div><div class="hint">${esc(whyText(d,c))}</div></div>`).join('')}</div>
+   <div class="panel"><h3>Grow card: ${esc(ch.name)}</h3><p><b>Strengths</b></p><ul>${ch.strengths.map(s=>`<li>${esc(s)}</li>`).join('')}</ul><p><b>Gaps to close</b></p><ul>${ch.gaps.map(s=>`<li>${esc(s)}</li>`).join('')}</ul><p><b>Development path</b></p><ul>${ch.grow.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div></div>
+  <div class="panel" style="margin-top:14px"><h3>Mind-change log</h3><div style="overflow:auto"><table><tr><th>Player</th><th>First pick</th><th>Final vote</th><th>Result</th></tr>${changes}</table></div>
+   <p class="hint">Ask: did anyone change their mind because of evidence, or because of someone's confidence?</p></div>
+  <div class="grid g2" style="margin-top:14px"><div class="panel"><h3>Fairness watcher: signals in these dossiers</h3>
+   ${njl.length?`<ul>${njl.map(f=>`<li><b>${esc(f.c)}</b>: "${esc(short(f.x))}" <span class="mute">(${esc(f.nj)})</span></li>`).join('')}</ul>`:'<p>None in this round.</p>'}
+   <p class="hint">These facts may be true and may matter legally (right to work), but they say little about ability to do the job. Did any reasoning lean on them?</p></div>
+   <div class="panel"><h3>Document detective: what to verify</h3>${chl.length?`<ul>${chl.map(f=>`<li><b>${esc(f.c)}</b>: ${esc(f.chk)}</li>`).join('')}</ul>`:'<p>None in this round.</p>'}</div></div>
+  ${h.group?`<div class="panel" style="margin-top:14px"><h3>Job post: the group's draft</h3>${groupDoc(h).html}<div style="margin-top:12px">${fbHTML(h.group.sc)}</div></div>`:''}
+  <div class="panel" style="margin-top:14px"><h3>Debrief questions</h3><ol><li>Which line in the job post made the biggest difference to who looked like a good candidate?</li><li>Who would have been a good hire that nobody applied to this role for?</li><li>Which candidate's career path is closest to yours? What gap would you need to close?</li><li>What evidence would you have wanted that no CV could give you?</li></ol></div>
+  <div class="row" style="margin-top:16px"><button class="btn" data-act="dlRound">Download round journal</button><button class="btn main" data-act="nextRound">Next round</button><button class="btn pink" data-act="endSession">End session</button></div>`;
+}
+function hostSummary(){
+  const h=S.host;
+  const tot=h.rounds.reduce((a,r)=>a+r.result.total,0);
+  return `<div class="panel"><h2>Session summary</h2><table><tr><th>Round</th><th>Vacancy</th><th>Hired</th><th>Score</th></tr>
+   ${h.rounds.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.deal.vac.org)}: ${esc(r.deal.vac.role)}</td><td>${esc(CAND(r.decision.cand).name)}</td><td>${r.result.total} / ${r.result.max}</td></tr>`).join('')}</table>
+   <p style="margin-top:10px"><b>Table total: ${tot} out of ${h.rounds.length*11}</b></p>
+   <div class="row"><button class="btn" data-act="dlSession">Download session journal</button><button class="btn main" data-act="nextRound">Play another round</button></div></div>`;
+}
+
+/* ============================================================
+   PLAYER
+   ============================================================ */
+function viewJoin(){
+  return `${sign()}<div class="panel"><h2>Join a round</h2>
+   <label for="jc">Round code (four letters or digits)</label><input id="jc" type="text" maxlength="4" autocapitalize="characters" autocomplete="off" data-in="pl.code" value="${esc(S.pl.code)}" style="text-transform:uppercase;font:700 28px 'Courier New',monospace;letter-spacing:.2em">
+   <label for="jn">Your name</label><input id="jn" type="text" data-in="pl.name" value="${esc(S.pl.name)}">
+   ${S.err?`<p class="err" role="alert">${esc(S.err)}</p>`:''}
+   <div class="row" style="margin-top:14px"><button class="btn" data-act="home">Back</button><button class="btn main" data-act="join">Join round</button></div></div>`;
+}
+function playerEv(){const p=S.pl;return p.r1?countTags('player',+p.r1,'for'):0;}
+function playerNJ(d){let n=0;d.cands.forEach(c=>Object.keys(CAND(c).lines).forEach(id=>{if(CAND(c).lines[id].nj&&S.tags.player[id]&&S.tags.player[id]!=='verify')n++;}));return n;}
+function playerDet(d){let n=0;d.cands.forEach(c=>Object.keys(CAND(c).lines).forEach(id=>{if(CAND(c).lines[id].chk&&S.tags.player[id]==='verify')n++;}));return n;}
+function pickCode(){const p=S.pl,d=p.deal;return `${d.code}.${p.r1}-${p.r2}-${p.rej}.${playerEv()}.${playerNJ(d)}.${playerDet(d)}`;}
+function viewPlayer(){
+  const p=S.pl,d=p.deal;
+  const tabs=[['brief','Brief'],['post','Job post'],['dossiers','Dossiers'],['picks','My picks'],['reflect','Reflect']];
+  let body='';
+  if(p.tab==='brief')body=`<div class="grid g2">${vacancyCard(d)}<div>${twistCard(d)}${stakeCard(d)}</div></div>`;
+  if(p.tab==='post')body=playerPost(d);
+  if(p.tab==='dossiers')body=`<div class="grid g3">${d.cands.map(c=>candCard(CAND(c),'player')).join('')}</div>`;
+  if(p.tab==='picks'){
+    const valid=picksValid(p);
+    const ev=playerEv();
+    body=`<div class="panel"><h2>Your picks</h2><p class="hint">Choose in private. Your picks stay hidden until the host reveals everyone's.</p>
+     <label for="p1">First choice</label><select id="p1" data-in="pl.r1" data-render="1" ${p.locked?'disabled':''}>${opts(d,p.r1)}</select>
+     <label for="p2">Second choice</label><select id="p2" data-in="pl.r2" data-render="1" ${p.locked?'disabled':''}>${opts(d,p.r2)}</select>
+     <label for="pj">Reject</label><select id="pj" data-in="pl.rej" data-render="1" ${p.locked?'disabled':''}>${opts(d,p.rej)}</select>
+     ${p.r1?`<p style="margin-top:10px">Evidence marked for your first choice: <b>${ev}</b> ${ev<3?'<span class="err">(mark at least three lines you can point to)</span>':'<span class="ok">(good)</span>'}</p>`:''}
+     ${(p.r1||p.r2||p.rej)&&!valid?'<p class="err" role="alert">First, second and reject must be three different candidates.</p>':''}
+     ${!p.locked?`<button class="btn main" data-act="lock" ${valid?'':'disabled'}>Lock my picks</button>`:`
+      <div class="note" style="margin-top:12px"><b>Locked.</b> Show this code to your host, then keep your screen down until the reveal.</div>
+      <div class="code" style="font-size:22px;letter-spacing:.08em;word-break:break-all">${esc(pickCode())}</div>
+      <div class="row" style="margin-top:10px"><button class="btn small" data-act="copyPick">Copy code</button><button class="btn small" data-act="unlock">Unlock to edit</button></div>`}
+    </div>
+    ${p.locked?`<div class="panel" style="margin-top:14px"><h2>Final vote</h2><p class="hint">Use this after the group discussion. Choose one candidate.</p>
+      <label for="pf">My final vote</label><select id="pf" data-in="pl.finalPick" data-render="1">${opts(d,p.finalPick)}</select>
+      ${p.finalPick&&p.finalPick!=p.r1?`<p class="note">You changed from ${esc(CAND(+p.r1).name)}. What persuaded you?</p><label for="pr">Reason (kept in your journal)</label><input id="pr" type="text" data-in="pl.reason" value="${esc(p.reason)}">`:''}
+      ${p.finalPick?`<p style="margin-top:10px">Show your host:</p><div class="code" style="font-size:26px">${esc(d.code)}.F${p.finalPick}</div><div class="row" style="margin-top:10px"><button class="btn small" data-act="copyFinal">Copy code</button></div>`:''}</div>`:''}`;
+  }
+  if(p.tab==='reflect')body=`<div class="panel"><h2>Reflect</h2><p class="hint">Written for you only. Download it when you finish.</p>
+    <label for="rf1">Which candidate's path is closest to yours? What do you share, and what gap would you need to close?</label><textarea id="rf1" data-in="pl.ref1">${esc(p.ref1)}</textarea>
+    <label for="rf2">What did this round change about how you would write your own CV?</label><textarea id="rf2" data-in="pl.ref2">${esc(p.ref2)}</textarea>
+    <div class="row" style="margin-top:10px"><button class="btn main" data-act="dlPlayer">Download my journal</button></div></div>`;
+  return `${sign()}<div class="row" style="justify-content:space-between"><span class="chip">${esc(p.name||'Player')}</span><span class="row"><span class="mute">Round</span><span class="code" style="font-size:26px">${d.code}</span><button class="btn small" data-act="home">Leave</button></span></div>
+   <div class="tabs" role="tablist">${tabs.map(t=>`<button class="tab ${p.tab===t[0]?'on':''}" role="tab" aria-selected="${p.tab===t[0]}" data-act="ptab" data-t="${t[0]}">${t[1]}</button>`).join('')}</div>${body}`;
+}
+
+/* ============================================================
+   JOURNALS (downloads)
+   ============================================================ */
+function download(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function roundText(r){
+  const d=r.deal,L=[];
+  L.push('THE MATCH DESK: round journal','Round code: '+d.code,'Vacancy: '+d.vac.org+' - '+d.vac.role,'Twist: '+d.twist.title+' - '+d.twist.text,'Stakeholder: '+d.sh.name+' - "'+d.sh.says+'"','');
+  L.push('Decision: '+CAND(r.decision.cand).name,'Panel score: '+r.result.total+' / '+r.result.max,'Fit: '+r.result.fit+', hidden-fit bonus: '+r.result.gem+', stakeholder: '+r.result.stk+', evidence: '+r.result.evPts+', detective: '+r.result.detPts+', fairness: '+r.result.fair+(r.result.pres?', pressure: '+r.result.pres:''),'');
+  if(r.group){L.push('Group job post (score '+r.group.sc.score+' / 10):');L.push(postDoc(d,r.group.spec,r.group.title,r.group.level,i=>r.group.stArr[i]).text);}
+  L.push('Picks and mind changes:');
+  r.players.forEach(p=>L.push('- '+p.name+': 1st '+CAND(p.r1).name+', 2nd '+CAND(p.r2).name+', reject '+CAND(p.rej).name+' | final vote '+CAND(p.final).name+(p.final!=p.r1?' (changed'+(p.reason?': '+p.reason:'')+')':' (held)')));
+  L.push('','Best fit on the table:');
+  d.cands.slice().sort((a,b)=>adjFit(d,b)-adjFit(d,a)).forEach(c=>L.push('- '+CAND(c).name+' ('+adjFit(d,c)+'/5): '+whyText(d,c)));
+  const ch=CAND(r.decision.cand);
+  L.push('','Grow card for '+ch.name+':');ch.grow.forEach(g=>L.push('- '+g));L.push('');
+  return L.join('\n');
+}
+function snapshot(h){return {group:h.group,deal:h.deal,decision:h.decision,result:h.result,players:JSON.parse(JSON.stringify(h.players))};}
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+function toast(m){const b=document.getElementById('toastbox');b.innerHTML=`<div class="toast" role="status">${esc(m)}</div>`;setTimeout(()=>{b.innerHTML='';},1800);}
+function copyText(t){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('Copied'),()=>toast('Could not copy. Select the code and copy it by hand.'));else toast('Could not copy. Select the code and copy it by hand.');}
+function parseCode(str,code){const s=String(str||'').trim().toUpperCase().split('.');return s[0]===code.toUpperCase()?s:null;}
+
+const A={
+ home(){stopTimer();S.view='home';S.err='';},
+ goHostSetup(){S.view='hostSetup';},
+ goJoin(){S.view='join';S.err='';},
+ setN(d){S.host.n=+d.n;},
+ drawRound(){newRound();S.view='host';},
+ redraw(){newRound();},
+ copyCode(){copyText(S.host.deal.code);return false;},
+ startDraft(){S.host.stage='draft';S.host.group=null;startTimer(180);},
+ fillDraft(d){const h=S.host,i=+d.i,el=document.getElementById('dc'+i);const s=parseCode(el.value,h.deal.code);
+   if(!s||!s[1]||s[1][0]!=='D'||!s[2]){toast('That is not a job-post code for this round');return false;}
+   h.players[i].draft={title:s[1][1]==='-'?'':s[1][1],level:s[1][2]==='-'?'':s[1][2],states:s[2].toLowerCase()};},
+ compileGroup(){const g=buildGroup(S.host);if(!g){toast('Add at least one draft first');return false;}S.host.group=g;},
+ startRead(){S.err='';S.host.stage='read';startTimer(S.host.readMin*60);},
+ chip(d){const dr=S.pl.draft,i=+d.i,cur=dr.st[i]||'0';const next={'0':'d','d':'m','m':'n','n':'0'}[cur];dr.st[i]=next;return 'noscroll';},
+ toggleCheck(){S.pl.check=!S.pl.check;return 'noscroll';},
+ copyDraftCode(){copyText(playerDraftCode());return false;},
+ copyPost(){const dr=S.pl.draft,d=S.pl.deal;copyText(postDoc(d,draftSpec(d),dr.title,dr.level,i=>dr.st[i]).text);return false;},
+ timerToggle(){const t=S.host.timer;if(t.running){t.secs=Math.max(0,Math.ceil((t.end-Date.now())/1000));stopTimer();}else if(t.secs>0){t.running=true;t.end=Date.now()+t.secs*1000;clearInterval(tInt);tInt=setInterval(tick,250);}},
+ timerAdd(){const t=S.host.timer;if(t.running){t.end+=60000;tick();}else{t.secs+=60;updTimer();}return false;},
+ fillCode(d){const h=S.host,i=+d.i,el=document.getElementById('cd'+i);const s=parseCode(el.value,h.deal.code);
+   if(!s||!s[1]||/^[FD]/.test(s[1])){toast('That is not a pick code for this round');return false;}
+   const [a,b,c]=s[1].split('-').map(Number);const p=h.players[i];p.r1=a||'';p.r2=b||'';p.rej=c||'';p.ev=s[2]!=null?+s[2]:null;p.nj=s[3]!=null?+s[3]:null;p.det=s[4]!=null?+s[4]:null;},
+ reveal(){const h=S.host;
+   if(!h.players.every(picksValid)){S.err='Every player needs a first choice, second choice and reject, all different.';return;}
+   S.err='';
+   if(h.deal.twist.effect==='withdraw'){const m=top1Counts(h);const mx=Math.max(...Object.values(m));h.withdrawn=h.deal.cands.find(c=>m[c]===mx)||null;}
+   h.stage='reveal';startTimer(h.deal.twist.clock||h.discMin*60);},
+ toVote(){stopTimer();S.host.stage='vote';},
+ backReveal(){S.host.stage='reveal';},
+ fillFinal(d){const h=S.host,i=+d.i,el=document.getElementById('fc'+i);const s=parseCode(el.value,h.deal.code);
+   if(!s||!s[1]||!s[1].startsWith('F')){toast('That is not a final-vote code for this round');return false;}
+   const c=+s[1].slice(1);if(c===h.withdrawn){toast('That candidate has withdrawn');return false;}h.players[i].final=c;},
+ decide(){const h=S.host,t=voteTally(h);
+   const cand=t.lead.length>1?+h.tie:t.lead[0];
+   h.decision={cand,tied:t.lead.length>1};h.result=scoreRound(h);h.stage='outcome';
+   h.rounds.push(snapshot(h));},
+ nextRound(){newRound();S.view='host';},
+ endSession(){stopTimer();S.host.stage='summary';},
+ dlRound(){const h=S.host;download('match-desk-round-'+h.deal.code+'.txt',roundText(snapshot(h)));return false;},
+ dlSession(){download('match-desk-session.txt',S.host.rounds.map(roundText).join('\n----------------------------------------\n'));return false;},
+ /* viewer */
+ open(d){S.viewer={cid:+d.cid,reader:d.reader};},
+ closeViewer(){S.viewer=null;},
+ navCand(d){const v=S.viewer,dl=v.reader==='host'?S.host.deal:S.pl.deal;const i=dl.cands.indexOf(v.cid)+(+d.d);if(i>=0&&i<dl.cands.length)v.cid=dl.cands[i];},
+ tool(d){S.tool=d.t;return 'noscroll';},
+ zoom(d){S.zoom=clamp(Math.round((S.zoom+ +d.d)*10)/10,0.7,2);return 'noscroll';},
+ toggleBrief(){S.showBrief=!S.showBrief;return 'noscroll';},
+ tag(d){const T=S.tags[d.reader];const id=d.id;
+   if(S.tool==='clear')delete T[id];else if(T[id]===S.tool)delete T[id];else T[id]=S.tool;return 'noscroll';},
+ /* player */
+ join(){const p=S.pl;const code=(p.code||'').trim().toUpperCase();
+   if(!/^[A-Z0-9]{4}$/.test(code)){S.err='Enter the four-character code from the host screen.';return;}
+   S.err='';p.code=code;p.deal=deal(code);p.tab='brief';p.draft={title:'',level:'',st:{}};p.check=false;p.r1=p.r2=p.rej='';p.locked=false;p.finalPick='';p.reason='';S.tags.player={};S.view='player';},
+ ptab(d){S.pl.tab=d.t;},
+ lock(){S.pl.locked=true;},
+ unlock(){S.pl.locked=false;},
+ copyPick(){copyText(pickCode());return false;},
+ copyFinal(){copyText(S.pl.deal.code+'.F'+S.pl.finalPick);return false;},
+ dlPlayer(){const p=S.pl,d=p.deal;const L=['THE MATCH DESK: my journal','Name: '+p.name,'Round: '+d.code,'Vacancy: '+d.vac.org+' - '+d.vac.role,''];
+   L.push('My picks: 1st '+(p.r1?CAND(+p.r1).name:'-')+', 2nd '+(p.r2?CAND(+p.r2).name:'-')+', reject '+(p.rej?CAND(+p.rej).name:'-'));
+   L.push('Final vote: '+(p.finalPick?CAND(+p.finalPick).name:'-')+(p.reason?' (reason: '+p.reason+')':''),'','Lines I marked:');
+   d.cands.forEach(c=>{const cd=CAND(c);const m=Object.keys(S.tags.player).filter(k=>k.startsWith(c+'.')).map(k=>'  ['+S.tags.player[k]+'] '+cd.lines[k].x);if(m.length){L.push(cd.name);m.forEach(x=>L.push(x));}});
+   {const dr=p.draft;if(dr&&Object.values(dr.st).some(v=>v&&v!=='0')){L.push('','My job post draft:',postDoc(d,draftSpec(d),dr.title,dr.level,i=>dr.st[i]).text);}}
+   L.push('','Closest career path to mine:',p.ref1||'-','','What this changes about my CV:',p.ref2||'-','');
+   download('my-match-desk-journal.txt',L.join('\n'));return false;}
+};
+
+/* ============================================================
+   RENDER LOOP AND EVENTS
+   ============================================================ */
+function render(keepScroll){
+  const app=document.getElementById('app');
+  const vw=document.querySelector('.vbody');const vs=vw?vw.scrollTop:0;
+  const ps=window.scrollY;
+  const html={home:viewHome,hostSetup:viewHostSetup,host:viewHost,join:viewJoin,player:viewPlayer}[S.view]();
+  app.innerHTML=html;
+  document.getElementById('overlay').innerHTML=S.viewer?renderViewer():'';
+  document.body.style.overflow=S.viewer?'hidden':'';
+  if(keepScroll){const nv=document.querySelector('.vbody');if(nv)nv.scrollTop=vs;window.scrollTo(0,ps);}
+  updTimer();
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-act]');if(!t)return;
+  const fn=A[t.dataset.act];if(!fn)return;
+  const r=fn(t.dataset,e);
+  if(r===false)return;
+  const toTop=['startDraft','goHostSetup','goJoin','drawRound','redraw','startRead','reveal','toVote','backReveal','decide','nextRound','endSession','join','home'].includes(t.dataset.act);
+  render(!toTop);
+  if(toTop)window.scrollTo(0,0);
+});
+document.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('ln')){e.preventDefault();e.target.click();}
+  if(e.key==='Escape'&&S.viewer){S.viewer=null;render(true);}
+});
+function onInput(e){
+  const t=e.target;if(!t.dataset||!t.dataset.in)return;
+  let v=t.value;if(t.dataset.num)v=v===''?'':+v;
+  if(t.dataset.in==='pl.code')v=v.toUpperCase();
+  setPath(t.dataset.in,v);
+  if(t.dataset.render&&e.type==='change')render(true);
+}
+document.addEventListener('input',onInput);
+document.addEventListener('change',onInput);
+render();
+</script>
+</body>
+</html>
