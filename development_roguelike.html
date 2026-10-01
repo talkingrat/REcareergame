@@ -187,6 +187,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="panel-title" style="font-size:16px">Your starting deck</div>
     <div class="draft-cards" id="intro-deck"></div>
   </div>
+  <div class="panel" style="border-color:var(--accent,#5FA8D0);background:rgba(95,168,208,0.06)">
+    <div class="panel-title" style="font-size:15px">New to this kind of game?</div>
+    <div class="panel-sub" style="margin-bottom:10px">Try one tiny practice challenge first — it takes about 20 seconds and shows you exactly how playing cards clears a challenge. No risk, nothing carries over.</div>
+    <button class="btn full" id="intro-tutorial" style="background:#3E7CA8">▸ Try the practice challenge</button>
+  </div>
   <div class="btn-row"><button class="btn ghost full" onclick="show('s-home')">← Back</button><button class="btn full" id="intro-start"></button></div>
 </div>
 
@@ -379,6 +384,7 @@ let deck=[], drawPile=[], hand=[], discard=[], exhausted=[];
 let energy=0, MAX_ENERGY=3, blockVia=0, blockPub=0, blockStand=0;
 let curEnc=null, encLog=[], turnNum=0, lastCardPlayed=null;
 let mapNodes=[], mapCol=0, curNodeId=null, pendingNode=null, cardXP={};
+let tutorialMode=false;
 const LIFELINE=()=> side==='dev'?'via':'pub';
 
 function chooseSeat(s){
@@ -390,9 +396,60 @@ function chooseSeat(s){
     : 'Site appraisal -> Development management -> Viability -> Decision';
   document.getElementById('intro-deck').innerHTML = START_DECK[s].map(id=>cardHTML(id,false)).join('');
   const b=document.getElementById('intro-start'); b.className='btn full '+(s==='plan'?'plan-btn':''); b.textContent='Begin the run ->'; b.onclick=startRun;
+  document.getElementById('intro-tutorial').onclick=startTutorial;
   show('s-intro');
 }
-function startRun(){ M={via:55,pub:55,stand:50}; deck=[...START_DECK[side]]; cardXP={}; buildMap(); show('s-map'); renderMap(); }
+function startRun(){ tutorialMode=false; M={via:55,pub:55,stand:50}; deck=[...START_DECK[side]]; cardXP={}; buildMap(); show('s-map'); renderMap(); }
+
+/* ============ PRACTICE CHALLENGE (first-timer tutorial) ============
+ Reuses the real combat engine so players learn the actual screen, but with a
+ tiny rigged setup: resistance 12, a soft telegraphed hit, and a hand of two
+ Negotiate cards (-6 each) that crush it. Coaching appears in the log. Nothing
+ carries over to the real run. */
+function startTutorial(){
+  tutorialMode=true;
+  if(!side) side='dev';
+  M={via:55,pub:55,stand:50};
+  curEnc={ emoji:'🪧', name:'Practice: a minor objection', flavor:'A gentle one to learn the ropes — no risk, nothing carries over.',
+    res:12, maxRes:12, key:'tutorial', catMult:{}, intents:[{ico:'📣',label:'A grumble from a neighbour',dmg:4,target:'pub'}], reacts:{} };
+  encLog=[]; turnNum=0; lastCardPlayed=null;
+  // rigged hand: exactly two Negotiate cards, nothing else to confuse
+  drawPile=[]; discard=[]; exhausted=[]; hand=['negotiate','negotiate'];
+  turnNum=1; energy=MAX_ENERGY; blockVia=0; blockPub=0; blockStand=0;
+  log('👋 Welcome! This challenge has 12 <b>resistance</b> — think of it as how hard the problem is to clear.','good');
+  log('You have two <b>Negotiate</b> cards in hand. Each one knocks 6 off. Tap one to play it.');
+  show('s-encounter'); renderEncounter();
+  // after first render, nudge toward the card
+  setTimeout(()=>{ try{ document.querySelectorAll('#hand .pcard').forEach(el=>{ el.style.boxShadow='0 0 0 2px var(--gold)'; }); }catch(e){} }, 60);
+}
+function tutorialAfterPlay(){
+  // called from playCard when in tutorial mode, after a card resolves (res not yet cleared)
+  if(curEnc.res>0){
+    log('Nice — resistance dropped. Play your second <b>Negotiate</b> to finish the job.','good');
+  }
+}
+function tutorialWin(){
+  // bespoke win screen for the practice fight
+  log('✔ Cleared! That is the whole idea.','good');
+  const wrap=document.getElementById('hand'); if(wrap) wrap.innerHTML='';
+  // show a short recap panel over the encounter area
+  const recap=document.createElement('div'); recap.className='panel'; recap.style.borderColor='var(--gold)'; recap.style.marginTop='12px';
+  recap.innerHTML=`<div class="panel-title" style="font-size:16px">That's it — you've got it 🎉</div>
+    <div class="panel-sub" style="margin-bottom:8px">Two cards worth 6 each cleared 12 resistance. The real game adds the interesting parts:</div>
+    <ul class="tut" style="margin-bottom:6px">
+      <li><span class="tut-ico">⚡</span><span><b>Energy</b> limits how many cards you play each turn — you can't always do everything.</span></li>
+      <li><span class="tut-ico">⚔️</span><span>Each challenge <b>hits back</b> if you don't clear it in time — watch the "building next turn" line.</span></li>
+      <li><span class="tut-ico">🎯</span><span>The <b>right kind of card</b> matters: money won't fix a cost crisis, design wins over heritage, and so on.</span></li>
+    </ul>`;
+  const btnRow=document.createElement('div'); btnRow.className='btn-row';
+  btnRow.innerHTML=`<button class="btn full" id="tut-done">Start the real game →</button>`;
+  recap.appendChild(btnRow);
+  const container=document.querySelector('#s-encounter'); container.appendChild(recap);
+  document.getElementById('tut-done').onclick=()=>{ // clean up the injected recap, then start the real run
+    recap.remove(); startRun();
+  };
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
 function buildMap(){
   const stages=[ ['start'], ['objection','viability'], ['heritage','councillor'], ['objection','viability','event'], ['committee'] ];
   mapNodes=[]; let uid=0;
@@ -483,12 +540,21 @@ function playCard(idx){
   if(c.blockVia)blockVia+=c.blockVia; if(c.blockPub)blockPub+=c.blockPub; if(c.blockVia||c.blockPub) log(`▸ ${c.name}: shield up`);
   if(curEnc.reacts && curEnc.reacts[id]){ const rc=curEnc.reacts[id]; const t={via:'Viability',pub:'Public value',stand:'Standing'}[rc.target]; M[rc.target]=clamp(M[rc.target]-rc.dmg,0,100); log(`⚡ ${rc.label}: -${rc.dmg} ${t}`,'hit'); }
   lastCardPlayed=id; hand.splice(idx,1); if(c.once) exhausted.push(id); else discard.push(id);
-  if(curEnc.res<=0){ winEncounter(); return; } if(checkDeath()) return; renderEncounter();
+  if(curEnc.res<=0){ if(tutorialMode){ renderEncounter(); tutorialWin(); return; } winEncounter(); return; }
+  if(!tutorialMode && checkDeath()) return;
+  if(tutorialMode) tutorialAfterPlay();
+  renderEncounter();
 }
 function endTurn(){
   if(curEnc.res>0){ const it=currentIntent(); let dmg=it.dmg, blk=0; if(it.target==='via')blk=blockVia; else if(it.target==='pub')blk=blockPub; else blk=blockStand;
     dmg=Math.max(0,dmg-blk); const t={via:'Viability',pub:'Public value',stand:'Standing'}[it.target]; M[it.target]=clamp(M[it.target]-dmg,0,100);
     log(dmg>0?`⚔ ${it.label}: -${dmg} ${t}`:`🛡 ${it.label} fully blocked`, dmg>0?'hit':'good'); }
+  if(tutorialMode){
+    // keep the practice going: top the hand back up to two Negotiates and coach
+    discard.push(...hand); hand=['negotiate','negotiate']; turnNum++; energy=MAX_ENERGY; blockVia=0; blockPub=0; blockStand=0;
+    log('That little knock is what happens when a challenge is not cleared in time. Here are two more Negotiate cards — tap one to chip the resistance down.');
+    renderEncounter(); return;
+  }
   if(checkDeath()) return; discard.push(...hand); hand=[]; startTurn(false); renderEncounter();
 }
 function checkDeath(){ if(M[LIFELINE()]<=0){ runOver(false); return true; } if(side==='plan'&&M.via<=0){ runOver(false,'via'); return true; } if(side==='dev'&&M.pub<=0){ runOver(false,'pub'); return true; } return false; }
