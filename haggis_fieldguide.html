@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Field Guide to the Wild Haggis</title>
+<style>
+:root{
+  --page:#e4e1cd; --page2:#d8d4bd; --ink:#233b33; --ink2:#3f564d; --faint:#6f8278;
+  --brass:#b2863a; --rule:#b9b193; --plate:#10302e; --plateln:#2d564f;
+  --build:#4f86c6; --rigour:#9b7ae0; --story:#f2994a; --ground:#5bb87a;
+  --explore:#e86aa6; --judge:#e3b53e;
+  --card:#efead7;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--page);
+  background-image:
+    radial-gradient(60% 50% at 80% 0%, rgba(178,134,58,.08), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(35,59,51,.018) 0 1px, transparent 1px 4px);
+  color:var(--ink);
+  font:16px/1.6 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  min-height:100vh;
+}
+.wrap{max-width:860px;margin:0 auto;padding:26px 18px 80px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+
+.masthead{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:6px}
+.kicker{font:600 12px/1.4 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.28em;text-transform:uppercase;color:var(--brass)}
+.masthead h1{font-size:clamp(24px,4.6vw,38px);font-weight:700;margin:4px 0 2px;letter-spacing:.01em}
+.masthead .sub{color:var(--ink2);font-style:italic;font-size:15px}
+.chapline{display:flex;align-items:center;gap:12px;margin:18px 0 10px;color:var(--brass);
+  font:600 13px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.chapline::before,.chapline::after{content:"";height:1px;background:var(--rule);flex:1}
+
+.stage{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:700px){.stage{grid-template-columns:260px 1fr}}
+
+.plate{background:radial-gradient(120% 90% at 50% 10%,#174039,var(--plate));
+  border:10px solid #efe9d4;border-radius:6px;
+  box-shadow:0 0 0 1px var(--plateln),0 14px 30px rgba(0,0,0,.28);
+  padding:10px;position:relative;min-height:230px;display:flex;align-items:center;justify-content:center}
+.plate::after{content:"";position:absolute;inset:10px;border:1px solid rgba(255,255,255,.12);pointer-events:none}
+.plate .pin{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#f4e4b0,var(--brass));box-shadow:0 2px 3px rgba(0,0,0,.4)}
+.creature{width:100%;max-width:210px}
+.creature svg{width:100%;height:auto;display:block;animation:bob 3.6s ease-in-out infinite}
+.creature.pulse svg{animation:bob 3.6s ease-in-out infinite, pop .5s ease}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.09) rotate(-1deg)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.creature svg{animation:none}.creature.pulse svg{animation:none}}
+.platecap{text-align:center;font:italic 13px/1.4 Georgia,serif;color:var(--ink2);margin-top:8px}
+.platecap b{font-style:normal;color:var(--ink)}
+
+.traits{margin-top:14px;background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:12px 13px}
+.traits h4{margin:0 0 8px;font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.trait{display:grid;grid-template-columns:52px 1fr;gap:9px;align-items:center;font:13px/1.3 "Gill Sans","Segoe UI",sans-serif;margin:5px 0}
+.trait .lab{color:var(--ink2);text-align:right}
+.meter{height:8px;background:#ded9c2;border-radius:5px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;border-radius:5px;transition:width .5s cubic-bezier(.3,.8,.3,1)}
+.heart{display:flex;align-items:center;gap:8px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--rule);
+  font:13px/1.3 "Gill Sans","Segoe UI",sans-serif;color:var(--ink2)}
+.heart .pip{font-size:15px;letter-spacing:1px}
+.satchel{margin-top:9px;padding-top:9px;border-top:1px dashed var(--rule)}
+.satchel .lab{font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
+.pill{display:inline-block;font:12px/1 "Gill Sans","Segoe UI",sans-serif;padding:4px 9px;border-radius:999px;margin:0 5px 5px 0;border:1px solid var(--rule);background:#fff8}
+.pill.w{border-color:#b9893a}
+.pill .d{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+.card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:20px 22px;box-shadow:0 2px 0 #0000000a}
+.steps{display:flex;gap:6px;margin-bottom:12px}
+.sd{width:8px;height:8px;border-radius:50%;background:#cfc9ad;border:1px solid var(--rule)}
+.sd.on{background:var(--brass);border-color:var(--brass)}
+.sd.done{background:var(--ground);border-color:var(--ground)}
+.prompt{font-size:clamp(18px,2.4vw,21px);line-height:1.35;margin:0 0 4px}
+.scene{color:var(--ink2);font-style:italic;margin:0 0 15px}
+.opts{display:grid;gap:10px}
+.opt{display:block;width:100%;text-align:left;background:#fffdf4;border:1.5px solid var(--rule);border-radius:7px;
+  padding:12px 14px;color:var(--ink);transition:border-color .14s,background .14s,transform .05s;font-size:15.5px}
+.opt:hover{border-color:var(--brass);background:#fff}
+.opt:active{transform:translateY(1px)}
+.opt .k{display:block;font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:6px}
+
+.note{background:#fffdf4;border-left:4px solid var(--brass);border-radius:0 7px 7px 0;padding:13px 16px;margin-top:4px}
+.note .h{font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.note .lit{color:var(--ground);font-style:italic;margin-top:8px}
+
+.btn{background:var(--ink);color:var(--page);border:none;border-radius:7px;padding:12px 22px;font:600 15px/1 "Gill Sans","Segoe UI",sans-serif}
+.btn:hover{background:#2f5248}
+.btn.brass{background:var(--brass);color:#2a1e06}
+.btn.ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.center{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.lede{color:var(--ink2);max-width:60ch;margin:0 auto 4px;text-align:center}
+.intro-plate{max-width:260px;margin:14px auto 0}
+
+/* specimen reveal */
+.specimen{background:var(--card);border:1px solid var(--ink);border-radius:8px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.22)}
+.spec-top{display:grid;grid-template-columns:200px 1fr;gap:6px}
+@media(max-width:560px){.spec-top{grid-template-columns:1fr}}
+.spec-plate{background:radial-gradient(120% 90% at 50% 10%,#174039,var(--plate));padding:14px;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--ink)}
+.spec-plate svg{width:100%;max-width:190px;height:auto}
+.spec-id{padding:18px 20px}
+.spec-no{font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
+.spec-name{font-size:clamp(23px,3.6vw,30px);font-weight:700;margin:3px 0 1px;line-height:1.1}
+.spec-bin{font-style:italic;color:var(--ink2)}
+.spec-hab{font-size:14px;color:var(--ink2);margin-top:8px}
+.spec-temper{display:inline-block;margin-top:10px;font:600 12px/1 "Gill Sans","Segoe UI",sans-serif;padding:5px 11px;border-radius:999px}
+.t-sound{background:#d9ead9;color:#2e6b3f;border:1px solid #8ec49c}
+.t-mixed{background:#eee6cf;color:#7a6a36;border:1px solid #cdb97e}
+.t-volatile{background:#f3d9cf;color:#9a4625;border:1px solid #d99b7e}
+.spec-body{padding:18px 22px;border-top:1px solid var(--rule)}
+.spec-body h3{font:600 12px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin:16px 0 7px}
+.spec-body h3:first-child{margin-top:0}
+.spec-body ul{margin:0;padding-left:1.15em}.spec-body li{margin:5px 0}
+.spec-edge{background:#efe7cf;border-left:4px solid var(--story);border-radius:0 7px 7px 0;padding:11px 15px;color:var(--ink2)}
+.carry{font:13px/1.5 "Gill Sans","Segoe UI",sans-serif;color:var(--ink2)}
+.closing{text-align:center;font-style:italic;color:var(--ink2);max-width:54ch;margin:18px auto 0}
+
+.objective{display:flex;gap:10px;align-items:baseline;background:#eae2c8;border:1px solid var(--rule);border-left:4px solid var(--brass);border-radius:0 7px 7px 0;padding:11px 14px;margin:0 0 14px}
+.objective .t{font:700 12px/1.3 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.04em;color:var(--ink);white-space:nowrap}
+.objective span:last-child{font-size:15.5px;color:var(--ink)}
+.chartbox{margin:0 0 15px;background:#fffdf4;border:1px solid var(--rule);border-radius:8px;padding:12px 12px 6px}
+.chartbox svg{display:block;width:100%;height:auto;max-width:330px;margin:0 auto}
+.chartbox figcaption{text-align:center;font:italic 13px/1.4 Georgia,serif;color:var(--ink2);margin-top:4px}
+.poster-opt{display:flex;gap:13px;align-items:center;text-align:left}
+.pthumb{flex:0 0 74px}
+.pthumb svg{width:74px;height:auto;display:block;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.ptext{flex:1}
+.term{border-bottom:1.5px dotted var(--brass);cursor:help;color:#6a4e1e}
+.term:hover,.term:focus{background:rgba(178,134,58,.14);outline:none}
+#termpop{position:absolute;display:none;max-width:260px;z-index:60;background:var(--ink);color:#f3efe0;
+  font:13px/1.45 "Gill Sans","Segoe UI",sans-serif;padding:9px 12px;border-radius:7px;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+#termpop b{color:var(--judge)}
+.glossary{margin:6px 0 0}
+.glossary dt{font-weight:700;margin-top:8px;font-size:14px}
+.glossary dd{margin:0;color:var(--ink2);font-size:14px}
+.anomaly{background:#f3ecd6;border:1px solid var(--brass);border-left:5px solid var(--brass);border-radius:0 7px 7px 0;padding:11px 15px;margin:8px 0}
+.anomaly .h{font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:5px}
+.anomaly b{font-size:15px}
+.whisper{font-style:italic;color:var(--faint);border-top:1px dashed var(--rule);padding-top:12px;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(16px);padding:9px 18px;border-radius:999px;
+  font:600 14px/1 "Gill Sans","Segoe UI",sans-serif;color:#2a1e06;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:40;
+  box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast"></div>
+<div id="termpop"></div>
+<script>
+"use strict";
+
+/* =========================================================================
+   TRAITS
+   ========================================================================= */
+const TR = {
+  build:  {lab:'Build',  color:'#4f86c6'},
+  rigour: {lab:'Rigour', color:'#9b7ae0'},
+  story:  {lab:'Story',  color:'#f2994a'},
+  ground: {lab:'Ground', color:'#5bb87a'},
+  explore:{lab:'Explore',color:'#e86aa6'},
+};
+const POWER = ['build','rigour','story','ground','explore'];
+const JUDGE = '#e3b53e';
+
+/* tiny fictional charts, so abstract instructions become something students can see */
+function chartBox(svg,cap){return `<figure class="chartbox">${svg}<figcaption>${cap}</figcaption></figure>`;}
+function barChart(labels,values,hi,cap){
+  const w=300,h=150,padL=6,padR=6,padT=16,padB=28,n=values.length,max=Math.max(...values)*1.12,slot=(w-padL-padR)/n,bw=slot*0.6;
+  let g=`<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="#c9c2a6"/>`;
+  values.forEach((v,i)=>{
+    const bh=(h-padT-padB)*(v/max),x=padL+slot*i+(slot-bw)/2,y=h-padB-bh,on=i===hi;
+    g+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="2" fill="${on?'#b2863a':'#6f8a80'}"/>`;
+    g+=`<text x="${(x+bw/2).toFixed(1)}" y="${h-padB+15}" text-anchor="middle" font-size="10" fill="#3f564d" font-family="Gill Sans,sans-serif">${labels[i]}</text>`;
+    if(on)g+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-5).toFixed(1)}" text-anchor="middle" font-size="11" fill="#b2863a">▼</text>`;
+  });
+  return chartBox(`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${cap}" xmlns="http://www.w3.org/2000/svg">${g}</svg>`,cap);
+}
+function lineChart(values,cap){
+  const w=300,h=130,padL=10,padR=10,padT=14,padB=24,n=values.length,max=Math.max(...values),min=Math.min(...values),span=(max-min)||1;
+  const xs=i=>padL+(w-padL-padR)*(i/(n-1)),ys=v=>padT+(h-padT-padB)*(1-(v-min)/span);
+  const pts=values.map((v,i)=>`${xs(i).toFixed(1)},${ys(v).toFixed(1)}`).join(' ');
+  const dots=values.map((v,i)=>`<circle cx="${xs(i).toFixed(1)}" cy="${ys(v).toFixed(1)}" r="2.3" fill="#b2863a"/>`).join('');
+  return chartBox(`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${cap}" xmlns="http://www.w3.org/2000/svg">`+
+    `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="#c9c2a6"/>`+
+    `<polyline points="${pts}" fill="none" stroke="#6f8a80" stroke-width="2.5" stroke-linejoin="round"/>${dots}</svg>`,cap);
+}
+function lineChart2(a,b,nameA,nameB,marker,cap){
+  const w=300,h=142,padL=10,padR=10,padT=26,padB=22,n=Math.max(a.length,b.length);
+  const all=a.concat(b),max=Math.max(...all),min=Math.min(...all),span=(max-min)||1;
+  const xs=i=>padL+(w-padL-padR)*(i/(n-1)),ys=v=>padT+(h-padT-padB)*(1-(v-min)/span);
+  const cA='#6f8a80',cB='#b2863a';
+  const poly=(s,c)=>`<polyline points="${s.map((v,i)=>xs(i).toFixed(1)+','+ys(v).toFixed(1)).join(' ')}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  let mk='';
+  if(marker!=null){const mx=xs(marker).toFixed(1);
+    mk=`<line x1="${mx}" y1="${padT}" x2="${mx}" y2="${h-padB}" stroke="#c0502f" stroke-width="1.2" stroke-dasharray="3 3"/>`+
+       `<text x="${mx}" y="${h-7}" text-anchor="middle" font-size="9" fill="#c0502f" font-family="Gill Sans,sans-serif">↑ cap introduced</text>`;}
+  const legend=`<rect x="12" y="4" width="9" height="9" rx="2" fill="${cA}"/><text x="24" y="12" font-size="10" fill="#3f564d" font-family="Gill Sans,sans-serif">${nameA}</text>`+
+    `<rect x="110" y="4" width="9" height="9" rx="2" fill="${cB}"/><text x="122" y="12" font-size="10" fill="#3f564d" font-family="Gill Sans,sans-serif">${nameB}</text>`;
+  return chartBox(`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${cap}" xmlns="http://www.w3.org/2000/svg">${legend}`+
+    `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="#c9c2a6"/>${mk}${poly(a,cA)}${poly(b,cB)}</svg>`,cap);
+}
+
+/* three tiny "posters" so the presentation options are visible, not abstract */
+function posterSVG(kind){
+  const paper='<rect x="2" y="2" width="116" height="146" rx="6" fill="#fffdf4" stroke="#d8d4bd"/>';
+  const g=[];
+  const gray=(x,y,w,h,c)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5" fill="${c||'#cfc8ab'}"/>`;
+  const bar=(x,y,w,h,c)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5" fill="${c}"/>`;
+  if(kind==='reveal'){                       // one striking chart, little else
+    g.push(gray(42,14,36,4));
+    const base=128,xs=[24,48,72,96],hs=[34,56,82,104],cols=['#8aa49b','#7d9b91','#6f8a80','#b2863a'];
+    xs.forEach((x,i)=>g.push(bar(x-9,base-hs[i],18,hs[i],cols[i])));
+    g.push('<line x1="14" y1="128" x2="106" y2="128" stroke="#c9c2a6"/>');
+  }else if(kind==='method'){                 // crammed: everything, overwhelming
+    g.push(gray(12,12,54,4,'#9aa89f'));
+    let y=24;[96,90,70,96,84].forEach(w=>{g.push(gray(12,y,w,3));y+=8;});
+    g.push('<rect x="12" y="70" width="44" height="30" rx="2" fill="#eef0e6" stroke="#d8d4bd"/>');
+    for(let i=0;i<4;i++)g.push(bar(16+i*10,96-(i*5+8),6,(i*5+8),'#8aa49b'));
+    g.push('<rect x="64" y="70" width="44" height="30" rx="2" fill="#eef0e6" stroke="#d8d4bd"/>');
+    g.push('<polyline points="68,94 78,86 88,90 98,78 104,80" fill="none" stroke="#b2863a" stroke-width="1.5"/>');
+    y=106;[96,88,96,72].forEach(w=>{g.push(gray(12,y,w,3));y+=7;});
+    g.push('<rect x="12" y="132" width="96" height="10" fill="none" stroke="#cfc8ab"/><line x1="44" y1="132" x2="44" y2="142" stroke="#cfc8ab"/><line x1="76" y1="132" x2="76" y2="142" stroke="#cfc8ab"/>');
+  }else{                                     // headline + one chart + one caveat
+    g.push('<rect x="14" y="14" width="92" height="15" rx="3" fill="#2f5248"/>');
+    g.push(gray(14,34,58,4));
+    const base=112,xs=[30,52,74,96],hs=[40,58,34,50],cols=['#8aa49b','#b2863a','#8aa49b','#7d9b91'];
+    xs.forEach((x,i)=>g.push(bar(x-8,base-hs[i],16,hs[i],cols[i])));
+    g.push('<line x1="18" y1="112" x2="102" y2="112" stroke="#c9c2a6"/>');
+    g.push('<path d="M16 130 l5 9 h-10 z" fill="#b2863a"/><rect x="26" y="134" width="74" height="4" rx="1.5" fill="#cfc8ab"/>');
+  }
+  return `<svg viewBox="0 0 120 150" role="img" xmlns="http://www.w3.org/2000/svg">${paper}${g.join('')}</svg>`;
+}
+const POSTERS={reveal:posterSVG('reveal'),method:posterSVG('method'),headline:posterSVG('headline')};
+
+/* =========================================================================
+   STAGE A — CULTIVATION  (4 picks, one item each)
+   item: {name, kind:'weapon'|'ornament', trait}
+   ========================================================================= */
+const STAGE_A = [
+  { prompt:"Which lens do you sink your first year into?",
+    scene:"Every surveyor-of-data specialises a little. Choose where your eye sharpens.",
+    opts:[
+      {t:"The Valuation Lens — reading worth from market and asset data.", feed:{rigour:1,ground:1}, item:{name:"Valuation Lens",kind:"weapon",trait:"rigour"}},
+      {t:"The Map-Compass — land, place and everything spatial.", feed:{build:1,ground:1}, item:{name:"Map-Compass",kind:"weapon",trait:"ground"}},
+      {t:"The Insight Quill — turning findings into pictures a room can read.", feed:{story:2}, item:{name:"Insight Quill",kind:"weapon",trait:"story"}},
+      {t:"The Climate Prism — carbon, energy and the green ledger.", feed:{ground:1,explore:1}, item:{name:"Climate Prism",kind:"weapon",trait:"ground"}},
+    ]},
+  { prompt:"Which tool do you teach yourself, late at night?",
+    scene:"Nobody hands you this one. You pick it up on your own.",
+    opts:[
+      {t:"The Code Wand — scripts and pipelines (Python, SQL).", feed:{build:2}, item:{name:"Code Wand",kind:"weapon",trait:"build"}},
+      {t:"The Inference Lens — econometrics and what's really true.", feed:{rigour:2}, item:{name:"Inference Lens",kind:"weapon",trait:"rigour"}},
+      {t:"The Dashboard Loom — weaving live data into dials.", feed:{story:1,build:1}, item:{name:"Dashboard Loom",kind:"weapon",trait:"build"}},
+      {t:"The Field Notebook — talking to the people behind the data.", feed:{ground:1,judgement:1}, item:{name:"Field Notebook",kind:"ornament",trait:"ground"}},
+    ]},
+  { prompt:"An early habit hardens into who you are.",
+    scene:"Small at first. Then it's a reflex, and reflexes show.",
+    opts:[
+      {t:"The Provenance Seal — always ask where the data came from.", feed:{judgement:2}, item:{name:"Provenance Seal",kind:"ornament",trait:"judgement"}},
+      {t:"The Client Compass — always ask whose decision this feeds.", feed:{ground:2}, item:{name:"Client Compass",kind:"ornament",trait:"ground"}},
+      {t:"The Wayfarer's Feather — try the strange approach first.", feed:{explore:2}, item:{name:"Wayfarer's Feather",kind:"ornament",trait:"explore"}},
+    ]},
+  { prompt:"Under pressure, your instinct is to…",
+    scene:"The deadline is close and the answer isn't clean yet.",
+    opts:[
+      {t:"Slow down and get it right.", feed:{rigour:1,judgement:1}, item:{name:"Owl Charm",kind:"ornament",trait:"rigour"}},
+      {t:"Ship something rough and learn from it.", feed:{explore:1,story:1}, item:{name:"Spark Mote",kind:"ornament",trait:"explore"}},
+      {t:"Go and ask the people who'll use it.", feed:{ground:1,judgement:1}, item:{name:"Listening Bell",kind:"ornament",trait:"ground"}},
+      {t:"Make it robust before anyone leans on it.", feed:{build:1,judgement:1}, item:{name:"Anvil Token",kind:"ornament",trait:"build"}},
+    ]},
+];
+
+/* =========================================================================
+   STAGE B — THE TELLING  (tutorial; 3 options; term-light; shows consequence)
+   integrated:true grants a story-craft point; note shown after choosing.
+   ========================================================================= */
+const STAGE_B = [
+  { prompt:"Footfall at the shopping centre is down, and the manager wants to know why.",
+    objective:"You have one afternoon to investigate. Decide where to begin.",
+    chart:lineChart([128,126,120,122,113,109,105,100],"📉 Footfall, last 8 weeks — it is drifting down"),
+    opts:[
+      {t:"Dive straight into the numbers.", feed:{build:1},
+        note:"You surface a mountain of figures — but you don't yet know which matter. Data without a question is just weight."},
+      {t:"Ask the manager what decision this is for.", feed:{ground:1}, integrated:true,
+        note:"Now you know what 'good' looks like: they're deciding which shops to keep. Every number can point at that. A story needs a destination."},
+      {t:"Pull a few quick charts to see the shape of it.", feed:{story:1,explore:1}, integrated:true,
+        note:"You chart it and a dip appears where you didn't expect one (you'll see it in a moment). You can't explain it yet — but now you know where to look. Seeing comes before saying."},
+    ]},
+  { prompt:"You now have the raw footfall figures. They look enormous.",
+    objective:"Decide whether the data can be trusted — before you build anything on it.",
+    opts:[
+      {t:"Trust it — it's the official count.", feed:{},
+        note:"Later you learn it counted every re-entry as a new visitor. Half your 'crowd' was the same people fetching coffee. Verify first — here, skipping it costs you."},
+      {t:"Check how the number is actually measured.", feed:{rigour:1,judgement:1}, integrated:true,
+        note:"The sensor counts phones, not people. Good catch — now every later claim rests on something solid."},
+      {t:"Ask what one 'visit' is even meant to mean.", feed:{ground:1,judgement:1}, integrated:true,
+        note:"A person? A phone? A re-entry? You pin the definition down first. Half of all data arguments are really definition arguments."},
+    ]},
+  { prompt:"You chart footfall by day of the week. One bar clearly stands out.",
+    objective:"A pattern has appeared in the data. Decide what to do with it.",
+    chart:barChart(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],[100,58,96,99,94,121,127],1,"📊 Average footfall by weekday — Tuesday sits far below the rest"),
+    opts:[
+      {t:"Headline it straight away: 'Tuesdays are dying!'", feed:{story:1},
+        note:"It's a great line. But you haven't checked whether the dip is real or just noise — and a great line built on nothing falls hardest."},
+      {t:"Test whether the dip is real before saying anything.", feed:{rigour:2}, integrated:true,
+        note:"It survives the test — the Tuesday dip is real. Now you can say it with a straight face, which is worth more than saying it loudly."},
+      {t:"Go and find out WHY Tuesdays dip.", feed:{explore:2}, integrated:true,
+        note:"There's a rival market in the next town every Tuesday. That 'why' is the actual story — the number was only the doorway."},
+    ]},
+  { prompt:"You have five minutes with the client to explain what you found.",
+    objective:"Choose how to present it. The goal: they understand, and can act.",
+    opts:[
+      {t:"One striking chart, big reveal.", feed:{story:2}, poster:"reveal",
+        note:"The room gasps — then asks one question you can't answer, and the spell breaks. A picture opens the door; it can't hold it open alone."},
+      {t:"The full method, every step, in order.", feed:{rigour:1,build:1}, poster:"method",
+        note:"It's airtight. But you lost the room by minute two, and a finding nobody follows changes nothing. Rigour unread is rigour wasted."},
+      {t:"The headline, plus the one caveat that matters.", feed:{story:1,ground:1,judgement:1}, integrated:true, poster:"headline",
+        note:"They trust it AND act on it. You gave them the shape and the one honest limit — enough to move, not so much they freeze. That's the whole craft."},
+    ]},
+];
+
+/* =========================================================================
+   STAGE C — THE FIELD  (business case; kit lights paths + buffs; none fatal)
+   lit: {need, bonus, msg}   need = item name OR 'storycraft'
+   ========================================================================= */
+const STAGE_C = [
+  { prompt:"Your first case. The client: 'Footfall's soft and I don't know who to lease to. Help.'",
+    scene:"Where do you point the work?",
+    opts:[
+      {t:"Chase the footfall drop — find out why it fell.", feed:{build:1},
+        note:"You'll learn a lot about the dip. Whether it answers the client's real question is another matter."},
+      {t:"Reframe to the real decision: tenant mix and rent.", feed:{ground:2,judgement:1},
+        lit:{need:"Client Compass",bonus:{ground:1},msg:"Your Client Compass swings true — you ask whose decision this is before touching a spreadsheet."},
+        note:"You aim the whole project at the choice the client actually has to make. Half of good analysis is pointing it the right way."},
+      {t:"Scope both, briefly, then choose.", feed:{ground:1,rigour:1},
+        note:"A sensible hedge: a quick look at the drop, framed by the leasing decision. Costs a little time, buys some safety."},
+    ]},
+  { prompt:"A vendor offers to track individual shoppers' phone IDs around the centre for exact footfall.",
+    scene:"It would be the most precise data you've ever had.",
+    opts:[
+      {t:"Use it — precision wins.", feed:{build:1,judgement:-1},
+        note:"The numbers are gorgeous. But you never asked whether following named people around a mall was right — and that question doesn't go away just because you skipped it."},
+      {t:"Use an anonymised, aggregated version instead.", feed:{judgement:2,rigour:1},
+        lit:{need:"Provenance Seal",bonus:{judgement:1},msg:"Your Provenance Seal glows — you trace the data's origin and consent before you touch it."},
+        note:"You get most of the signal and none of the harm. Proportionate, explainable, defensible — the RICS line, lived rather than quoted."},
+      {t:"Decline; use camera and till counts.", feed:{judgement:1,ground:1},
+        note:"Less precise, but clean. Sometimes the right dataset is the humbler one."},
+    ]},
+  { prompt:"You find something odd: footfall up 10%, but sales flat.",
+    scene:"What's going on?",
+    opts:[
+      {t:"More browsers, fewer buyers — tell the client.", feed:{story:1},
+        note:"Plausible, and it might even be right. But you've stated it, not shown it — and the client can't tell the difference until it's too late."},
+      {t:"Check the mismatch before believing it.", feed:{rigour:2},
+        lit:{need:"Inference Lens",bonus:{rigour:1},msg:"Your Inference Lens catches it: footfall counts visits, sales count transactions — different units entirely."},
+        note:"The 'paradox' was a measurement mismatch. You just saved the client from a strategy built on a mirage."},
+      {t:"It's seasonal — move on.", feed:{},
+        note:"Maybe. But you didn't check, and 'probably seasonal' is where a lot of missed stories go to die."},
+    ]},
+  { prompt:"Final presentation. The client wants certainty you honestly can't give.",
+    scene:"Their face says: just tell me it'll work.",
+    opts:[
+      {t:"Give them the confident answer they want.", feed:{story:1,judgement:-2},
+        note:"They leave happy. If it goes wrong, it's your name on the advice — and certainty you didn't have is the most expensive thing to sell."},
+      {t:"The honest range, plus the one call you'd stand behind.", feed:{judgement:2,ground:1,rigour:1},
+        lit:{need:"storycraft",bonus:{story:1},msg:"The storytelling you learned pays off: you frame the uncertainty so it guides rather than frightens."},
+        note:"You give them a decision they can actually trust — a recommendation with its limits shown. That's what a research desk is for."},
+      {t:"Hedge everything; commit to nothing.", feed:{},
+        note:"Perfectly safe, perfectly useless. The client leaves no wiser than they came, and quietly looks for someone who'll help them decide."},
+    ]},
+];
+
+/* =========================================================================
+   STAGE C CASES  (Stage 1 skeleton: titles, leads, lit-kit, STUB beats)
+   ========================================================================= */
+const CASES = {
+  retail:{ id:'retail', no:'Case I', title:'The Footfall & the Tenants',
+    blurb:"A shopping centre wants to judge its shops by who actually walks past — and decide who to keep.",
+    lead:['ground','story'], litItems:['Client Compass','Insight Quill'],
+    beats:[
+      { prompt:"The centre manager drops a list on your desk: \u201CMy quiet units are dragging the place down. Tell me who to drop.\u201D",
+        objective:"The manager wants shops cut. Decide how to judge a shop fairly before you rank anything.",
+        scene:"Before you rank anyone \u2014 what does \u2018performing\u2019 even mean here?",
+        opts:[
+          {t:"Rank every shop by total sales and cut the bottom.", feed:{build:1},
+            note:"A tiny kiosk will always lose to a department store on raw sales \u2014 you\u2019d be measuring size, not performance. The fairer move is {{normalisation|comparing like with like}}."},
+          {t:"Ask the manager what \u2018performing\u2019 means \u2014 sales per visitor? per square metre?", feed:{ground:1,judgement:1},
+            lit:{need:"Client Compass",bonus:{ground:1},msg:"Your Client Compass swings true \u2014 you pin down the decision before touching a number."},
+            note:"Now you can judge shops fairly, {{normalisation|like against like}}: a small unit that sells briskly to everyone who walks in beats a big one that doesn\u2019t."},
+          {t:"First count how many people even walk past each unit.", feed:{story:1,explore:1},
+            note:"Good instinct \u2014 footfall is the raw material. But a headcount isn\u2019t performance yet; it\u2019s the start of the question, not the answer."},
+        ]},
+      { prompt:"You pull the footfall sensor data. The numbers are enormous.",
+        objective:"Decide whether the footfall data can be trusted before you build on it.",
+        scene:"Suspiciously enormous. Do you trust them?",
+        opts:[
+          {t:"Use them as they are \u2014 more data is better.", feed:{},
+            note:"Later you learn the sensor counted every re-entry as a new person; half your \u2018crowd\u2019 was the same shoppers coming back from coffee. A little {{data_cleaning|tidying the data first}} would have caught it."},
+          {t:"Clean it first \u2014 strip double-counts, agree what a \u2018visit\u2019 is.", feed:{rigour:1,judgement:1},
+            lit:{need:"Provenance Seal",bonus:{judgement:1},msg:"Your Provenance Seal glows \u2014 you trace the data back to how it was collected before leaning on it."},
+            note:"Now a visit means one {{unique_visitors|shopper, counted once}}, and every later number rests on something solid."},
+          {t:"Ask what the sensor actually detects.", feed:{judgement:1},
+            note:"It counts phones, not people \u2014 a shopper with a work phone and a personal one reads as \u2018two visitors.\u2019 Worth knowing before you brief anyone."},
+        ]},
+      { prompt:"You map where people actually go: a {{heat_map|picture of the busy and quiet spots}} of the mall, hour by hour.",
+        objective:"The heat map reveals a pattern. Decide what it means for the quiet units.",
+        scene:"A pattern jumps out \u2014 and it isn\u2019t the one the manager expected.",
+        opts:[
+          {t:"The quiet units have low footfall \u2014 confirm they\u2019re failing, cut them.", feed:{build:1},
+            note:"But they never got a fair chance: almost nobody walks past them. That\u2019s a {{positioning|location}} problem, not a bad tenant."},
+          {t:"Compare footfall to sales \u2014 who turns passers-by into buyers?", feed:{rigour:1,story:1},
+            lit:{need:"Inference Lens",bonus:{rigour:1},msg:"Your Inference Lens cuts in: one \u2018busy\u2019 unit has huge footfall and almost no sales \u2014 its {{conversion|share of passers-by who buy}} is the real story."},
+            note:"Footfall and sales together say what neither says alone: a crowded unit that converts nobody has an offer problem, not a footfall one."},
+          {t:"Chase why the quiet corner is empty in the first place.", feed:{explore:1,ground:1}, anomaly:"absence",
+            note:"You follow the gap, not the signal \u2014 and find a blank service wall killing the route. Move an anchor shop and the whole corner warms. The absence was the clue."},
+        ]},
+      { prompt:"Five minutes with the manager, who still wants a list of shops to evict.",
+        objective:"Five minutes with the manager. Decide what to hand over.",
+        scene:"What do you hand over?",
+        opts:[
+          {t:"The eviction list they asked for.", feed:{story:1,judgement:-1},
+            note:"Tidy, and wrong \u2014 you\u2019d be cutting units the data says were set up to fail. The manager is happy today and poorer in a year."},
+          {t:"Reframe it: a positioning problem, not a tenant one \u2014 move anchors, fix the dead route, re-judge in six months.", feed:{ground:1,story:1,judgement:1},
+            lit:{need:"Insight Quill",bonus:{story:1},msg:"Your Insight Quill earns its keep: one heat-map-beside-sales chart makes the whole argument land in a glance."},
+            note:"You give them a decision that fixes the cause, not the symptom \u2014 and the evidence to trust it."},
+          {t:"Hand over the full heat maps and tables; let them decide.", feed:{build:1,rigour:1},
+            note:"All the evidence, no recommendation. They wanted a call and got homework \u2014 and a research desk that won\u2019t commit stops being asked."},
+        ]},
+    ]},
+  rentcap:{ id:'rentcap', no:'Case II', title:'The Cap that Backfired',
+    blurb:"An affordable-rent cap on new private builds — and rents that somehow softened across both sectors.",
+    lead:['rigour','judgement'], litItems:['Inference Lens','Provenance Seal'],
+    beats:[
+      { prompt:"The council capped rents on new private schemes to keep them affordable. A year on, building has stalled and rents have slipped in both the capped and the open market.",
+        objective:"The council asks: did our cap cause this? Decide what question you\u2019re actually here to answer.",
+        chart:lineChart2([100,99,100,98,92,88,85,83],[100,98,99,97,90,86,84,82],"Market","Affordable",3,"📉 Rents slipped in both sectors after the cap \u2014 but did the cap cause it?"),
+        opts:[
+          {t:"Show before-and-after: rents fell after the cap, so the cap did it.", feed:{story:1},
+            note:"\u2018After\u2019 isn\u2019t \u2018because.\u2019 Two things {{correlation|moving together}} needn\u2019t be cause and effect \u2014 something else may have moved at the same time."},
+          {t:"Ask what rents would have done with no cap at all.", feed:{rigour:1,judgement:1},
+            lit:{need:"Inference Lens",bonus:{rigour:1},msg:"Your Inference Lens frames it: you need the {{counterfactual|the world you compare against \u2014 what would have happened anyway}}, not just a before-and-after."},
+            note:"Now you\u2019re asking a cause question, not describing a coincidence. Describing a drop isn\u2019t explaining it."},
+          {t:"List everything else that changed that year first.", feed:{rigour:1,explore:1},
+            note:"Interest rates jumped the same quarter \u2014 a {{confounder|something else that moved at the same time and could explain the change}} you can\u2019t wave away."},
+        ]},
+      { prompt:"You gather rent figures for both sectors.",
+        objective:"Decide whether the data can carry a claim this big before you lean on it.",
+        opts:[
+          {t:"Use asking rents from listings \u2014 quickest to pull.", feed:{build:1},
+            note:"Asking rents aren\u2019t agreed rents, and listings lean toward pricier, slower-letting units \u2014 {{selection_bias|your sample isn\u2019t representative of the whole market}}."},
+          {t:"Trace exactly what each figure includes before trusting it.", feed:{rigour:1,judgement:1},
+            lit:{need:"Provenance Seal",bonus:{judgement:1},msg:"Your Provenance Seal pays off: the \u2018market\u2019 series quietly contains the capped units themselves."},
+            note:"Because the two series overlap, of course they move together. Always check the {{composition|what\u2019s actually inside each group}}."},
+          {t:"Check \u2018market\u2019 and \u2018affordable\u2019 are even measured the same way.", feed:{judgement:1},
+            note:"Different definitions, different collection \u2014 you can\u2019t compare them until they line up."},
+        ]},
+      { prompt:"To isolate the cap, you line the capped city up against similar cities that never introduced one.",
+        objective:"Decide how to tell whether the cap, specifically, caused the fall.",
+        chart:lineChart2([100,98,97,92,88,85,83],[100,99,97,93,89,86,84],"Capped city","No-cap cities",null,"📊 The capped city and similar no-cap cities fell about the same."),
+        opts:[
+          {t:"The capped city\u2019s rents fell \u2014 blame the cap, done.", feed:{story:1},
+            note:"But the cities with NO cap fell just as far (the chart). The cap can\u2019t be the main cause."},
+          {t:"Measure how much extra the capped city fell, beyond the others.", feed:{rigour:2},
+            lit:{need:"Inference Lens",bonus:{rigour:1},msg:"Your Inference Lens does the real work: comparing to a {{natural_experiment|a similar place that didn\u2019t get the policy}} isolates the cap\u2019s own effect."},
+            note:"Almost all the fall is shared; the cap added only a sliver. The scary headline quietly dissolves."},
+          {t:"Back the uncomfortable finding: the flagship policy barely moved the market.", feed:{judgement:1,explore:1}, anomaly:"trusted_weird",
+            note:"It\u2019s not what anyone wanted to hear, and it\u2019s what the comparison shows. Saying so takes more nerve than inventing a dramatic cause."},
+        ]},
+      { prompt:"You brief the councillors. They want one thing: did our policy work?",
+        objective:"Decide what to tell them \u2014 they want a certainty the data can\u2019t fully give.",
+        opts:[
+          {t:"Give a clean verdict: \u2018the cap caused the slump.\u2019", feed:{story:1,judgement:-2},
+            note:"Tidy and quotable \u2014 and not what your comparison showed. A confident wrong cause is worse than an honest \u2018mostly the market.\u2019"},
+          {t:"Say what you can stand behind, and name what you can\u2019t yet separate.", feed:{judgement:2,rigour:1,ground:1},
+            lit:{need:"storycraft",bonus:{story:1},msg:"The storytelling you practised lands it: you make the uncertainty clear without making it frightening."},
+            anomaly:"honest_unknown",
+            note:"\u2018Most of the fall was the wider market; the cap\u2019s own effect is small, and we can\u2019t pin it precisely yet.\u2019 Honest, useful, and it protects the people the policy was meant to help."},
+          {t:"Hedge: \u2018it\u2019s complicated, many factors.\u2019", feed:{},
+            note:"True, and useless \u2014 the councillors needed a steer and got a shrug."},
+        ]},
+    ]},
+  gym:{ id:'gym', no:'Case III', title:'The Gym in the Office',
+    blurb:"A co-working firm weighs a members-only gym in the building against simply buying staff subscriptions.",
+    lead:['build','explore'], litItems:['Code Wand','Dashboard Loom'],
+    beats:[
+      { prompt:"A co-working firm notices members with gym access renew far more often. \u2018Build us a gym,\u2019 they say, \u2018and retention will jump.\u2019",
+        objective:"A gym is a huge spend. Decide whether that reasoning holds before anyone signs it off.",
+        chart:barChart(["Non-gym","Gym users"],[62,78],1,"📊 Gym users renew more \u2014 but were they always going to?"),
+        opts:[
+          {t:"They\u2019re right \u2014 gym users renew more. Build it.", feed:{build:1},
+            note:"Maybe fitness-keen members were always the loyal type. The gym may not have caused anything \u2014 {{selection_bias|the two groups differ before the gym ever enters}}."},
+          {t:"Ask whether gym users were already the stickier members.", feed:{rigour:1,judgement:1},
+            lit:{need:"Inference Lens",bonus:{rigour:1},msg:"Your Inference Lens cuts in: do gym-lovers self-select into staying? {{correlation|moving together}} isn\u2019t cause."},
+            note:"That\u2019s the real question. If the keen ones would have stayed anyway, the gym is buying retention it already had."},
+          {t:"Pin down what \u2018retention\u2019 even means and when it\u2019s measured.", feed:{ground:1,judgement:1},
+            note:"Renew within a year? Stay two? Define the outcome, and the {{baseline|the starting point you measure change against}}, before chasing it."},
+        ]},
+      { prompt:"You can\u2019t build three gyms to test the idea.",
+        objective:"Decide how to find out cheaply whether a gym would actually move retention.",
+        opts:[
+          {t:"Just build it and watch whether retention rises.", feed:{build:1},
+            note:"Slow, expensive, and even if retention rises you won\u2019t know the gym did it \u2014 with no {{comparison|a like-for-like group that didn\u2019t get the change}}, everything moved at once."},
+          {t:"Offer free gym subscriptions to a random half; compare the two.", feed:{rigour:1,explore:1},
+            lit:{need:"Code Wand",bonus:{build:1},msg:"Your Code Wand sets it up: a clean {{ab_test|split a group at random, change one thing for one half, and compare}}."},
+            note:"A random split makes the two halves alike except the gym \u2014 so a difference afterwards really points at the gym."},
+          {t:"Use something measurable now as a stand-in \u2014 do gym-users log in more?", feed:{explore:1},
+            note:"A {{proxy|an easier-to-measure stand-in for the thing you really care about}} \u2014 handy, but check it actually tracks retention before you trust it."},
+        ]},
+      { prompt:"A vendor offers to track each member individually \u2014 gym check-ins, desk hours, app taps, all named.",
+        objective:"It would be the richest data you\u2019ve ever had. Decide whether to use it.",
+        opts:[
+          {t:"Use all of it \u2014 maximum signal.", feed:{build:1,judgement:-1},
+            note:"Granular and intrusive: you\u2019d be profiling named members\u2019 daily movements without asking. Precise, and not yours to take."},
+          {t:"Use an anonymised, aggregated slice instead.", feed:{judgement:2,rigour:1},
+            lit:{need:"Provenance Seal",bonus:{judgement:1},msg:"Your Provenance Seal glows \u2014 you take the pattern, not the surveillance."},
+            note:"Most of the signal, none of the harm. Proportionate and defensible."},
+          {t:"Decline the tracking; run the clean random test instead.", feed:{judgement:1,explore:1}, anomaly:"refused_shiny",
+            note:"You turn down the richest dataset on the table for a fair, consented one. Looks like giving up power; it\u2019s the mature call."},
+        ]},
+      { prompt:"The test is back: free subscriptions lifted retention a little. A full gym build would cost roughly twenty times as much.",
+        objective:"Decide what to recommend.",
+        chart:barChart(["Subscriptions","Build a gym"],[5,100],1,"💷 A gym costs ~20\u00D7 the subscriptions \u2014 for a similar lift"),
+        opts:[
+          {t:"Recommend the gym \u2014 it\u2019s the flagship.", feed:{story:1,judgement:-1},
+            note:"The data says subscriptions get most of the benefit at a fraction of the cost. The gym is a want dressed as a finding."},
+          {t:"Recommend subscriptions now; revisit a gym only if the test scales.", feed:{ground:1,judgement:1,rigour:1},
+            lit:{need:"storycraft",bonus:{story:1},msg:"Your storytelling lands it: the cheaper win now, with a clear condition for the bigger bet later."},
+            note:"Evidence leading the money, not the other way round."},
+          {t:"Say both could work; list the pros and cons.", feed:{},
+            note:"They wanted a recommendation and got a menu."},
+        ]},
+    ]},
+};
+const CASE_IDS=['retail','rentcap','gym'];
+function caseScore(p,c){return c.lead.reduce((a,t)=>a+(p[t]||0),0);}
+function assignCase(p){let best='retail',m=-1;for(const id of CASE_IDS){const sc=caseScore(p,CASES[id]);if(sc>m){m=sc;best=id;}}return best;}
+function traitLab(t){return TR[t]?TR[t].lab:(t==='judgement'?'Judgement':t);}
+
+/* technique terms: plain phrase shown inline, label+definition revealed on hover/tap, collected in the plate glossary */
+const TERMS={
+  normalisation:{t:"Normalisation",d:"Comparing like with like \u2014 e.g. sales per visitor, not raw totals \u2014 so a small unit isn\u2019t judged against a giant one."},
+  unique_visitors:{t:"Unique visitors",d:"Counting each shopper once, however many times they pass the sensor \u2014 as opposed to total visits."},
+  data_cleaning:{t:"Data cleaning",d:"Fixing or removing dodgy records (double-counts, errors, duplicates) before you trust the numbers."},
+  heat_map:{t:"Heat map",d:"A picture of where activity concentrates \u2014 here, which parts of the mall are busy, hour by hour. Often built by geocoding points onto a map."},
+  conversion:{t:"Conversion rate",d:"Of the people who walk past or enter, the share who actually buy. High footfall + low conversion = an offer or layout problem."},
+  positioning:{t:"Positioning / pitch",d:"Where a unit sits and what footfall it naturally gets. A cold spot can starve even a good tenant."},
+  correlation:{t:"Correlation",d:"Two things moving together. On its own it does not prove one causes the other."},
+  counterfactual:{t:"Counterfactual",d:"The world you compare against \u2014 what would have happened without the thing you\u2019re studying."},
+  confounder:{t:"Confounder",d:"Something else that changed at the same time and could explain the result instead of the thing you\u2019re blaming."},
+  selection_bias:{t:"Selection bias",d:"When the group you measured isn\u2019t representative of the whole, so the numbers quietly mislead."},
+  composition:{t:"Composition",d:"What\u2019s actually inside a group or figure. Two \u2018separate\u2019 groups can overlap without you noticing."},
+  natural_experiment:{t:"Natural experiment",d:"Using a similar place or group that didn\u2019t get the policy as a ready-made comparison."},
+  baseline:{t:"Baseline",d:"The starting point you measure change against."},
+  comparison:{t:"Control / comparison group",d:"A like-for-like group that didn\u2019t get the change, so you can see what the change itself did."},
+  ab_test:{t:"A/B test",d:"Split a group at random, change one thing for one half, and compare the two."},
+  proxy:{t:"Proxy",d:"An easier-to-measure stand-in for the thing you really care about \u2014 only as good as how well it tracks it."},
+};
+const ANOMALIES={
+  absence:{title:"Followed the dog that didn\u2019t bark",
+    note:"This specimen chased the gap in the data \u2014 the footfall that wasn\u2019t there \u2014 instead of the obvious signal. Rare, and often where the real story hides."},
+  trusted_weird:{title:"Trusted the weird answer",
+    note:"It backed the counter-intuitive finding \u2014 that the dramatic cause barely mattered \u2014 when the easy, sellable story was right there. Takes nerve."},
+  honest_unknown:{title:"Said \u2018I don\u2019t know\u2019 out loud",
+    note:"Offered a confident answer that would have pleased the room, it chose honest uncertainty instead. The rarest move in the field, and the most trustworthy."},
+  refused_shiny:{title:"Refused the shiny data",
+    note:"It turned down the richest, most invasive dataset for a cleaner, fairer one. Looks like giving up power; it is the mature call."},
+};
+
+/* =========================================================================
+   FINAL FORMS (field-guide specimens)  keyed to dominant trait
+   ========================================================================= */
+const BEASTS = {
+  rigour:{ name:"The Strathffinch", bin:"Strix analytica", no:"№ 041",
+    hab:"Roosts near peer-reviewed streams and well-lit reading rooms.",
+    essence:"An owl-browed beast that will not say a thing until it is sure of it.",
+    feats:["Reaches for causation and uncertainty, not just a correlation that flatters.",
+           "Trusted where the stakes are high and the answer must hold.",
+           "Reads a result and asks, first, what could be fooling everyone."],
+    edge:"Sureness is slow, and the world often wants an answer by Friday. Its growth edge: a clearly-labelled 'good enough', shipped on time."},
+  ground:{ name:"The Glenbrush", bin:"Vulpes mercatus", no:"№ 017",
+    hab:"Patrols market edges, client corridors and the space between a brief and what was really meant.",
+    essence:"A sharp-eared fox that starts from the real problem, never the dataset.",
+    feats:["Asks whether anyone is even solving the right thing.",
+           "Reads the business and its people as fluently as the numbers.",
+           "The specimen whose work actually gets used."],
+    edge:"Good judgement needs technical depth beneath it. Its growth edge: going as deep as the problem demands, not only framing it well."},
+  story:{ name:"The Wandering Mapwing", bin:"Avis narrativa", no:"№ 033",
+    hab:"Nests wherever a room needs convincing; migrates toward the one chart that changes a meeting.",
+    essence:"A plumed, chart-tailed creature that makes a cold number land warm.",
+    feats:["Finds the single view that turns a conversation.",
+           "Translates between the figures and the people who must act on them.",
+           "Insight that lands — not merely insight that is correct."],
+    edge:"A clean story can outrun its evidence. Its growth edge: pairing the striking picture with the rigour that holds it up."},
+  build:{ name:"The Girncrubin", bin:"Fossor machinatus", no:"№ 008",
+    hab:"Dwells in pipelines, server-rooms and the messy underside of every tidy report.",
+    essence:"A sturdy, tool-limbed burrower that builds the plumbing everyone relies on.",
+    feats:["Turns chaos into clean, repeatable data flows.",
+           "Most at home exactly where the data is filthiest.",
+           "The one who quietly makes other people's analysis possible."],
+    edge:"A system is only as useful as the question it serves. Its growth edge: staying close to why the data matters, not just that it flows."},
+  explore:{ name:"The Spindrift", bin:"Ignis fatuus caledonicus", no:"№ 101",
+    hab:"Drifts across uncharted datasets at dusk, glowing faintly where no one else has looked.",
+    essence:"A luminous, will-o'-wisp haggis that tries the odd thing nobody would touch.",
+    feats:["Pokes at datasets others ignore — and sometimes finds the signal there.",
+           "Learns by shipping rough and watching what breaks.",
+           "The specimen whose strange bet occasionally reframes the whole question."],
+    edge:"Not every strange path pays off. Its growth edge: sensing which hunches to chase and which to drop, fast. (A field where everyone plays safe grows nothing but crabs — the ecosystem needs this one.)"},
+  chimera:{ name:"The Cuddychimera", bin:"Chimaera utilis", no:"№ 000",
+    hab:"Refuses a single habitat. Found in the gaps between all the others, translating.",
+    essence:"A rare, awkward, many-parts hybrid that grew a little of everything.",
+    feats:["Moves between building, proving, showing and framing without flinching.",
+           "Hard to file under one heading — which is exactly the point.",
+           "Bridges the specialists who can't quite talk to each other."],
+    edge:"Breadth can mean no single deep well. Depth costs breadth — its growth edge: choosing, when it truly matters, which specialism to follow all the way down."},
+};
+
+/* =========================================================================
+   STATE
+   ========================================================================= */
+const S = {
+  view:'intro', stage:'A', i:0, pending:null,
+  profile:{build:0,rigour:0,story:0,ground:0,explore:0,judgement:0},
+  items:[], itemNames:new Set(), storycraft:0, form:0,
+  caseId:null, showAllCases:false, glossary:{}, anomalies:new Set(),
+};
+const app=()=>document.getElementById('app');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* =========================================================================
+   PIXEL CREATURE COMPOSITOR
+   ========================================================================= */
+const CELL=8;
+function px(c,r,w,h,fill,op){return `<rect x="${c*CELL}" y="${r*CELL}" width="${w*CELL}" height="${h*CELL}" fill="${fill}"${op?` opacity="${op}"`:''} shape-rendering="crispEdges"/>`;}
+function hx(n){return clamp(Math.round(n),0,255).toString(16).padStart(2,'0');}
+function mix(a,b,t){const pa=[1,3,5].map(i=>parseInt(a.substr(i,2),16)),pb=[1,3,5].map(i=>parseInt(b.substr(i,2),16));
+  return '#'+pa.map((v,i)=>hx(v+(pb[i]-v)*t)).join('');}
+function shade(hex,t){return mix(hex,t<0?'#000000':'#ffffff',Math.abs(t));}
+
+function dominant(p){let d='build',m=-1;POWER.forEach(k=>{if(p[k]>m){m=p[k];d=k;}});return d;}
+function archetypeKey(p){
+  const s=POWER.slice().sort((a,b)=>p[b]-p[a]),top=s[0],second=s[1];
+  if(top==='explore'||(p.explore>=3&&(p[top]-p.explore)<=1))return 'explore';
+  if((p[top]-p[second])<=1)return 'chimera';
+  return top;
+}
+function temperament(p){
+  const powMax=Math.max(...POWER.map(k=>p[k]));
+  if(powMax<2)return 'mixed';
+  if(p.judgement>=4&&p.judgement>=powMax*0.5)return 'sound';
+  if(p.judgement<=Math.max(1,powMax*0.25))return 'volatile';
+  return 'mixed';
+}
+
+/* body silhouette: row -> [startCol,endCol], symmetric around col 11 */
+const SIL={6:[9,13],7:[8,14],8:[7,15],9:[6,16],10:[6,16],11:[5,17],12:[5,17],13:[5,17],14:[6,16],15:[6,16],16:[7,15],17:[8,14],18:[9,13]};
+
+function buildCreature(p,form,items,temper){
+  const dom=dominant(p), arch=archetypeKey(p);
+  const total=POWER.reduce((a,k)=>a+p[k],0)||1;
+  const share=Math.max(...POWER.map(k=>p[k]))/total;
+
+  // palette: haggis-brown at form 0, drifting to trait tint as it evolves
+  const haggis='#9c7a4d';
+  const refined=mix('#e9e4d6',TR[dom]?TR[dom].color:'#cccccc',clamp(0.14+share*0.5,0,0.6));
+  let body = form===0 ? haggis : mix(haggis,refined,clamp(form/2,0,1));
+  if(temper==='volatile')body=mix(body,'#7a3a2a',0.18);
+  if(temper==='sound')body=shade(body,0.06);
+  const belly=shade(body,0.16), dark=shade(body,-0.22), ink='#2a2420';
+
+  let s='';
+
+  /* ---- aura (judgement temperament) behind everything ---- */
+  if(temper==='sound'){const g='#f3e6b0';
+    s+=px(9,3,1,1,g,.9)+px(11,2,1,1,g,.9)+px(13,3,1,1,g,.9)+px(7,5,1,1,g,.6)+px(15,5,1,1,g,.6);}
+  if(temper==='volatile'){const r='#c6502f';
+    s+=px(5,8,1,2,r,.8)+px(4,11,1,2,r,.8)+px(5,14,1,2,r,.8)+px(17,9,1,2,r,.8)+px(18,12,1,2,r,.8);}
+
+  /* ---- legs: haggis has 4 lopsided; evolved has 2 sturdy ---- */
+  if(form===0){
+    s+=px(7,19,2,2,dark)+px(9,19,1,2,dark)+px(13,19,1,3,dark)+px(15,19,2,2,dark); // lopsided
+  }else{
+    s+=px(8,19,2,2,dark)+px(13,19,2,2,dark);
+  }
+
+  /* ---- body bands ---- */
+  for(const r in SIL){const[a,b]=SIL[r];s+=px(a,+r,b-a+1,1, (+r>=15?belly:body));}
+
+  /* ---- fur texture on the wild/early forms ---- */
+  if(form<=1){
+    s+=px(7,17,1,1,dark,.7)+px(10,18,1,1,dark,.6)+px(14,17,1,1,dark,.7)+px(6,15,1,1,dark,.5)+px(16,15,1,1,dark,.5);
+    if(form===0)s+=px(10,5,1,1,dark)+px(11,5,1,1,dark); // top tuft
+  }
+
+  /* ---- TAIL + EARS: final-form flourish (form 3) ---- */
+  if(form>=3){
+    const c=TR[dom]?TR[dom].color:'#bbb';
+    if(arch==='ground'){ // fox: ears + brush tail
+      s+=px(7,4,1,2,body)+px(6,3,1,2,body)+px(15,4,1,2,body)+px(16,3,1,2,body);
+      s+=px(6,2,1,1,dark)+px(16,2,1,1,dark);
+      s+=px(18,13,2,2,body)+px(19,12,2,2,shade(body,.1))+px(20,11,2,2,belly); // brush
+    }else if(arch==='rigour'){ // owl: ear tufts
+      s+=px(7,3,1,3,shade(c,-.1))+px(15,3,1,3,shade(c,-.1))+px(7,2,1,1,c)+px(15,2,1,1,c);
+    }else if(arch==='story'){ // mapwing: chart-feather tail
+      s+=px(18,14,1,2,c)+px(19,12,1,4,shade(c,.1))+px(20,10,1,6,shade(c,.2))+px(21,13,1,3,c);
+      s+=px(6,8,1,1,c,.8)+px(16,8,1,1,c,.8); // plume hints
+    }else if(arch==='build'){ // girncrubin: gear-pack + stubby tail
+      s+=px(17,9,2,2,shade(c,-.1))+px(18,8,1,1,c)+px(16,8,1,1,c);
+      s+=px(18,14,1,2,dark);
+    }else if(arch==='explore'){ // spindrift: wisp flames
+      const f='#ffd36a';
+      s+=px(4,6,1,1,c,.9)+px(3,9,1,1,f,.9)+px(5,12,1,1,c,.8)+px(18,7,1,1,f,.9)+px(19,10,1,1,c,.9)+px(17,14,1,1,f,.8);
+      s+=px(11,2,1,1,f,.9);
+    }else if(arch==='chimera'){ // mismatched: one owl tuft, one fox ear, patchy tail
+      s+=px(7,3,1,3,shade(TR.rigour.color,-.1)); // owl tuft left
+      s+=px(15,4,1,2,body)+px(16,3,1,2,body)+px(16,2,1,1,dark); // fox ear right
+      s+=px(18,13,1,2,TR.story.color)+px(19,12,1,2,TR.ground.color); // patchy tail
+    }
+  }
+
+  /* ---- CREST (rigour) ---- */
+  if(form>=1){
+    const rv=p.rigour, ch=clamp(Math.round(rv*0.5),0,5);
+    if(ch>0){const c=TR.rigour.color,cd=shade(c,-.15);
+      s+=px(10,6-ch,1,ch,c)+px(11,6-ch,1,ch,c);
+      if(rv>=4){const sd=Math.max(1,ch-2);s+=px(9,6-sd,1,sd,cd)+px(12,6-sd,1,sd,cd);}
+    }
+  }
+  /* ---- ANTENNAE (explore) ---- */
+  if(form>=1){
+    const ev=p.explore, al=clamp(Math.round(ev*0.5),0,5);
+    if(ev>=1&&al>0){const c=TR.explore.color,cd=shade(c,-.2),tip=shade(c,.3);
+      s+=px(7,6-al,1,al,cd)+px(15,6-al,1,al,cd);
+      s+=px(6,6-al-2,2,2,c)+px(14,6-al-2,2,2,c)+px(6,6-al-2,1,1,tip)+px(14,6-al-2,1,1,tip);
+    }
+  }
+  /* ---- ARMS (build) ---- */
+  if(form>=1){
+    const iv=p.build, len=clamp(1+Math.round(iv*0.4),1,4), th=iv>=6?3:2, armC=shade(body,-0.05);
+    s+=px(5-len,12,len,th,armC)+px(17,12,len,th,armC);
+    if(iv>=5){const c=TR.build.color;s+=px(5-len-1,12,1,th,c)+px(17+len,12,1,th,c);} // tool-tips
+  }
+  /* ---- SATCHEL (ground) ---- */
+  if(form>=1){
+    const dv=p.ground;
+    if(dv>=1){const c=TR.ground.color,flap=shade(c,.2),big=dv>=4,x=big?5:6,w=big?3:2,y=big?14:15,h=big?3:2;
+      s+=px(8,11,1,1,shade(c,-.3))+px(7,12,1,1,shade(c,-.3))+px(x+w-1,13,1,1,shade(c,-.3));
+      s+=px(x,y,w,h,c)+px(x,y,w,1,flap);
+    }
+  }
+
+  /* ---- EYES (story) ---- */
+  const vv=p.story, es=form===0?1:clamp(2+Math.round(vv*0.4),2,5), eyeRow=9;
+  const lS=11-es,rS=11, sclera='#ffffff';
+  if(form===0){ // tiny haggis dot-eyes
+    s+=px(9,9,1,1,ink)+px(12,9,1,1,ink);
+  }else{
+    s+=px(lS,eyeRow,es,es,sclera)+px(rS,eyeRow,es,es,sclera);
+    const pr=eyeRow+es-Math.min(2,es),psz=es>=4?2:1;
+    s+=px(11-psz,pr,psz,psz,ink)+px(rS,pr,psz,psz,ink);
+    s+=px(lS,eyeRow,1,1,'#dfefff')+px(rS,eyeRow,1,1,'#dfefff');
+    if(vv>=4){const b=TR.story.color;s+=px(lS,eyeRow-1,es,1,b)+px(rS,eyeRow-1,es,1,b);}
+  }
+  /* ---- mouth ---- */
+  const mr=form===0?11:eyeRow+es+1;
+  s+=px(9,mr,1,1,ink)+px(12,mr,1,1,ink)+px(10,mr+1,2,1,ink);
+  if(form===0)s+=px(10,10,2,1,shade(body,-0.1)); // little snout
+
+  /* ---- ITEMS carried on the body ---- */
+  // weapons: little tools leaning on the right; ornaments: neck beads + head feather
+  const weapons=items.filter(it=>it.kind==='weapon'), orns=items.filter(it=>it.kind==='ornament');
+  weapons.slice(0,3).forEach((it,k)=>{
+    const c=TR[it.trait]?TR[it.trait].color:'#ccc', xx=18+k, yy=10;
+    s+=px(xx,yy,1,5,'#5a4a36'); // handle
+    s+=px(xx-0,yy-1,1,1,shade(c,.25))+px(xx,yy,1,1,c); // tip
+  });
+  orns.slice(0,3).forEach((it,k)=>{
+    const c=TR[it.trait]?TR[it.trait].color:(it.trait==='judgement'?JUDGE:'#ccc');
+    if(it.name==="Wayfarer's Feather"){ s+=px(8,4,1,2,c)+px(7,5,1,1,shade(c,.2)); } // head feather
+    else { s+=px(9+k,mr+2,1,1,c); if(k===0)s+=px(10,mr+1,1,1,'#5a4a36'); } // neck bead(s)
+  });
+
+  return `<svg viewBox="-24 -64 240 264" role="img" aria-label="Specimen illustration">${s}</svg>`;
+}
+
+/* =========================================================================
+   SIDE PANEL (plate + traits)
+   ========================================================================= */
+const FORMCAP=["Wild Haggis — undocumented","Fledgling specimen","Maturing specimen","Catalogued specimen"];
+function sidePanel(caption){
+  const temper=temperament(S.profile);
+  return `<div>
+    <div class="plate"><span class="pin"></span><div class="creature" id="cr">${buildCreature(S.profile,S.form,S.items,temper)}</div></div>
+    <p class="platecap"><b>${caption||FORMCAP[S.form]}</b></p>
+    ${traitPanel(temper)}
+  </div>`;
+}
+function traitPanel(temper){
+  const hearts=['','♡','♥','♥♥','♥♥♥','♥♥♥'][clamp(Math.round(S.profile.judgement/2),0,5)]||'♡';
+  const tcol=temper==='sound'?'#2e6b3f':temper==='volatile'?'#9a4625':'#7a6a36';
+  return `<div class="traits">
+    <h4>Traits taking shape</h4>
+    ${POWER.map(k=>`<div class="trait"><span class="lab">${TR[k].lab}</span>
+      <div class="meter"><i style="width:${clamp(S.profile[k]/10*100,0,100)}%;background:${TR[k].color}"></i></div></div>`).join('')}
+    <div class="heart"><span class="pip" style="color:${JUDGE}">${hearts||'·'}</span>
+      <span>Temper: <b style="color:${tcol}">${temper==='sound'?'sound':temper==='volatile'?'volatile':'unsettled'}</b></span></div>
+    ${S.items.length?`<div class="satchel"><div class="lab">Carrying</div>${
+      S.items.map(it=>{const c=TR[it.trait]?TR[it.trait].color:(it.trait==='judgement'?JUDGE:'#bbb');
+        return `<span class="pill ${it.kind==='weapon'?'w':''}"><span class="d" style="background:${c}"></span>${it.name}</span>`;}).join('')
+    }</div>`:''}
+  </div>`;
+}
+
+/* =========================================================================
+   VIEWS
+   ========================================================================= */
+function viewIntro(){
+  app().innerHTML=`
+  <div class="masthead"><div class="kicker">A Naturalist's Pilot Pathway</div>
+    <h1>A Field Guide to the Wild Haggis</h1>
+    <div class="sub">in which an absurd Highland beast is cultivated into a research & data creature</div></div>
+  <p class="lede" style="margin-top:16px">You begin, as all great careers do, as a <b>wild haggis</b> — round, lopsided, and officially non-existent. There is nothing dignified to protect here, which is rather the point: every choice only <i>changes</i> the beast, never harms it. Feed it well across three chapters and see what you find in the field.</p>
+  <div class="plate intro-plate"><span class="pin"></span><div class="creature"><div>${buildCreature(S.profile,0,[],'mixed')}</div></div></div>
+  <p class="platecap"><b>Specimen 00 — Wild Haggis</b>, as yet uncultivated</p>
+  <div class="center"><button class="btn brass" id="go">Begin the cultivation →</button></div>`;
+  document.getElementById('go').onclick=()=>{S.view='introA';render();};
+}
+
+function chapterIntro(key){
+  const data={
+    A:{ch:"Chapter I",title:"Cultivation",meta:"",
+        lede:"The specimen takes its first shape. Four choices about what to learn — each feeds a trait and hands the beast a tool or a habit it will carry.",
+        next:"A",btn:"Into the field notes →"},
+    B:{ch:"Chapter II",title:"The Telling",meta:"It sheds the wild — features surface, your first tools in its grip. Still absurd; no longer <i>only</i> absurd.",
+        lede:"Now it learns the one skill every job demands: turning information floating in the air into a story that holds. A gentle rehearsal — watch what each move costs.",
+        next:"B",btn:"Begin the rehearsal →"},
+    C:{ch:"Chapter III",title:"The Field",meta:"Steadier now, and surer — it has learned to make a number land. One chapter left: the field itself.",
+        lede:"Graduated, and onto a research desk. A real client, a real mess. What you grew meets a world it couldn't predict — your tools light the way, but nothing here can kill the beast.",
+        next:"caseAssign",btn:"Report to your desk →"},
+  }[key];
+  app().innerHTML=`
+  <div class="chapline">${data.ch}</div>
+  <h1 style="text-align:center;font-size:clamp(26px,5vw,40px);margin:0 0 6px">${data.title}</h1>
+  ${data.meta?`<p class="lede" style="font-style:italic;color:var(--brass)">${data.meta}</p>`:''}
+  <p class="lede">${data.lede}</p>
+  <div class="plate intro-plate"><span class="pin"></span><div class="creature" id="cr"><div>${buildCreature(S.profile,S.form,S.items,temperament(S.profile))}</div></div></div>
+  <p class="platecap"><b>${FORMCAP[S.form]}</b></p>
+  <div class="center"><button class="btn ${key==='A'?'':'brass'}" id="go">${data.btn}</button></div>`;
+  if(key!=='A'){const cr=document.getElementById('cr');if(cr)cr.classList.add('pulse');}
+  document.getElementById('go').onclick=()=>{S.i=0;S.view=data.next;render();};
+}
+
+function questionView(list,stageKey){
+  const Q=list[S.i];
+  app().innerHTML=`<div class="stage">
+    ${sidePanel()}
+    <div class="card">
+      <div class="steps">${list.map((_,k)=>`<span class="sd ${k<S.i?'done':k===S.i?'on':''}"></span>`).join('')}</div>
+      <p class="prompt">${Q.prompt}</p>
+      ${Q.objective?`<div class="objective"><span class="t">🎯 Objective</span><span>${Q.objective}</span></div>`:''}
+      ${Q.scene?`<p class="scene">${Q.scene}</p>`:''}
+      ${Q.chart||''}
+      <div class="opts">${Q.opts.map((o,k)=>o.poster
+        ? `<button class="opt poster-opt" data-k="${k}"><span class="pthumb">${POSTERS[o.poster]}</span><span class="ptext">${o.t}</span></button>`
+        : `<button class="opt" data-k="${k}">${o.t}</button>`).join('')}</div>
+    </div></div>`;
+  app().querySelectorAll('.opt').forEach(b=>b.onclick=()=>chooseOption(stageKey,+b.dataset.k));
+}
+
+function applyFeed(feed){for(const k in feed){S.profile[k]=(S.profile[k]||0)+feed[k];}}
+function growPulse(){const cr=document.getElementById('cr');if(!cr)return;
+  cr.innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile));
+  cr.classList.remove('pulse');void cr.offsetWidth;cr.classList.add('pulse');}
+function bumpMeters(){
+  app().querySelectorAll('.trait .meter i').forEach((el,idx)=>{el.style.width=clamp(S.profile[POWER[idx]]/10*100,0,100)+'%';});
+}
+
+function chooseOption(stageKey,k){
+  if(stageKey==='A'){
+    const o=STAGE_A[S.i];const opt=o.opts[k];
+    applyFeed(opt.feed);
+    if(opt.item){S.items.push(opt.item);S.itemNames.add(opt.item.name);}
+    toast(opt.item?('Gained · '+opt.item.name):'Fed');
+    growPulse();bumpMeters();
+    // refresh carrying panel
+    const sp=app().querySelector('.traits');if(sp)sp.outerHTML=traitPanel(temperament(S.profile));
+    setTimeout(()=>{S.i++;if(S.i>=STAGE_A.length){S.form=1;S.view='introB';}render();},640);
+    return;
+  }
+  // Stage B or C: apply, then show consequence note + continue
+  const list=stageKey==='B'?STAGE_B:STAGE_C;const opt=list[S.i].opts[k];
+  applyFeed(opt.feed);
+  if(stageKey==='B'&&opt.integrated)S.storycraft++;
+  let litMsg='';
+  if(stageKey==='C'&&opt.lit){
+    const need=opt.lit.need;
+    const have = need==='storycraft'? S.storycraft>=2 : S.itemNames.has(need);
+    if(have){applyFeed(opt.lit.bonus);litMsg=opt.lit.msg;}
+  }
+  toast('Noted');
+  S.pending={note:opt.note,lit:litMsg,stageKey};
+  S.view=stageKey==='B'?'noteB':'noteC';
+  render();
+}
+
+function noteView(stageKey){
+  const list=stageKey==='B'?STAGE_B:STAGE_C;const last=S.i+1>=list.length;
+  app().innerHTML=`<div class="stage">
+    ${sidePanel()}
+    <div class="card">
+      <div class="steps">${list.map((_,k)=>`<span class="sd ${k<=S.i?'done':''}"></span>`).join('')}</div>
+      <div class="note"><div class="h">Field note</div><p style="margin:0">${S.pending.note}</p>
+        ${S.pending.lit?`<p class="lit">✦ ${S.pending.lit}</p>`:''}</div>
+      <div class="center"><button class="btn" id="cont">${last?(stageKey==='B'?'The rehearsal ends →':'File the specimen →'):'Continue →'}</button></div>
+    </div></div>`;
+  growPulse();
+  document.getElementById('cont').onclick=()=>{
+    S.pending=null;S.i++;
+    if(S.i>=list.length){
+      if(stageKey==='B'){S.form=2;S.view='introC';}
+      else{S.form=3;S.view='reveal';}
+    }else{S.view=stageKey;}
+    render();
+  };
+}
+
+function caseAssignView(){
+  const assigned=assignCase(S.profile);
+  if(!S.caseId)S.caseId=assigned;
+  const litFor=c=>c.litItems.filter(n=>S.itemNames.has(n));
+  if(!S.showAllCases){
+    const c=CASES[assigned],lit=litFor(c);
+    app().innerHTML=`
+    <div class="chapline">The Posting</div>
+    <h1 style="text-align:center;font-size:clamp(24px,4.4vw,32px);margin:0 0 6px">A case lands on your desk</h1>
+    <p class="lede">The guide reads your specimen and points it toward the work it's built for.</p>
+    <div class="plate intro-plate"><span class="pin"></span><div class="creature"><div>${buildCreature(S.profile,S.form,S.items,temperament(S.profile))}</div></div></div>
+    <p class="platecap"><b>${FORMCAP[S.form]}</b></p>
+    <div class="card" style="max-width:560px;margin:14px auto 0">
+      <div class="spec-no" style="color:var(--brass)">Suited posting</div>
+      <div style="font-weight:700;font-size:20px;line-height:1.2;margin:2px 0 4px">${c.no} — ${c.title}</div>
+      <p style="color:var(--ink2);margin:0 0 8px">${c.blurb}</p>
+      <p style="font:italic 14px/1.45 Georgia,serif;color:var(--ink2);margin:0">Suited because it leads with <b style="font-style:normal">${c.lead.map(traitLab).join(' + ')}</b>${lit.length?`, and your ${lit.join(' & ')} ${lit.length>1?'fit':'fits'} it well`:''}.</p>
+      <div class="center"><button class="btn brass" id="take">Take this case →</button>
+        <button class="btn ghost" id="other">Try a different case</button></div>
+    </div>`;
+    document.getElementById('take').onclick=()=>{S.caseId=assigned;S.i=0;S.view='caseBeat';render();};
+    document.getElementById('other').onclick=()=>{S.showAllCases=true;render();};
+  }else{
+    const card=id=>{const c=CASES[id],lit=litFor(c);
+      return `<button class="opt" data-id="${id}"><b>${c.no} — ${c.title}</b>
+        <span style="display:block;color:var(--ink2);margin-top:3px">${c.blurb}</span>
+        <span class="k">leads with ${c.lead.map(traitLab).join(' + ')}${lit.length?` · your ${lit.join(' & ')} will help`:''}</span></button>`;};
+    app().innerHTML=`
+    <div class="chapline">The Posting</div>
+    <h1 style="text-align:center;font-size:clamp(24px,4.4vw,32px);margin:0 0 6px">Choose your case</h1>
+    <p class="lede">Any specimen can take any case — some just fit better. Send yours where you like.</p>
+    <div class="card" style="max-width:620px;margin:12px auto 0"><div class="opts">${CASE_IDS.map(card).join('')}</div></div>`;
+    app().querySelectorAll('.opt').forEach(btn=>btn.onclick=()=>{S.caseId=btn.dataset.id;S.i=0;S.showAllCases=false;S.view='caseBeat';render();});
+  }
+}
+
+function termify(text){
+  if(!text)return '';
+  return text.replace(/\{\{(\w+)\|([^}]+)\}\}/g,(m,k,phrase)=>{
+    if(TERMS[k])S.glossary[k]=true;
+    return `<span class="term" data-k="${k}" tabindex="0">${phrase}</span>`;
+  });
+}
+function caseHeader(c,lit){
+  return `<div style="font:600 11px/1 'Gill Sans','Segoe UI',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:8px">${c.no} — ${c.title}${lit.length?` · <span style="color:var(--ground);text-transform:none;letter-spacing:0;font-style:italic">${lit.join(' & ')} lit</span>`:''}</div>`;
+}
+function caseBeatView(){
+  const c=CASES[S.caseId],beat=c.beats[S.i],lit=c.litItems.filter(n=>S.itemNames.has(n));
+  app().innerHTML=`<div class="stage">
+    ${sidePanel()}
+    <div class="card">
+      ${caseHeader(c,lit)}
+      <div class="steps">${c.beats.map((_,k)=>`<span class="sd ${k<S.i?'done':k===S.i?'on':''}"></span>`).join('')}</div>
+      <p class="prompt">${termify(beat.prompt)}</p>
+      ${beat.objective?`<div class="objective"><span class="t">🎯 Objective</span><span>${termify(beat.objective)}</span></div>`:''}
+      ${beat.scene?`<p class="scene">${termify(beat.scene)}</p>`:''}
+      ${beat.chart||''}
+      <div class="opts">${beat.opts.map((o,k)=>`<button class="opt" data-k="${k}">${o.t}</button>`).join('')}</div>
+    </div></div>`;
+  app().querySelectorAll('.opt').forEach(b=>b.onclick=()=>chooseCaseOption(+b.dataset.k));
+}
+function chooseCaseOption(k){
+  const c=CASES[S.caseId],opt=c.beats[S.i].opts[k];
+  applyFeed(opt.feed||{});
+  let litMsg='';
+  if(opt.lit){const need=opt.lit.need,have=need==='storycraft'?S.storycraft>=2:S.itemNames.has(need);
+    if(have){applyFeed(opt.lit.bonus||{});litMsg=opt.lit.msg;}}
+  if(opt.anomaly)S.anomalies.add(opt.anomaly);
+  toast('Noted');
+  if(opt.note){S.pending={note:opt.note,lit:litMsg};S.view='caseNote';render();}
+  else{ // stub beats with no note: feed and advance
+    growPulse();const sp=app().querySelector('.traits');if(sp)sp.outerHTML=traitPanel(temperament(S.profile));
+    setTimeout(()=>{S.i++;if(S.i>=c.beats.length){S.form=3;S.view='reveal';}render();},500);
+  }
+}
+function caseNoteView(){
+  const c=CASES[S.caseId],last=S.i+1>=c.beats.length,lit=c.litItems.filter(n=>S.itemNames.has(n));
+  app().innerHTML=`<div class="stage">
+    ${sidePanel()}
+    <div class="card">
+      ${caseHeader(c,lit)}
+      <div class="steps">${c.beats.map((_,k)=>`<span class="sd ${k<=S.i?'done':''}"></span>`).join('')}</div>
+      <div class="note"><div class="h">Field note</div><p style="margin:0">${termify(S.pending.note)}</p>
+        ${S.pending.lit?`<p class="lit">✦ ${termify(S.pending.lit)}</p>`:''}</div>
+      <div class="center"><button class="btn" id="cont">${last?'File the specimen →':'Continue →'}</button></div>
+    </div></div>`;
+  growPulse();
+  document.getElementById('cont').onclick=()=>{
+    S.pending=null;S.i++;
+    if(S.i>=c.beats.length){S.form=3;S.view='reveal';}else{S.view='caseBeat';}
+    render();
+  };
+}
+
+function revealView(){
+  const arch=archetypeKey(S.profile),b=BEASTS[arch],temper=temperament(S.profile);
+  const tclass=temper==='sound'?'t-sound':temper==='volatile'?'t-volatile':'t-mixed';
+  const tlabel=temper==='sound'?'Temper: sound · well-handled':temper==='volatile'?'Temper: volatile · handle with care':'Temper: unsettled';
+  const temperNote=temper==='sound'
+    ? "A well-tempered specimen: its judgement kept pace with its power, and it shows — clear-eyed and steady."
+    : temper==='volatile'
+    ? "Its capability outran its judgement. A brilliant, slightly feral thing — capable of real harm if left unchecked. Note for the keeper: slow it down."
+    : "A balanced disposition — neither saintly nor reckless. Most working specimens look like this.";
+  const carry=S.items.length?S.items.map(it=>it.name).join(' · '):'nothing but its wits';
+  app().innerHTML=`
+  <div class="chapline">Specimen Plate</div>
+  <div class="specimen">
+    <div class="spec-top">
+      <div class="spec-plate">${buildCreature(S.profile,3,S.items,temper)}</div>
+      <div class="spec-id">
+        <div class="spec-no">${b.no}</div>
+        <div class="spec-name">${b.name}</div>
+        <div class="spec-bin">${b.bin}</div>
+        <div class="spec-hab">${b.hab}</div>
+        ${S.caseId?`<div class="spec-hab" style="margin-top:5px"><b>Field posting:</b> ${CASES[S.caseId].no} — ${CASES[S.caseId].title}</div>`:''}
+        <span class="spec-temper ${tclass}">${tlabel}</span>
+      </div>
+    </div>
+    <div class="spec-body">
+      <p style="font-style:italic;margin:0 0 4px">${b.essence}</p>
+      <h3>Field markings</h3>
+      <ul>${b.feats.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <h3>Where the world pushes back</h3>
+      <div class="spec-edge">${b.edge}</div>
+      <h3>Disposition</h3>
+      <p style="margin:0 0 10px">${temperNote}</p>
+      <h3>Observed carrying</h3>
+      <p class="carry">${carry}</p>
+      ${Object.keys(S.glossary).length?`<h3>Field glossary — terms this specimen met</h3>
+        <dl class="glossary">${Object.keys(S.glossary).map(k=>TERMS[k]?`<dt>${TERMS[k].t}</dt><dd>${TERMS[k].d}</dd>`:'').join('')}</dl>`:''}
+      ${S.anomalies.size
+        ? `<h3>Field anomaly</h3>${[...S.anomalies].map(a=>ANOMALIES[a]?`<div class="anomaly"><div class="h">Observer\u2019s note</div><b>${ANOMALIES[a].title}</b><p style="margin:5px 0 0;color:var(--ink2)">${ANOMALIES[a].note}</p></div>`:'').join('')}`
+        : `<p class="whisper">Observer\u2019s note: other specimens have been seen doing stranger things in this field. This one played it safe \u2014 there were other ways through.</p>`}
+    </div>
+  </div>
+  <p class="closing">No specimen is the right one. This is the one you grew — and the field needs all of them, the strange and fallible ones most of all.</p>
+  <div class="center"><button class="btn brass" id="again">Cultivate another →</button></div>`;
+  document.getElementById('again').onclick=()=>{
+    Object.assign(S,{view:'intro',stage:'A',i:0,pending:null,
+      profile:{build:0,rigour:0,story:0,ground:0,explore:0,judgement:0},
+      items:[],itemNames:new Set(),storycraft:0,form:0,caseId:null,showAllCases:false,glossary:{},anomalies:new Set()});
+    render();
+  };
+}
+
+/* =========================================================================
+   TOAST + LOOP
+   ========================================================================= */
+let toastT;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.background=JUDGE;
+  el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),1000);}
+
+function render(){
+  switch(S.view){
+    case 'intro':  viewIntro(); break;
+    case 'introA': chapterIntro('A'); break;
+    case 'introB': chapterIntro('B'); break;
+    case 'introC': chapterIntro('C'); break;
+    case 'A': questionView(STAGE_A,'A'); break;
+    case 'B': questionView(STAGE_B,'B'); break;
+    case 'C': questionView(STAGE_C,'C'); break;
+    case 'noteB': noteView('B'); break;
+    case 'caseAssign': caseAssignView(); break;
+    case 'caseBeat': caseBeatView(); break;
+    case 'caseNote': caseNoteView(); break;
+    case 'reveal': revealView(); break;
+    default: viewIntro();
+  }
+  window.scrollTo(0,0);
+}
+
+/* ---- technique-term tooltip (hover on desktop, tap on mobile) ---- */
+const _pop=document.getElementById('termpop');
+function showPop(el){const T=TERMS[el.dataset.k];if(!T)return;
+  _pop.innerHTML=`<b>${T.t}</b> — ${T.d}`;_pop.style.display='block';_pop._k=el.dataset.k;
+  const r=el.getBoundingClientRect(),w=Math.min(260,window.innerWidth-16);
+  _pop.style.width=w+'px';
+  _pop.style.left=Math.max(8,Math.min(window.scrollX+r.left, window.scrollX+window.innerWidth-w-8))+'px';
+  _pop.style.top=(window.scrollY+r.bottom+6)+'px';}
+function hidePop(){_pop.style.display='none';_pop._k=null;}
+document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('.term');if(el)showPop(el);});
+document.addEventListener('mouseout',e=>{const el=e.target.closest&&e.target.closest('.term');if(el&&!el.contains(e.relatedTarget))hidePop();});
+document.addEventListener('focusin',e=>{const el=e.target.closest&&e.target.closest('.term');if(el)showPop(el);});
+document.addEventListener('focusout',hidePop);
+document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('.term');
+  if(el){e.preventDefault();if(_pop.style.display==='block'&&_pop._k===el.dataset.k)hidePop();else showPop(el);}
+  else if(!e.target.closest('#termpop'))hidePop();});
+window.addEventListener('scroll',hidePop,{passive:true});
+
+/* initial */
+render();
+</script>
+</body>
+</html>
