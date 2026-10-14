@@ -101,6 +101,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 .modal-back{position:fixed;inset:0;background:rgba(10,24,21,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.card{max-width:460px;width:100%;max-height:86vh;overflow:auto}
 .box-tag{font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:8px}
+.purpose{max-width:62ch;margin:15px auto 0;text-align:center;color:var(--ink2);font-size:15.5px;line-height:1.55}
+.purpose b{color:var(--ink)}
+.howlabel{text-align:center;font:700 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:20px 0 0}
+.howto{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px auto 2px;max-width:580px}
+.hstep{flex:1 1 150px;max-width:185px;text-align:center;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:12px 10px}
+.hstep svg{width:44px;height:44px;display:block;margin:2px auto 7px}
+.hstep .hn{font:700 10px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.12em;color:var(--brass);text-transform:uppercase;margin-bottom:2px}
+.hstep .hl{font:600 13px/1.3 "Gill Sans","Segoe UI",sans-serif;color:var(--ink)}
 .kitstrip{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 10px;font:12px/1 "Gill Sans","Segoe UI",sans-serif;color:var(--ink2)}
 .kititem{display:inline-flex;align-items:center;gap:5px;background:#efe9d4;border:1px solid var(--rule);border-radius:999px;padding:4px 9px}
 .tooltray{margin:14px 0 4px;padding:11px 12px;border:1px dashed var(--rule);border-radius:8px;background:#fffdf4}
@@ -214,6 +222,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .chartbox{margin:0 0 15px;background:#fffdf4;border:1px solid var(--rule);border-radius:8px;padding:12px 12px 6px}
 .chartbox svg{display:block;width:100%;height:auto;max-width:330px;margin:0 auto}
 .chartbox figcaption{text-align:center;font:italic 13px/1.4 Georgia,serif;color:var(--ink2);margin-top:4px}
+.opt.locked{opacity:.75;border-style:dashed;background:#f3eedf;cursor:help}
+.opt.locked .lockrow{display:flex;gap:8px;align-items:flex-start}
+.opt.locked .lockicon{color:var(--brass);flex:0 0 auto}
+.lockneed{display:block;margin-top:7px;font:700 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
+.toolbadge{display:inline-block;margin-top:7px;font:700 11px/1.1 "Gill Sans","Segoe UI",sans-serif;color:#2e6b3f;background:#e1efe1;border:1px solid #9cc7a8;border-radius:999px;padding:4px 10px}
 .poster-opt{display:flex;gap:13px;align-items:center;text-align:left}
 .pthumb{flex:0 0 74px}
 .pthumb svg{width:74px;height:auto;display:block;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.14)}
@@ -333,7 +346,7 @@ const POSTERS={reveal:posterSVG('reveal'),method:posterSVG('method'),headline:po
    ========================================================================= */
 const STAGE_A = [
   { prompt:"Which lens do you sink your first year into?",
-    objective:"Pick the specialism you\u2019ll master first \u2014 it shapes what your haggis is good at.",
+    objective:"Choose the kind of data work your analyst focuses on \u2014 it shapes what they\u2019re best at.",
     scene:"Every surveyor-of-data specialises a little. Choose where your eye sharpens.",
     opts:[
       {t:"The Valuation Lens — reading worth from market and asset data.", feed:{rigour:1,ground:1}, item:{name:"Valuation Lens",kind:"weapon",trait:"rigour"}},
@@ -342,7 +355,7 @@ const STAGE_A = [
       {t:"The Climate Prism — carbon, energy and the green ledger.", feed:{ground:1,explore:1}, item:{name:"Climate Prism",kind:"weapon",trait:"ground"}},
     ]},
   { prompt:"Which tool do you teach yourself, late at night?",
-    objective:"Choose a tool to teach yourself \u2014 it becomes a weapon for the cases ahead.",
+    objective:"Pick a technical skill to teach yourself \u2014 the real tools of the job, like coding or statistics.",
     scene:"Nobody hands you this one. You pick it up on your own.",
     opts:[
       {t:"The Code Wand — scripts and pipelines (Python, SQL).", feed:{build:2}, item:{name:"Code Wand",kind:"weapon",trait:"build"}},
@@ -351,7 +364,7 @@ const STAGE_A = [
       {t:"The Field Notebook — talking to the people behind the data.", feed:{ground:1,judgement:1}, item:{name:"Field Notebook",kind:"ornament",trait:"ground"}},
     ]},
   { prompt:"An early habit hardens into who you are.",
-    objective:"Lock in a working habit \u2014 it becomes part of who your haggis is.",
+    objective:"Lock in a working habit \u2014 the professional instincts good analysts rely on.",
     scene:"Small at first. Then it's a reflex, and reflexes show.",
     opts:[
       {t:"The Provenance Seal — always ask where the data came from.", feed:{judgement:2}, item:{name:"Provenance Seal",kind:"ornament",trait:"judgement"}},
@@ -359,7 +372,7 @@ const STAGE_A = [
       {t:"The Wayfarer's Feather — try the strange approach first.", feed:{explore:2}, item:{name:"Wayfarer's Feather",kind:"ornament",trait:"explore"}},
     ]},
   { prompt:"Under pressure, your instinct is to…",
-    objective:"Set your instinct under pressure \u2014 it tempers how your haggis turns out.",
+    objective:"Decide how your analyst works under pressure \u2014 every data scientist needs a default move.",
     scene:"The deadline is close and the answer isn't clean yet.",
     opts:[
       {t:"Slow down and get it right.", feed:{rigour:1,judgement:1}, item:{name:"Owl Charm",kind:"ornament",trait:"rigour"}},
@@ -604,8 +617,7 @@ const CASES = {
           {t:"Just build it and watch whether retention rises.", feed:{build:1},
             note:"Slow, expensive, and even if retention rises you won\u2019t know the gym did it \u2014 with no {{comparison|a like-for-like group that didn\u2019t get the change}}, everything moved at once."},
           {t:"Offer free gym subscriptions to a random half; compare the two.", feed:{rigour:1,explore:1},
-            lit:{need:"Code Wand",bonus:{build:1},msg:"Your Code Wand sets it up: a clean {{ab_test|split a group at random, change one thing for one half, and compare}}."},
-            note:"A random split makes the two halves alike except the gym \u2014 so a difference afterwards really points at the gym."},
+            note:"A random split makes the two halves alike except the gym \u2014 so a difference afterwards really points at the gym. That\u2019s the whole idea of an {{ab_test|A/B test}}."},
           {t:"Use something measurable now as a stand-in \u2014 do gym-users log in more?", feed:{explore:1},
             note:"A {{proxy|an easier-to-measure stand-in for the thing you really care about}} \u2014 handy, but check it actually tracks retention before you trust it."},
         ]},
@@ -936,15 +948,26 @@ function traitPanel(temper){
 /* =========================================================================
    VIEWS
    ========================================================================= */
+function introIcon(k){
+  if(k==='equip')return `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="21" y="18" width="6" height="21" rx="3" fill="#5a4a36"/><rect x="14" y="12" width="20" height="11" rx="5" fill="#b2863a"/><path d="M24 4 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#e3b53e"/></svg>`;
+  if(k==='case')return `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="19" width="30" height="21" rx="3" fill="#6b4e2c"/><rect x="18" y="11" width="12" height="9" rx="2" fill="#5c4327"/><rect x="9" y="26" width="30" height="3" fill="#b2863a"/><rect x="21" y="26" width="6" height="6" rx="1" fill="#e6c24a"/></svg>`;
+  return `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="29" r="12" fill="#9b7ae0"/><rect x="18" y="26" width="4" height="4" fill="#fff"/><rect x="26" y="26" width="4" height="4" fill="#fff"/><path d="M24 3 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#e3b53e"/><circle cx="10" cy="15" r="2" fill="#e3b53e"/><circle cx="39" cy="12" r="1.6" fill="#e3b53e"/></svg>`;
+}
 function viewIntro(){
   app().innerHTML=`
-  <div class="masthead"><div class="kicker">A Naturalist's Pilot Pathway</div>
-    <h1>A Field Guide to the Wild Haggis</h1>
-    <div class="sub">in which an absurd Highland beast is cultivated into a research & data creature</div></div>
-  <p class="lede" style="margin-top:16px">You begin, as all great careers do, as a <b>wild haggis</b> — round, lopsided, and officially non-existent. There is nothing dignified to protect here, which is rather the point: every choice only <i>changes</i> the beast, never harms it. Feed it well across three chapters and see what you find in the field.</p>
+  <div class="masthead"><div class="kicker">Grow a data scientist</div>
+    <h1>The Wild Haggis</h1>
+    <div class="sub">A playful way to find out what a <b>data scientist</b> really does.</div></div>
   <div class="plate intro-plate"><span class="pin"></span><div class="creature"><div>${buildCreature(S.profile,0,[],'mixed')}</div></div></div>
-  <p class="platecap"><b>Specimen 00 — Wild Haggis</b>, as yet uncultivated</p>
-  <div class="center"><button class="btn brass" id="go">Begin the cultivation →</button></div>`;
+  <p class="platecap"><b>Specimen 00 — Wild Haggis.</b> Your future analyst, before any training.</p>
+  <p class="purpose">A <b>data scientist</b> builds and digs into data to find what it's hiding. A <b>research analyst</b> turns those findings into clear advice a client or employer can act on. Here you grow one from scratch: pick up real data-analysis skills, use them on real jobs — valuing a property, testing a policy, running an experiment — and see what kind of analyst your haggis becomes.</p>
+  <div class="howlabel">How to play</div>
+  <div class="howto">
+    <div class="hstep"><div class="hn">1 · Equip</div>${introIcon('equip')}<div class="hl">Collect data-analysis skills in your room</div></div>
+    <div class="hstep"><div class="hn">2 · Work a case</div>${introIcon('case')}<div class="hl">Use them on a real client's problem</div></div>
+    <div class="hstep"><div class="hn">3 · Evolve</div>${introIcon('evolve')}<div class="hl">See the analyst your haggis became</div></div>
+  </div>
+  <div class="center"><button class="btn brass" id="go">Start →</button></div>`;
   document.getElementById('go').onclick=()=>{S.view='introA';render();};
 }
 
@@ -1178,7 +1201,7 @@ function openedChestSVG(){
 }
 /* sequential-step rooms (Chapters II & III): a path of numbered spots walked in order */
 const STATIONS=[{x:18,y:71},{x:41,y:60},{x:63,y:69},{x:83,y:59}];
-function ensureRoom(id,onInit){ if(ROOM.cur!==id){ ROOM.cur=id; ROOM.active=true; ROOM.face=1; ROOM.keys={}; ROOM.near=-1; onInit(); } }
+function ensureRoom(id,onInit){ if(ROOM.cur!==id){ ROOM.cur=id; ROOM.active=true; ROOM.face=1; ROOM.keys={}; ROOM.near=-1; ROOM.target=null; ROOM.autoOpen=null; onInit(); } }
 function markerSVG(n,state){
   const col=state==='active'?'#e3b53e':state==='done'?'#5bb87a':'#53736b';
   const ring=state==='active'?`<circle cx="32" cy="30" r="27" fill="none" stroke="#e3b53e" stroke-width="2" opacity=".55"/>`:'';
@@ -1322,10 +1345,17 @@ function roomTick(){
   if(!ROOM.active)return;
   let dx=0,dy=0;const k=ROOM.keys;
   if(k.up)dy--; if(k.down)dy++; if(k.left)dx--; if(k.right)dx++;
+  if(dx||dy)ROOM.target=null;                               // keyboard/D-pad cancels tap-to-move
+  if(!dx&&!dy&&ROOM.target&&!S._modal){                     // walk toward tapped point
+    const tx=ROOM.target.x-ROOM.x, ty=ROOM.target.y-ROOM.y, dist=Math.hypot(tx,ty);
+    if(dist<1.6){ const ai=ROOM.autoOpen; ROOM.target=null; ROOM.autoOpen=null;
+      if(ai!=null&&ROOM.isActive(ai))ROOM.onOpen(ai); }
+    else { dx=tx/dist; dy=ty/dist; }
+  }
   const rhin=document.getElementById('rhin');
   if((dx||dy)&&!S._modal){const l=Math.hypot(dx,dy)||1,sp=0.72;
     ROOM.x=clamp(ROOM.x+dx/l*sp,8,90); ROOM.y=clamp(ROOM.y+dy/l*1.0*sp,26,86);
-    if(dx<0)ROOM.face=-1; else if(dx>0)ROOM.face=1;
+    if(dx<-0.05)ROOM.face=-1; else if(dx>0.05)ROOM.face=1;
     if(rhin)rhin.classList.add('walk'); positionHaggis(); updateNear();
     let inEgg=-1;
     (ROOM.eggs||[]).forEach((e,idx)=>{ if(Math.abs(e.x-ROOM.x)<=(e.w/2+3)&&Math.abs(e.y-ROOM.y)<=(e.h/2+4))inEgg=idx; });
@@ -1350,8 +1380,13 @@ function setupRoomControls(){
     btn.addEventListener('pointerdown',e=>{e.preventDefault();set(1);});
     ['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,()=>set(0)));
   });
-  (ROOM.stations||[]).forEach((b,i)=>{const c=document.getElementById('chest'+i); if(c)c.onclick=()=>{ if(ROOM.isActive(i))ROOM.onOpen(i); };});
-  app().querySelectorAll('.egg').forEach(el=>el.onclick=()=>triggerEgg(+el.dataset.egg));
+  (ROOM.stations||[]).forEach((b,i)=>{const c=document.getElementById('chest'+i); if(c)c.onclick=e=>{ e.stopPropagation(); if(ROOM.isActive(i)){ROOM.target={x:b.x,y:clamp(b.y+2,26,86)};ROOM.autoOpen=i;ROOM.keys={};} };});
+  app().querySelectorAll('.egg').forEach(el=>el.onclick=e=>{ e.stopPropagation(); triggerEgg(+el.dataset.egg); });
+  const roomEl=document.getElementById('room');
+  if(roomEl)roomEl.onclick=e=>{ if(S._modal)return;
+    const r=roomEl.getBoundingClientRect();
+    ROOM.target={x:clamp((e.clientX-r.left)/r.width*100,8,90), y:clamp((e.clientY-r.top)/r.height*100,26,86)};
+    ROOM.autoOpen=null; ROOM.keys={}; };
   cancelAnimationFrame(ROOM.raf); ROOM.raf=requestAnimationFrame(roomTick);
 }
 function openBox(i){
@@ -1397,7 +1432,7 @@ function roomView(){
   app().innerHTML=`
   <div class="chapline">Chapter I · Cultivation</div>
   <p class="lede" style="margin:2px 0 10px">This is you: a fresher on the eve of your first day. Explore your room and get set up before you head out.</p>
-  <div class="room-objective"><span>🎯 <b>Goal:</b> poke around — sort your shelf, laptop, habits and bag (and anything else that catches your eye).</span><span class="prog" id="prog">${opened.size} / 4 done</span></div>
+  <div class="room-objective"><span>🎯 <b>Goal:</b> choose the <b>data-analysis skills</b> your analyst will specialise in — stats, coding, visualising, business know-how. <i>Explore your room to pick them.</i></span><span class="prog" id="prog">${opened.size} / 4 done</span></div>
   <div id="kitwrap">${kitStripHTML()}</div>
   <div class="room-wrap"><div class="room" id="room">
     ${roomBg()}
@@ -1412,7 +1447,7 @@ function roomView(){
       <button class="u" data-d="up">▲</button><button class="l" data-d="left">◀</button>
       <button class="o" data-d="open">OPEN</button><button class="r" data-d="right">▶</button><button class="d" data-d="down">▼</button>
     </div>
-    <div class="chint">Move with <b>arrow keys / WASD</b>, press <b>Space</b> next to something to use it — or just <b>tap it</b>. Each choice shapes who your haggis becomes.</div>
+    <div class="chint"><b>Tap where you want to go</b> (or use arrow keys / WASD). <b>Tap an object</b> to use it. Each choice shapes who your haggis becomes.</div>
   </div>
   <div id="exitrow"></div>`;
   positionHaggis(); updateNear(); setupRoomControls();
@@ -1451,13 +1486,13 @@ function renderBeatRoom(cfg){
        <button class="u" data-d="up">▲</button><button class="l" data-d="left">◀</button>
        <button class="o" data-d="open">OPEN</button><button class="r" data-d="right">▶</button><button class="d" data-d="down">▼</button>
      </div>
-     <div class="chint">Move with <b>arrow keys / WASD</b>, walk to the glowing <b>!</b> and press <b>Space</b> — or <b>tap it</b>. The steps run in order (poke other things for fun).</div>
+     <div class="chint"><b>Tap where you want to go</b> (or use arrow keys / WASD). <b>Tap the glowing <span style="color:var(--brass)">!</span></b> to work the next step. Poke other things for fun.</div>
    </div>`;
   positionHaggis(); updateNear(); setupRoomControls();
 }
 function tellingRoomView(){
   renderBeatRoom({chap:"Chapter II · The Telling", isTelling:true,
-    goal:"rehearse turning raw data into a story the client can act on — one step at a time.",
+    goal:"learn the core skill of a data scientist — turning raw data into a story a client can actually act on.",
     verbs:['gather','check the data','read the pattern','present'],
     props:STATION_PROPS.telling, eggs:eggsForRoom('telling'),
     bg:studyBg(), beats:STAGE_B,
@@ -1466,7 +1501,7 @@ function tellingRoomView(){
 function fieldRoomView(){
   const c=CASES[S.caseId];
   renderBeatRoom({chap:"Chapter III · The Field", caseTitle:c.no+' — '+c.title,
-    goal:"work the case like a research desk: scope it, gather, analyse, advise.",
+    goal:"do the real work of a <b>research analyst</b> — handle a live data case for a client, start to finish.",
     verbs:['scope it','gather','analyse','advise'],
     props:STATION_PROPS[S.caseId], eggs:eggsForRoom(S.caseId),
     bg:caseBg(S.caseId), beats:c.beats,
@@ -1474,6 +1509,11 @@ function fieldRoomView(){
       if(S.repeat){S.view='reveal';} else {S._evolve={from:2,next:'reveal'};S.form=3;S.view='evolve';}
       render(); }});
 }
+const GATE_WHY={
+  retail:["to aim the work at the real decision","to check where the data came from","to tell what the numbers really mean","to make the finding land in one picture"],
+  rentcap:["to tell cause from coincidence","to see what\u2019s really inside the data","to isolate the cap\u2019s own effect"],
+  gym:["to spot who was loyal anyway",null,"to source the data responsibly"],
+};
 function beatToolOpt(beat){return beat.opts.find(o=>o.lit&&o.lit.need!=='storycraft')||null;}
 function toolTrayHTML(beat){
   const to=beatToolOpt(beat), need=to?to.lit.need:null;
@@ -1496,8 +1536,19 @@ function kitStripHTML(){
 function refreshKit(){const w=document.getElementById('kitwrap'); if(w)w.innerHTML=kitStripHTML();}
 function openBeatStation(i){
   if(S._modal||i!==ROOM.beatIdx)return;
-  S._modal=true; ROOM.keys={}; ROOM._toolUsed=false;
+  S._modal=true; ROOM.keys={};
   const beat=ROOM.beats[i],total=ROOM.beats.length;
+  const to=beatToolOpt(beat), need=to?to.lit.need:null, held=!!(need&&S.itemNames.has(need));
+  const why=(GATE_WHY[S.caseId]||[])[i]||'';
+  const optHTML=beat.opts.map((o,k)=>{
+    const gate=(o===to);
+    if(gate&&!held){ // locked-but-visible: the clean path you're not equipped for
+      return `<button class="opt locked" data-need="${need}" data-why="${why}"><span class="lockrow"><span class="lockicon">🔒</span><span>${o.t}</span></span><span class="lockneed">Needs the ${need}${why?' \u2014 '+why:''}</span></button>`;
+    }
+    const badge=(gate&&held)?`<span class="toolbadge" title="${powerOf(need)}">✓ ${need}${why?' \u00b7 '+why:''}</span>`:'';
+    if(o.poster)return `<button class="opt poster-opt" data-k="${k}"><span class="pthumb">${POSTERS[o.poster]}</span><span class="ptext">${o.t}${badge}</span></button>`;
+    return `<button class="opt" data-k="${k}">${o.t}${badge}</button>`;
+  }).join('');
   const back=document.createElement('div'); back.className='modal-back'; back.id='modalback';
   back.innerHTML=`<div class="modal card">
      <div class="box-tag">${ROOM.cfg.caseTitle?ROOM.cfg.caseTitle+' · ':''}step ${i+1} of ${total}</div>
@@ -1505,32 +1556,20 @@ function openBeatStation(i){
      ${beat.objective?`<div class="objective"><span class="t">🎯 Objective</span><span>${termify(beat.objective)}</span></div>`:''}
      ${beat.scene?`<p class="scene-txt">${termify(beat.scene)}</p>`:''}
      ${beat.chart||''}
-     ${toolTrayHTML(beat)}
-     <div class="opts">${beat.opts.map((o,k)=>o.poster
-       ?`<button class="opt poster-opt" data-k="${k}"><span class="pthumb">${POSTERS[o.poster]}</span><span class="ptext">${o.t}</span></button>`
-       :`<button class="opt" data-k="${k}">${o.t}</button>`).join('')}</div></div>`;
+     <div class="opts">${optHTML}</div></div>`;
   document.body.appendChild(back);
-  const to=beatToolOpt(beat);
-  back.querySelectorAll('.toolchip.tc-live').forEach(b=>b.onclick=()=>useToolAtBeat(to.lit));
-  back.querySelectorAll('.opt').forEach(b=>b.onclick=()=>chooseBeatStation(i,+b.dataset.k));
-}
-function useToolAtBeat(lit){
-  if(ROOM._toolUsed)return; ROOM._toolUsed=true;
-  applyFeed(lit.bonus||{});
-  const rev=document.getElementById('ttreveal'); if(rev)rev.innerHTML=`<div class="insight">✦ ${termify(lit.msg)}</div>`;
-  const chip=document.querySelector('.toolchip.tc-live');
-  if(chip){chip.classList.add('tc-fired');chip.disabled=true;chip.innerHTML=chip.innerHTML.replace(' — use',' ✓');
-    const k=Object.keys(lit.bonus||{})[0];
-    if(k){const rc=document.createElement('div');rc.className='rewardchip';rc.textContent='+'+(TR[k]?TR[k].lab:(k==='judgement'?'Judgement':k));rc.style.setProperty('--rc',TR[k]?TR[k].color:JUDGE);chip.appendChild(rc);setTimeout(()=>rc.remove(),1200);}}
-  const rhin=document.getElementById('rhin'); if(rhin){rhin.classList.remove('walk');rhin.innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile));}
-  refreshKit();
+  back.querySelectorAll('.opt').forEach(b=>{
+    if(b.classList.contains('locked')){ b.onclick=()=>toast('🔒 Needs the '+b.dataset.need+(b.dataset.why?' — '+b.dataset.why:'')+'. Take another route for now.'); }
+    else b.onclick=()=>chooseBeatStation(i,+b.dataset.k);
+  });
 }
 function chooseBeatStation(i,k){
   const beat=ROOM.beats[i],opt=beat.opts[k];
   applyFeed(opt.feed||{});
   if(ROOM.cfg.isTelling&&opt.integrated)S.storycraft++;
   let litMsg='';
-  if(opt.lit&&opt.lit.need==='storycraft'&&S.storycraft>=2){applyFeed(opt.lit.bonus||{});litMsg=opt.lit.msg;}
+  if(opt.lit){ const need=opt.lit.need, have=need==='storycraft'?S.storycraft>=2:S.itemNames.has(need);
+    if(have){applyFeed(opt.lit.bonus||{});litMsg=opt.lit.msg;} }   // bonus for the clean, tool-gated path
   if(opt.anomaly)S.anomalies.add(opt.anomaly);
   const last=i+1>=ROOM.beats.length;
   const card=document.querySelector('#modalback .modal');
