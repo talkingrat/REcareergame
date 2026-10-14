@@ -53,6 +53,96 @@ button{font:inherit;color:inherit;cursor:pointer}
 @media(prefers-reduced-motion:reduce){.creature svg{animation:none}.creature.pulse svg{animation:none}}
 .platecap{text-align:center;font:italic 13px/1.4 Georgia,serif;color:var(--ink2);margin-top:8px}
 .platecap b{font-style:normal;color:var(--ink)}
+.scene-plate{background:radial-gradient(130% 100% at 50% 0%,#1b4a42,#0c2824);border:10px solid #efe9d4;border-radius:6px;box-shadow:0 0 0 1px var(--plateln),0 14px 30px rgba(0,0,0,.28);position:relative;overflow:hidden}
+.scene{position:relative;height:234px;overflow:hidden}
+.scene .bg{position:absolute;inset:0;width:100%;height:100%}
+.scene .haggis{position:absolute;left:12%;bottom:4px;width:132px;z-index:2}
+.scene .hin{transform-origin:bottom center}
+.scene .hin svg{width:100%;height:auto;display:block}
+.scene .hin.searching{animation:hsearch 2.6s ease-in-out infinite}
+.scene .hin.reach{transition:transform .35s;transform:rotate(7deg) translateX(14px)}
+.scene .hin.hop{animation:hhop .6s ease}
+.scene .chest{position:absolute;right:13%;bottom:18px;width:76px;z-index:2;transition:filter .3s}
+.scene .chest svg{width:100%;height:auto;display:block}
+.scene .chest .lid{transform-box:fill-box;transform-origin:left bottom;transition:transform .45s cubic-bezier(.4,1.5,.5,1)}
+.scene.open .chest .lid{transform:rotate(-112deg)}
+.scene.open .chest{filter:drop-shadow(0 0 9px var(--glow,#b2863a))}
+.scene .flyitem{position:absolute;width:26px;left:70%;top:40%;opacity:0;z-index:3}
+.scene .flyitem svg{width:100%;height:auto;display:block}
+.scene .flyitem.go{animation:hfly 1s cubic-bezier(.4,.1,.5,1) forwards}
+@keyframes hsearch{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg) translateY(-3px)}}
+@keyframes hhop{0%,100%{transform:translateY(0)}30%{transform:translateY(-17px)}60%{transform:translateY(0)}}
+@keyframes hfly{0%{left:70%;top:40%;transform:scale(1) rotate(0);opacity:1}50%{top:8%;opacity:1}100%{left:13%;top:48%;transform:scale(.4) rotate(200deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){.scene .hin.searching,.scene .hin.hop,.scene .flyitem.go{animation:none}.scene.open .chest .lid{transition:none}}
+.scene-txt{color:var(--ink2);font-style:italic;margin:0 0 15px}
+.room-objective{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#eae2c8;border:1px solid var(--rule);border-left:4px solid var(--brass);border-radius:0 7px 7px 0;padding:10px 14px;margin:0 0 10px;font-size:15px}
+.room-objective .prog{font:700 13px/1 "Gill Sans","Segoe UI",sans-serif;color:var(--brass);white-space:nowrap}
+.room-wrap{position:relative;max-width:560px;margin:0 auto}
+.room{position:relative;width:100%;aspect-ratio:520/300;background:#15332d;border:8px solid #efe9d4;border-radius:8px;box-shadow:0 0 0 1px var(--plateln),0 12px 26px rgba(0,0,0,.28);overflow:hidden;touch-action:none}
+.room .bg{position:absolute;inset:0;width:100%;height:100%}
+.rchest{position:absolute;width:11%;transform:translate(-50%,-60%);cursor:pointer;z-index:2;transition:filter .2s}
+.rchest.near{filter:drop-shadow(0 0 7px var(--brass))}
+.rchest.mactive{filter:drop-shadow(0 0 7px var(--brass))}
+.rchest.opened{opacity:.5;cursor:default}
+.rchest svg{width:100%;height:auto;display:block}
+.rhaggis{position:absolute;width:16%;z-index:3}
+.rhaggis .rhin svg{width:100%;height:auto;display:block}
+.rhaggis .rhin.walk{animation:rwalk .34s steps(2,end) infinite}
+@keyframes rwalk{50%{transform:translateY(-3px)}}
+.nearhint{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:var(--ink);color:var(--page);font:600 12px/1 "Gill Sans","Segoe UI",sans-serif;padding:6px 12px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:4}
+.nearhint.show{opacity:1}
+.controls{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:12px auto 0;max-width:560px;flex-wrap:wrap}
+.dpad{display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px);gap:5px;flex:0 0 auto;touch-action:none}
+.dpad button{background:var(--card);border:1px solid var(--rule);border-radius:8px;font-size:15px;color:var(--ink);user-select:none;-webkit-user-select:none}
+.dpad button:active{background:var(--brass);color:#2a1e06}
+.dpad .u{grid-area:1/2}.dpad .l{grid-area:2/1}.dpad .r{grid-area:2/3}.dpad .d{grid-area:3/2}
+.dpad .o{grid-area:2/2;background:var(--brass);color:#2a1e06;font:700 10px/1 "Gill Sans","Segoe UI",sans-serif}
+.chint{font:13px/1.45 "Gill Sans","Segoe UI",sans-serif;color:var(--ink2);flex:1;min-width:170px}
+.modal-back{position:fixed;inset:0;background:rgba(10,24,21,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.card{max-width:460px;width:100%;max-height:86vh;overflow:auto}
+.box-tag{font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:8px}
+.kitstrip{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 10px;font:12px/1 "Gill Sans","Segoe UI",sans-serif;color:var(--ink2)}
+.kititem{display:inline-flex;align-items:center;gap:5px;background:#efe9d4;border:1px solid var(--rule);border-radius:999px;padding:4px 9px}
+.tooltray{margin:14px 0 4px;padding:11px 12px;border:1px dashed var(--rule);border-radius:8px;background:#fffdf4}
+.ttlabel{font:700 10px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.ttchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.toolchip{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 "Gill Sans","Segoe UI",sans-serif;padding:7px 11px;border-radius:999px;border:1.5px solid var(--rule);background:#fff;color:var(--ink);position:relative}
+.toolchip .tcdot{width:9px;height:9px;border-radius:3px}
+.tc-dim{opacity:.5}
+.tc-live{border-color:var(--brass);box-shadow:0 0 0 2px #b2863a22;cursor:pointer;animation:tcpulse 1.6s ease-in-out infinite}
+.tc-live:hover{background:#fff8ec}
+.tc-fired{animation:none !important;border-color:var(--ground);box-shadow:none;opacity:.9}
+@keyframes tcpulse{50%{box-shadow:0 0 0 6px #b2863a22}}
+.ttreveal:empty{display:none}
+.insight{margin-top:10px;background:#efe7cf;border-left:4px solid var(--brass);border-radius:0 7px 7px 0;padding:9px 12px;font-size:14px;color:var(--ink2)}
+.rewardchip{position:absolute;left:50%;top:-8px;transform:translateX(-50%);font:700 12px/1 "Gill Sans","Segoe UI",sans-serif;color:var(--rc,#b2863a);animation:rcfloat 1.1s ease forwards;pointer-events:none;white-space:nowrap}
+@keyframes rcfloat{0%{opacity:0;transform:translate(-50%,0)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
+.equipbanner{position:fixed;left:50%;top:16%;transform:translateX(-50%) translateY(-8px);max-width:360px;background:var(--ink);color:var(--page);border-radius:10px;padding:12px 16px;z-index:46;opacity:0;transition:opacity .3s,transform .3s;box-shadow:0 10px 26px rgba(0,0,0,.3);text-align:center}
+.equipbanner.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.equipbanner .en{font:700 15px/1.2 "Gill Sans","Segoe UI",sans-serif;color:var(--judge)}
+.equipbanner .ep{font-size:13px;margin-top:4px;color:#e9f1ef}
+.rchest.future{opacity:.5}
+.rchest.hint::after{content:"!";position:absolute;left:50%;top:-16px;transform:translateX(-50%);font:700 18px/1 "Gill Sans","Segoe UI",sans-serif;color:#e3b53e;animation:hintbob 1s ease-in-out infinite;text-shadow:0 1px 2px #0007}
+@keyframes hintbob{50%{transform:translateX(-50%) translateY(-5px)}}
+.egg{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:1}
+.eggbubble{position:absolute;left:50%;top:9px;transform:translateX(-50%) translateY(-6px);max-width:82%;background:#fffdf4;color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:8px 13px;font:13px/1.35 "Gill Sans","Segoe UI",sans-serif;text-align:center;opacity:0;transition:opacity .2s,transform .2s;z-index:5;box-shadow:0 4px 12px #0003;pointer-events:none}
+.eggbubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.evolve-stage{position:relative;width:230px;height:220px;margin:18px auto 0;display:flex;align-items:center;justify-content:center}
+.evo-haggis{width:150px;position:relative;z-index:2}
+.evo-haggis svg{width:100%;height:auto;display:block}
+.evo-shake{animation:evoshake .13s linear infinite}
+@keyframes evoshake{0%,100%{transform:translateX(-2px) rotate(-1deg)}50%{transform:translateX(2px) rotate(1deg)}}
+.evo-flash{filter:brightness(3) saturate(.2)}
+.evo-pop{animation:evopop .55s cubic-bezier(.3,1.6,.5,1)}
+@keyframes evopop{0%{transform:scale(.6);filter:brightness(2.4)}60%{transform:scale(1.13)}100%{transform:scale(1);filter:none}}
+.evo-burst{position:absolute;inset:0;z-index:1;pointer-events:none}
+.evo-burst.go::before{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);animation:evoflash .6s ease forwards}
+@keyframes evoflash{0%{opacity:.9}100%{opacity:0;box-shadow:0 0 0 170px #fff0;width:0;height:0}}
+.evo-burst .spark{position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:var(--judge);transform:translate(-50%,-50%);opacity:0}
+.evo-burst.go .spark{animation:sparkfly .75s ease-out forwards}
+@keyframes sparkfly{0%{opacity:1;transform:translate(-50%,-50%)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy)))}}
+.evo-title{text-align:center;font-family:"Trebuchet MS","Gill Sans",sans-serif;font-weight:800;font-size:clamp(22px,4vw,30px);margin:16px 0 2px;transition:opacity .4s}
+@media(prefers-reduced-motion:reduce){.evo-shake,.evo-pop,.evo-burst.go .spark,.tc-live{animation:none}}
 
 .traits{margin-top:14px;background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:12px 13px}
 .traits h4{margin:0 0 8px;font:600 11px/1 "Gill Sans","Segoe UI",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
@@ -149,6 +239,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 <body>
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
+<div class="equipbanner" id="equipbanner"></div>
 <div id="termpop"></div>
 <script>
 "use strict";
@@ -242,6 +333,7 @@ const POSTERS={reveal:posterSVG('reveal'),method:posterSVG('method'),headline:po
    ========================================================================= */
 const STAGE_A = [
   { prompt:"Which lens do you sink your first year into?",
+    objective:"Pick the specialism you\u2019ll master first \u2014 it shapes what your haggis is good at.",
     scene:"Every surveyor-of-data specialises a little. Choose where your eye sharpens.",
     opts:[
       {t:"The Valuation Lens — reading worth from market and asset data.", feed:{rigour:1,ground:1}, item:{name:"Valuation Lens",kind:"weapon",trait:"rigour"}},
@@ -250,6 +342,7 @@ const STAGE_A = [
       {t:"The Climate Prism — carbon, energy and the green ledger.", feed:{ground:1,explore:1}, item:{name:"Climate Prism",kind:"weapon",trait:"ground"}},
     ]},
   { prompt:"Which tool do you teach yourself, late at night?",
+    objective:"Choose a tool to teach yourself \u2014 it becomes a weapon for the cases ahead.",
     scene:"Nobody hands you this one. You pick it up on your own.",
     opts:[
       {t:"The Code Wand — scripts and pipelines (Python, SQL).", feed:{build:2}, item:{name:"Code Wand",kind:"weapon",trait:"build"}},
@@ -258,6 +351,7 @@ const STAGE_A = [
       {t:"The Field Notebook — talking to the people behind the data.", feed:{ground:1,judgement:1}, item:{name:"Field Notebook",kind:"ornament",trait:"ground"}},
     ]},
   { prompt:"An early habit hardens into who you are.",
+    objective:"Lock in a working habit \u2014 it becomes part of who your haggis is.",
     scene:"Small at first. Then it's a reflex, and reflexes show.",
     opts:[
       {t:"The Provenance Seal — always ask where the data came from.", feed:{judgement:2}, item:{name:"Provenance Seal",kind:"ornament",trait:"judgement"}},
@@ -265,6 +359,7 @@ const STAGE_A = [
       {t:"The Wayfarer's Feather — try the strange approach first.", feed:{explore:2}, item:{name:"Wayfarer's Feather",kind:"ornament",trait:"explore"}},
     ]},
   { prompt:"Under pressure, your instinct is to…",
+    objective:"Set your instinct under pressure \u2014 it tempers how your haggis turns out.",
     scene:"The deadline is close and the answer isn't clean yet.",
     opts:[
       {t:"Slow down and get it right.", feed:{rigour:1,judgement:1}, item:{name:"Owl Charm",kind:"ornament",trait:"rigour"}},
@@ -437,6 +532,7 @@ const CASES = {
     beats:[
       { prompt:"The council capped rents on new private schemes to keep them affordable. A year on, building has stalled and rents have slipped in both the capped and the open market.",
         objective:"The council asks: did our cap cause this? Decide what question you\u2019re actually here to answer.",
+        scene:"Rents fell after the cap \u2014 but \u2018after\u2019 isn\u2019t \u2018because.\u2019 What matters is the {{counterfactual|what rents would have done anyway, with no cap}}.",
         chart:lineChart2([100,99,100,98,92,88,85,83],[100,98,99,97,90,86,84,82],"Market","Affordable",3,"📉 Rents slipped in both sectors after the cap \u2014 but did the cap cause it?"),
         opts:[
           {t:"Show before-and-after: rents fell after the cap, so the cap did it.", feed:{story:1},
@@ -460,6 +556,7 @@ const CASES = {
         ]},
       { prompt:"To isolate the cap, you line the capped city up against similar cities that never introduced one.",
         objective:"Decide how to tell whether the cap, specifically, caused the fall.",
+        scene:"The trick: compare against similar cities that never capped \u2014 a {{natural_experiment|ready-made comparison, a place that didn\u2019t get the policy}}.",
         chart:lineChart2([100,98,97,92,88,85,83],[100,99,97,93,89,86,84],"Capped city","No-cap cities",null,"📊 The capped city and similar no-cap cities fell about the same."),
         opts:[
           {t:"The capped city\u2019s rents fell \u2014 blame the cap, done.", feed:{story:1},
@@ -489,6 +586,7 @@ const CASES = {
     beats:[
       { prompt:"A co-working firm notices members with gym access renew far more often. \u2018Build us a gym,\u2019 they say, \u2018and retention will jump.\u2019",
         objective:"A gym is a huge spend. Decide whether that reasoning holds before anyone signs it off.",
+        scene:"Gym users renew more \u2014 but two things {{correlation|moving together}} needn\u2019t mean one caused the other.",
         chart:barChart(["Non-gym","Gym users"],[62,78],1,"📊 Gym users renew more \u2014 but were they always going to?"),
         opts:[
           {t:"They\u2019re right \u2014 gym users renew more. Build it.", feed:{build:1},
@@ -501,6 +599,7 @@ const CASES = {
         ]},
       { prompt:"You can\u2019t build three gyms to test the idea.",
         objective:"Decide how to find out cheaply whether a gym would actually move retention.",
+        scene:"You can\u2019t build three gyms to compare. The clean way is an {{ab_test|A/B test: change one thing for a random half, then compare}}.",
         opts:[
           {t:"Just build it and watch whether retention rises.", feed:{build:1},
             note:"Slow, expensive, and even if retention rises you won\u2019t know the gym did it \u2014 with no {{comparison|a like-for-like group that didn\u2019t get the change}}, everything moved at once."},
@@ -537,7 +636,7 @@ const CASES = {
 };
 const CASE_IDS=['retail','rentcap','gym'];
 function caseScore(p,c){return c.lead.reduce((a,t)=>a+(p[t]||0),0);}
-function assignCase(p){let best='retail',m=-1;for(const id of CASE_IDS){const sc=caseScore(p,CASES[id]);if(sc>m){m=sc;best=id;}}return best;}
+function assignCase(p){let best=null,m=-1;for(const id of CASE_IDS){if(S.casesDone.has(id))continue;const sc=caseScore(p,CASES[id]);if(sc>m){m=sc;best=id;}}return best||CASE_IDS.find(id=>!S.casesDone.has(id))||'retail';}
 function traitLab(t){return TR[t]?TR[t].lab:(t==='judgement'?'Judgement':t);}
 
 /* technique terms: plain phrase shown inline, label+definition revealed on hover/tap, collected in the plate glossary */
@@ -569,6 +668,25 @@ const ANOMALIES={
   refused_shiny:{title:"Refused the shiny data",
     note:"It turned down the richest, most invasive dataset for a cleaner, fairer one. Looks like giving up power; it is the mature call."},
 };
+/* what each tool DOES, and when it helps — shown at pickup and in the kit tray */
+const POWERS={
+  "Valuation Lens":"Reads worth from messy market data. Shines on valuation and pricing problems.",
+  "Map-Compass":"Finds the story in where things are. Handy for anything spatial.",
+  "Insight Quill":"Turns a finding into one clear picture. Lands the final pitch.",
+  "Climate Prism":"Sees the carbon and energy angle. For green and ESG questions.",
+  "Code Wand":"Builds and automates. Sets up clean tests and pipelines.",
+  "Inference Lens":"Cuts through dodgy cause-and-effect. Key when a case turns on why.",
+  "Dashboard Loom":"Weaves live data into dials. Good for monitoring and showing.",
+  "Field Notebook":"Gets the human context behind the numbers.",
+  "Provenance Seal":"Traces where data came from. Guards against bad or unfair data.",
+  "Client Compass":"Keeps the real decision in view. Aims the work at what matters.",
+  "Wayfarer's Feather":"Tries the strange path first. Finds signal others miss.",
+  "Owl Charm":"Slows you down to get it right. Rigour under pressure.",
+  "Spark Mote":"Ships rough and learns fast. For momentum.",
+  "Listening Bell":"Asks the people who'll use it. For grounded calls.",
+  "Anvil Token":"Makes it robust first. For things others rely on.",
+};
+function powerOf(name){return POWERS[name]||'';}
 
 /* =========================================================================
    FINAL FORMS (field-guide specimens)  keyed to dominant trait
@@ -625,7 +743,8 @@ const S = {
   view:'intro', stage:'A', i:0, pending:null,
   profile:{build:0,rigour:0,story:0,ground:0,explore:0,judgement:0},
   items:[], itemNames:new Set(), storycraft:0, form:0,
-  caseId:null, showAllCases:false, glossary:{}, anomalies:new Set(),
+  caseId:null, showAllCases:false, glossary:{}, anomalies:new Set(), quirks:new Set(),
+  casesDone:new Set(), repeat:false, _anim:false,
 };
 const app=()=>document.getElementById('app');
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -809,7 +928,7 @@ function traitPanel(temper){
       <span>Temper: <b style="color:${tcol}">${temper==='sound'?'sound':temper==='volatile'?'volatile':'unsettled'}</b></span></div>
     ${S.items.length?`<div class="satchel"><div class="lab">Carrying</div>${
       S.items.map(it=>{const c=TR[it.trait]?TR[it.trait].color:(it.trait==='judgement'?JUDGE:'#bbb');
-        return `<span class="pill ${it.kind==='weapon'?'w':''}"><span class="d" style="background:${c}"></span>${it.name}</span>`;}).join('')
+        return `<span class="pill ${it.kind==='weapon'?'w':''}" title="${powerOf(it.name)}"><span class="d" style="background:${c}"></span>${it.name}</span>`;}).join('')
     }</div>`:''}
   </div>`;
 }
@@ -870,7 +989,7 @@ function questionView(list,stageKey){
   app().querySelectorAll('.opt').forEach(b=>b.onclick=()=>chooseOption(stageKey,+b.dataset.k));
 }
 
-function applyFeed(feed){for(const k in feed){S.profile[k]=(S.profile[k]||0)+feed[k];}}
+function applyFeed(feed){ if(S.repeat)return; for(const k in feed){S.profile[k]=(S.profile[k]||0)+feed[k];} }
 function growPulse(){const cr=document.getElementById('cr');if(!cr)return;
   cr.innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile));
   cr.classList.remove('pulse');void cr.offsetWidth;cr.classList.add('pulse');}
@@ -927,11 +1046,516 @@ function noteView(stageKey){
   };
 }
 
+/* ---- animated Stage 1 scene: haggis searches, opens a box, equips the tool ---- */
+function chestSVG(){
+  return `<svg viewBox="0 0 64 54" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="26" width="48" height="22" rx="3" fill="#6b4e2c"/>
+    <rect class="band" x="8" y="32" width="48" height="5" fill="#b2863a"/>
+    <rect x="29" y="33" width="6" height="9" rx="1" fill="#e6c24a"/>
+    <g class="lid">
+      <rect x="8" y="12" width="48" height="16" rx="3" fill="#7a5a33"/>
+      <rect class="band" x="8" y="12" width="48" height="6" rx="3" fill="#9c7a4d"/>
+      <rect x="29" y="20" width="6" height="5" fill="#e6c24a"/>
+    </g>
+  </svg>`;
+}
+function flyGlyph(col){
+  return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="6" width="4" height="15" rx="2" fill="#5a4a36"/>
+    <rect x="6" y="4" width="12" height="7" rx="3" fill="${col}"/>
+    <rect x="9" y="2" width="2" height="2" fill="#fff" opacity=".8"/></svg>`;
+}
+function miniChest(x,y,s,op){return `<g transform="translate(${x},${y}) scale(${s})" opacity="${op}">
+  <rect x="0" y="10" width="34" height="16" rx="2" fill="#5c4327"/><rect x="0" y="0" width="34" height="12" rx="2" fill="#6b4e2c"/>
+  <rect x="0" y="5" width="34" height="3" fill="#9c7a4d"/><rect x="15" y="13" width="4" height="6" fill="#d9b24a"/></g>`;}
+function sceneBg(){
+  return `<svg class="bg" viewBox="0 0 400 234" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="200" cy="214" rx="196" ry="30" fill="#07201c" opacity=".55"/>
+    <ellipse cx="78" cy="206" rx="70" ry="14" fill="#07201c" opacity=".4"/>
+    <ellipse cx="322" cy="206" rx="70" ry="14" fill="#07201c" opacity=".4"/>
+    ${miniChest(44,176,0.7,0.55)}${miniChest(320,182,0.6,0.45)}
+    <circle cx="96" cy="46" r="2" fill="#f3e6b0" opacity=".7"/><circle cx="330" cy="40" r="1.6" fill="#f3e6b0" opacity=".6"/>
+    <circle cx="210" cy="30" r="1.4" fill="#f3e6b0" opacity=".5"/><circle cx="150" cy="60" r="1.3" fill="#f3e6b0" opacity=".45"/>
+  </svg>`;
+}
+function stageAView(){
+  const Q=STAGE_A[S.i];
+  app().innerHTML=`
+  <div class="chapline">Chapter I · Cultivation</div>
+  <div class="scene-plate"><span class="pin"></span>
+    <div class="scene" id="scene">
+      ${sceneBg()}
+      <div class="haggis"><div class="hin searching" id="cr">${buildCreature(S.profile,S.form,S.items,temperament(S.profile))}</div></div>
+      <div class="chest" id="chest">${chestSVG()}</div>
+      <div class="flyitem" id="fly"></div>
+    </div>
+  </div>
+  <p class="platecap"><b>${FORMCAP[S.form]}</b> — foraging for its tools</p>
+  <div class="card">
+    <div class="steps">${STAGE_A.map((_,k)=>`<span class="sd ${k<S.i?'done':k===S.i?'on':''}"></span>`).join('')}</div>
+    <p class="prompt">${Q.prompt}</p>
+    ${Q.scene?`<p class="scene-txt">${Q.scene}</p>`:''}
+    <div class="opts">${Q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${o.t}</button>`).join('')}</div>
+  </div>
+  ${traitPanel(temperament(S.profile))}`;
+  app().querySelectorAll('.opt').forEach(b=>b.onclick=()=>chooseCultivate(+b.dataset.k));
+}
+function chooseCultivate(k){
+  if(S._anim)return; S._anim=true;
+  const opt=STAGE_A[S.i].opts[k];
+  const scene=document.getElementById('scene'),hin=document.querySelector('.hin'),
+        chest=document.getElementById('chest'),fly=document.getElementById('fly');
+  const col=opt.item?(TR[opt.item.trait]?TR[opt.item.trait].color:(opt.item.trait==='judgement'?JUDGE:'#b2863a')):'#b2863a';
+  app().querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  scene.style.setProperty('--glow',col);
+  chest.querySelectorAll('.band').forEach(e=>e.setAttribute('fill',col));
+  hin.classList.remove('searching'); hin.classList.add('reach');          // lean toward the box
+  setTimeout(()=>scene.classList.add('open'),260);                         // lid flips open
+  setTimeout(()=>{fly.innerHTML=flyGlyph(col);fly.classList.add('go');},620); // tool flies out
+  setTimeout(()=>{                                                         // it lands & is absorbed
+    applyFeed(opt.feed);
+    if(opt.item){S.items.push(opt.item);S.itemNames.add(opt.item.name);}
+    document.getElementById('cr').innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile));
+    hin.classList.remove('reach'); hin.classList.add('hop');
+    scene.classList.remove('open'); fly.classList.remove('go');
+    toast(opt.item?('Found · '+opt.item.name):'Fed');
+  },1560);
+  setTimeout(()=>{
+    S._anim=false; S.i++;
+    if(S.i>=STAGE_A.length){S.form=1;S.view='introB';}
+    render();
+  },2240);
+}
+
+/* ===== Chapter I as a small walkable room (RPG shell over the same beats) ===== */
+const ROOM={active:false,raf:0,x:50,y:58,face:1,keys:{},near:-1,opened:null,onKeyDown:null,onKeyUp:null};
+const BOXPOS=[
+  {x:70,y:24,kind:'shelf', verb:'browse your books',title:'Your bookshelf'}, // Q1 specialism
+  {x:76,y:58,kind:'laptop',verb:'sit at the laptop', title:'Your laptop'},    // Q2 tool
+  {x:28,y:25,kind:'board', verb:'pin up a habit',    title:'Your corkboard'},// Q3 habit
+  {x:46,y:80,kind:'bag',   verb:'pack your bag',      title:'Your bag'},      // Q4 pressure
+];
+function roomBg(){
+  const planks=[...Array(9)].map((_,i)=>`<line x1="${i*58}" y1="152" x2="${i*58}" y2="300" stroke="#4a3620"/>`).join('');
+  return `<svg class="bg" viewBox="0 0 520 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="520" height="300" fill="#284a44"/>
+    <rect y="150" width="520" height="150" fill="#5a4428"/>${planks}
+    <rect y="146" width="520" height="7" fill="#1c3f38"/>
+    <g><rect x="212" y="26" width="96" height="72" fill="#10302e" stroke="#b2863a" stroke-width="5"/>
+      <line x1="260" y1="26" x2="260" y2="98" stroke="#b2863a" stroke-width="3"/><line x1="212" y1="62" x2="308" y2="62" stroke="#b2863a" stroke-width="3"/>
+      <circle cx="288" cy="44" r="8" fill="#f3e6b0" opacity=".85"/><circle cx="232" cy="44" r="1.5" fill="#f3e6b0"/><circle cx="246" cy="82" r="1.4" fill="#f3e6b0"/></g>
+    <g><rect x="34" y="40" width="44" height="54" fill="#20423c" stroke="#3f6a60" stroke-width="3"/><rect id="poster" x="40" y="46" width="32" height="42" fill="#b2863a"/></g>
+    <ellipse cx="258" cy="238" rx="150" ry="36" fill="#7a5a33" opacity=".45"/><ellipse cx="258" cy="238" rx="116" ry="25" fill="#b2863a" opacity=".28"/>
+    <g><rect x="0" y="176" width="150" height="72" rx="6" fill="#6b4e2c"/><rect x="0" y="192" width="150" height="56" rx="4" fill="#8aa49b"/><rect x="10" y="184" width="42" height="26" rx="4" fill="#efe9d4"/></g>
+    <g><rect x="462" y="58" width="56" height="94" fill="#3a2b18"/><rect x="466" y="62" width="48" height="90" fill="#4e3a22"/><circle cx="473" cy="110" r="3" fill="#e6c24a"/></g>
+    <g><rect x="432" y="196" width="18" height="16" fill="#7a5a33"/><circle cx="441" cy="189" r="12" fill="#5bb87a"/></g>
+  </svg>`;
+}
+function objectSVG(kind,done){
+  let g='';
+  if(kind==='shelf'){
+    g=`<rect x="10" y="6" width="44" height="52" rx="2" fill="#7a5a33"/><rect x="10" y="31" width="44" height="3" fill="#5c4327"/>
+      <rect x="14" y="10" width="5" height="18" fill="#c0504d"/><rect x="20" y="10" width="5" height="18" fill="#4f86c6"/><rect x="26" y="12" width="5" height="16" fill="#e3b53e"/><rect x="33" y="10" width="5" height="18" fill="#5bb87a"/><rect x="39" y="11" width="5" height="17" fill="#9b7ae0"/><rect x="45" y="10" width="5" height="18" fill="#f2994a"/>
+      <rect x="15" y="37" width="5" height="18" fill="#5bb87a"/><rect x="21" y="36" width="5" height="19" fill="#e86aa6"/><rect x="27" y="37" width="5" height="18" fill="#4f86c6"/><rect x="34" y="38" width="5" height="17" fill="#f2994a"/><rect x="40" y="36" width="5" height="19" fill="#c0504d"/>`;
+  }else if(kind==='laptop'){
+    g=`<rect x="6" y="44" width="52" height="5" fill="#6b4e2c"/><rect x="11" y="49" width="4" height="11" fill="#5c4327"/><rect x="49" y="49" width="4" height="11" fill="#5c4327"/>
+      <rect x="18" y="40" width="28" height="4" rx="1" fill="#3a3f49"/><rect x="20" y="18" width="24" height="22" rx="2" fill="#2a2e3a"/><rect x="23" y="21" width="18" height="16" fill="#8fd0e0"/><rect x="25" y="23" width="13" height="3" fill="#cfeaf2"/>`;
+  }else if(kind==='board'){
+    g=`<rect x="8" y="8" width="48" height="44" rx="2" fill="#c49a5c"/><rect x="8" y="8" width="48" height="44" rx="2" fill="none" stroke="#7a5a33" stroke-width="3"/>
+      <rect x="14" y="14" width="14" height="13" fill="#f2cf6a"/><rect x="33" y="14" width="13" height="13" fill="#9fd3b0"/><rect x="14" y="32" width="14" height="13" fill="#e9a6b6"/><rect x="33" y="32" width="13" height="13" fill="#a8c6e8"/>`;
+  }else{
+    g=`<path d="M24 20 q8 -11 16 0" fill="none" stroke="#3f564d" stroke-width="3"/><rect x="16" y="20" width="32" height="34" rx="9" fill="#5bb87a"/><rect x="16" y="33" width="32" height="13" rx="4" fill="#4aa368"/><rect x="26" y="37" width="12" height="8" rx="2" fill="#2f7a4a"/>`;
+  }
+  const check=done?`<circle cx="52" cy="12" r="9" fill="#5bb87a" stroke="#fff" stroke-width="1.5"/><path d="M47 12 l3.4 3.4 l6 -7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`:'';
+  return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">${g}${check}</svg>`;
+}
+function openedChestSVG(){
+  return `<svg viewBox="0 0 64 54" xmlns="http://www.w3.org/2000/svg">
+    <g transform="rotate(-112 8 28)"><rect x="8" y="12" width="48" height="16" rx="3" fill="#5c4327"/><rect x="8" y="12" width="48" height="6" rx="3" fill="#6b5330"/></g>
+    <rect x="8" y="26" width="48" height="22" rx="3" fill="#4e3a22"/>
+    <rect x="8" y="32" width="48" height="5" fill="#6b5330"/>
+    <rect x="22" y="31" width="20" height="10" rx="2" fill="#241a11"/></svg>`;
+}
+/* sequential-step rooms (Chapters II & III): a path of numbered spots walked in order */
+const STATIONS=[{x:18,y:71},{x:41,y:60},{x:63,y:69},{x:83,y:59}];
+function ensureRoom(id,onInit){ if(ROOM.cur!==id){ ROOM.cur=id; ROOM.active=true; ROOM.face=1; ROOM.keys={}; ROOM.near=-1; onInit(); } }
+function markerSVG(n,state){
+  const col=state==='active'?'#e3b53e':state==='done'?'#5bb87a':'#53736b';
+  const ring=state==='active'?`<circle cx="32" cy="30" r="27" fill="none" stroke="#e3b53e" stroke-width="2" opacity=".55"/>`:'';
+  const face=state==='done'
+    ? `<path d="M22 30 l7 7 l13 -15" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>`
+    : `<text x="32" y="38" text-anchor="middle" font-size="24" font-weight="700" fill="#2a2016" font-family="Gill Sans,sans-serif">${n}</text>`;
+  return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">${ring}<ellipse cx="32" cy="52" rx="20" ry="6" fill="#0003"/><circle cx="32" cy="30" r="20" fill="${col}"/><circle cx="32" cy="30" r="20" fill="none" stroke="#2a2016" stroke-width="2" opacity=".3"/>${face}</svg>`;
+}
+const PROP_ART={
+  papers:`<rect x="14" y="18" width="34" height="40" rx="2" fill="#e4ddc9"/><rect x="18" y="12" width="34" height="42" rx="2" fill="#fff" stroke="#cfc8ab" stroke-width="1.5"/><rect x="24" y="20" width="22" height="3" fill="#b9b193"/><rect x="24" y="27" width="22" height="3" fill="#b9b193"/><rect x="24" y="34" width="16" height="3" fill="#b9b193"/>`,
+  magnifier:`<rect x="38" y="38" width="7" height="20" rx="3" transform="rotate(45 41 48)" fill="#5c4327"/><circle cx="28" cy="26" r="15" fill="#bfe0e8" stroke="#6b4e2c" stroke-width="4"/><path d="M22 20 a9 9 0 0 1 9 -3" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>`,
+  easel:`<rect x="30" y="20" width="4" height="40" fill="#6b4e2c"/><rect x="14" y="52" width="4" height="12" fill="#6b4e2c" transform="rotate(18 16 58)"/><rect x="46" y="52" width="4" height="12" fill="#6b4e2c" transform="rotate(-18 48 58)"/><rect x="12" y="10" width="40" height="30" fill="#fff" stroke="#cfc8ab" stroke-width="1.5"/><rect x="18" y="26" width="5" height="10" fill="#8aa49b"/><rect x="26" y="20" width="5" height="16" fill="#b2863a"/><rect x="34" y="24" width="5" height="12" fill="#6f8a80"/><rect x="42" y="22" width="5" height="14" fill="#8aa49b"/>`,
+  lectern:`<polygon points="20,20 44,20 40,42 24,42" fill="#6b4e2c"/><rect x="28" y="42" width="8" height="16" fill="#5c4327"/><rect x="20" y="56" width="24" height="5" rx="1" fill="#5c4327"/><rect x="24" y="23" width="16" height="11" rx="1" fill="#efeadb"/>`,
+  sensor:`<rect x="30" y="32" width="4" height="28" fill="#3a3f49"/><rect x="20" y="20" width="22" height="13" rx="2" fill="#2a2e34"/><circle cx="41" cy="26" r="4.5" fill="#8fd0e0"/><rect x="23" y="14" width="8" height="6" fill="#2a2e34"/>`,
+  board:`<rect x="30" y="42" width="4" height="18" fill="#6b4e2c"/><rect x="12" y="12" width="40" height="32" rx="2" fill="#2b4a44" stroke="#b2863a" stroke-width="3"/><rect x="18" y="19" width="28" height="3" fill="#8aa49b"/><rect x="18" y="26" width="28" height="3" fill="#8aa49b"/><rect x="18" y="33" width="18" height="3" fill="#8aa49b"/>`,
+  recordsbox:`<rect x="14" y="28" width="36" height="28" rx="2" fill="#7a5a33"/><rect x="18" y="22" width="9" height="12" fill="#e9a6b6"/><rect x="28" y="19" width="9" height="15" fill="#a8c6e8"/><rect x="38" y="22" width="9" height="12" fill="#f2cf6a"/><rect x="14" y="40" width="36" height="4" fill="#5c4327"/>`,
+  desk:`<rect x="12" y="42" width="40" height="7" fill="#6b4e2c"/><rect x="17" y="49" width="5" height="11" fill="#5c4327"/><rect x="42" y="49" width="5" height="11" fill="#5c4327"/><circle cx="32" cy="24" r="9" fill="#c9a06a"/><rect x="23" y="33" width="18" height="11" rx="3" fill="#4f86c6"/>`,
+  signup:`<rect x="16" y="12" width="32" height="44" rx="2" fill="#fff" stroke="#cfc8ab" stroke-width="1.5"/><rect x="26" y="8" width="12" height="7" rx="2" fill="#6b4e2c"/><path d="M20 24 l3 3 l5 -6" stroke="#5bb87a" stroke-width="2.4" fill="none" stroke-linecap="round"/><rect x="30" y="24" width="14" height="3" fill="#b9b193"/><path d="M20 36 l3 3 l5 -6" stroke="#5bb87a" stroke-width="2.4" fill="none" stroke-linecap="round"/><rect x="30" y="36" width="14" height="3" fill="#b9b193"/>`,
+};
+function propSVG(kind,state){
+  const check=state==='done'?`<circle cx="52" cy="12" r="9" fill="#5bb87a" stroke="#fff" stroke-width="1.5"/><path d="M47 12 l3.4 3.4 l6 -7" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`:'';
+  return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">${PROP_ART[kind]||''}${check}</svg>`;
+}
+const STATION_PROPS={
+  telling:['papers','magnifier','easel','lectern'],
+  retail:['board','sensor','easel','desk'],
+  rentcap:['board','recordsbox','easel','desk'],
+  gym:['signup','sensor','easel','desk'],
+};
+/* bump-or-tap easter eggs: flavour only, except a couple that grant a quirk */
+const STATION_EGGS={
+  shelf:{text:"You meant to revise. You read manga all afternoon. No regrets.",quirk:'manga'},
+  laptop:{text:"You refresh your inbox. Nothing. You refresh it again. Still nothing."},
+  board:{text:"You colour-code the sticky notes by hue, then by vibe. The habit sticks.",quirk:'colour_coder'},
+  bag:{text:"You pack it, unpack it, and pack it again. Peak productivity."},
+};
+function eggsBedroom(){return [
+  {x:14,y:73,w:30,h:18,text:"Too early for bed — you've a whole life to sort out first."},
+  {x:50,y:20,w:22,h:24,text:"You drift off staring out the window. Ideas arrive sideways, as they do.",quirk:'daydreamer'},
+  {x:11,y:23,w:12,h:20,text:"The poster is motivational. Mostly. You believe it for about an hour."},
+  {x:85,y:68,w:12,h:18,text:"The plant could use some water. You promise it 'later.' You both know."},
+  {x:95,y:36,w:9,h:30,text:"The door. Not yet — you're not quite ready to head out."},
+];}
+function eggsForRoom(kind){
+  if(kind==='telling')return [
+    {x:22,y:66,w:12,h:18,text:"You prod the pot plant. It judges you, quietly."},
+    {x:50,y:24,w:24,h:16,text:"The whiteboard still has last week's doodles. A dog? A bar chart? Both."},
+    {x:85,y:48,w:12,h:16,text:"You poke the spare monitor. It shows your own reflection, looking tired."}];
+  if(kind==='retail')return [
+    {x:50,y:72,w:14,h:16,text:"You flick a coin into the planter. It is not a fountain. Deeply awkward."},
+    {x:16,y:30,w:16,h:18,text:"You window-shop for twenty minutes. The data waits, patiently, like a dog."},
+    {x:88,y:30,w:12,h:18,text:"A shop plays the same eight seconds of jazz on loop. You will hear it in your dreams."}];
+  if(kind==='rentcap')return [
+    {x:50,y:46,w:10,h:28,text:"You lean on the lamppost, looking pensive. It helps the analysis not at all."},
+    {x:20,y:36,w:16,h:20,text:"A cat watches you from a windowsill. You lose five clean minutes to it. Worth it."},
+    {x:78,y:40,w:14,h:20,text:"You read a 'TO LET' sign very carefully. It does not, in fact, say anything new."}];
+  return [
+    {x:77,y:74,w:14,h:14,text:"You attempt the dumbbell. You put it back down. You try it once more.",quirk:'gym_bro'},
+    {x:30,y:28,w:16,h:16,text:"Free snacks. You take three. This is, technically, research fuel."},
+    {x:92,y:40,w:10,h:16,text:"You water the office plant. Finally, someone does. It seems grateful."}];
+}
+const QUIRKS={
+  manga:{tag:"Reads manga under the desk",note:"An unexplained fondness for manga — which may account for its lateral, rule-bending streak.",feed:{explore:1}},
+  daydreamer:{tag:"Incurable daydreamer",note:"Stares out of windows at the faintest excuse — which is, inconveniently, where its best ideas come from.",feed:{explore:1}},
+  colour_coder:{tag:"Colour-codes everything",note:"Must tidy before it can think. Fussy to a fault — which is its own quiet kind of rigour.",feed:{rigour:1}},
+  gym_bro:{tag:"Secretly a gym bro",note:"Cannot pass a dumbbell without a go. Brings a certain brute, cheerful diligence to the work.",feed:{build:1}},
+};
+
+function studyBg(){
+  return `<svg class="bg" viewBox="0 0 520 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+   <rect width="520" height="300" fill="#3a3326"/><rect y="150" width="520" height="150" fill="#5a4428"/>
+   ${[...Array(9)].map((_,i)=>`<line x1="${i*58}" y1="152" x2="${i*58}" y2="300" stroke="#4a3620"/>`).join('')}
+   <rect y="146" width="520" height="7" fill="#2a2016"/>
+   <g><rect x="150" y="26" width="150" height="86" rx="3" fill="#efeadb" stroke="#b2863a" stroke-width="4"/>
+     <line x1="166" y1="98" x2="286" y2="98" stroke="#9aa89f"/><polyline points="166,92 196,72 226,82 256,56 286,62" fill="none" stroke="#6f8a80" stroke-width="3"/>
+     <rect x="176" y="80" width="10" height="16" fill="#b2863a"/><rect x="196" y="72" width="10" height="24" fill="#8aa49b"/></g>
+   <g><rect x="24" y="40" width="70" height="92" fill="#6b4e2c"/><rect x="24" y="72" width="70" height="4" fill="#5c4327"/><rect x="24" y="104" width="70" height="4" fill="#5c4327"/>
+     ${[0,1,2,3,4,5].map(j=>`<rect x="${30+j*10}" y="46" width="7" height="22" fill="${['#c0504d','#4f86c6','#e3b53e','#5bb87a','#9b7ae0','#f2994a'][j]}"/>`).join('')}
+     ${[0,1,2,3,4].map(j=>`<rect x="${31+j*11}" y="80" width="8" height="22" fill="${['#5bb87a','#e86aa6','#4f86c6','#f2994a','#c0504d'][j]}"/>`).join('')}</g>
+   <g><rect x="396" y="150" width="104" height="10" fill="#6b4e2c"/><rect x="404" y="160" width="8" height="40" fill="#5c4327"/><rect x="484" y="160" width="8" height="40" fill="#5c4327"/>
+     <rect x="420" y="120" width="40" height="30" rx="2" fill="#2a2e3a"/><rect x="424" y="124" width="32" height="22" fill="#8fd0e0"/></g>
+   <g><rect x="110" y="196" width="18" height="16" fill="#7a5a33"/><circle cx="119" cy="189" r="12" fill="#5bb87a"/></g>
+  </svg>`;
+}
+function mallBg(){
+  const shop=(x,c)=>`<g><rect x="${x}" y="30" width="96" height="86" fill="#1f3b44"/><rect x="${x+6}" y="40" width="84" height="54" fill="#2b5560"/><rect x="${x+8}" y="26" width="80" height="12" fill="${c}"/>${[0,1,2,3].map(j=>`<rect x="${x+9+j*21}" y="44" width="13" height="30" fill="#cfeaf2" opacity=".35"/>`).join('')}</g>`;
+  return `<svg class="bg" viewBox="0 0 520 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+   <rect width="520" height="300" fill="#16343a"/><rect y="150" width="520" height="150" fill="#cfc6b0"/>
+   ${[...Array(11)].map((_,i)=>`<line x1="${i*52}" y1="150" x2="${i*52}" y2="300" stroke="#bcb29a"/>`).join('')}
+   ${[...Array(3)].map((_,i)=>`<line x1="0" y1="${182+i*34}" x2="520" y2="${182+i*34}" stroke="#bcb29a"/>`).join('')}
+   <rect y="146" width="520" height="7" fill="#9c927a"/>
+   ${shop(26,'#f2994a')}${shop(140,'#e86aa6')}${shop(300,'#4f86c6')}${shop(414,'#5bb87a')}
+   <text x="260" y="20" text-anchor="middle" font-size="12" fill="#b2863a" font-family="Gill Sans,sans-serif" font-weight="700">◇ THE GALLERIA ◇</text>
+   <g><ellipse cx="260" cy="214" rx="38" ry="11" fill="#b9b193"/><rect x="251" y="178" width="18" height="34" fill="#7a5a33"/><circle cx="260" cy="174" r="17" fill="#5bb87a"/></g>
+  </svg>`;
+}
+function housingBg(){
+  const house=(x,c)=>`<g><rect x="${x}" y="62" width="86" height="88" fill="${c}"/><polygon points="${x-6},62 ${x+43},28 ${x+92},62" fill="#5c4327"/><rect x="${x+14}" y="90" width="20" height="22" fill="#2b4a44"/><rect x="${x+52}" y="90" width="20" height="22" fill="#2b4a44"/><rect x="${x+33}" y="114" width="22" height="36" fill="#3a2b18"/><rect x="${x+30}" y="118" width="28" height="13" fill="#efe9d4"/><text x="${x+44}" y="128" text-anchor="middle" font-size="7" fill="#c0504d" font-family="Gill Sans,sans-serif" font-weight="700">TO LET</text></g>`;
+  return `<svg class="bg" viewBox="0 0 520 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+   <rect width="520" height="300" fill="#2b4a5a"/><rect y="150" width="520" height="150" fill="#5a5a52"/>
+   ${[...Array(9)].map((_,i)=>`<line x1="${i*58}" y1="150" x2="${i*58}" y2="300" stroke="#4e4e46"/>`).join('')}
+   <rect y="146" width="520" height="7" fill="#3f3f38"/>
+   ${house(20,'#b98c6a')}${house(130,'#9aa6a0')}${house(300,'#c2a06a')}${house(410,'#a98fb0')}
+   <g><rect x="258" y="98" width="5" height="52" fill="#2a3b3a"/><circle cx="260" cy="94" r="7" fill="#f3e6b0" opacity=".85"/></g>
+  </svg>`;
+}
+function coworkBg(){
+  return `<svg class="bg" viewBox="0 0 520 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+   <rect width="520" height="300" fill="#243b44"/>
+   ${[...Array(4)].map((_,i)=>`<rect x="${20+i*126}" y="24" width="110" height="86" fill="#2f5560" stroke="#1a2e34" stroke-width="4"/><line x1="${75+i*126}" y1="24" x2="${75+i*126}" y2="110" stroke="#1a2e34" stroke-width="3"/>`).join('')}
+   <rect y="150" width="520" height="150" fill="#6b5a44"/>
+   ${[...Array(11)].map((_,i)=>`<line x1="${i*52}" y1="150" x2="${i*52}" y2="300" stroke="#5c4c38"/>`).join('')}
+   <rect y="146" width="520" height="7" fill="#3f3528"/>
+   ${[70,250].map(x=>`<g><rect x="${x}" y="126" width="80" height="8" fill="#3a3f49"/><rect x="${x+8}" y="150" width="6" height="26" fill="#2a2e34"/><rect x="${x+66}" y="150" width="6" height="26" fill="#2a2e34"/><rect x="${x+22}" y="108" width="36" height="22" rx="2" fill="#2a2e3a"/><rect x="${x+25}" y="111" width="30" height="16" fill="#8fd0e0"/></g>`).join('')}
+   <g><rect x="470" y="120" width="18" height="18" fill="#7a5a33"/><circle cx="479" cy="112" r="14" fill="#5bb87a"/></g>
+   <g transform="translate(398,196)"><rect x="0" y="6" width="34" height="5" fill="#8a97a0"/><rect x="-4" y="0" width="6" height="17" rx="2" fill="#6f7c86"/><rect x="32" y="0" width="6" height="17" rx="2" fill="#6f7c86"/></g>
+  </svg>`;
+}
+function caseBg(id){return id==='retail'?mallBg():id==='rentcap'?housingBg():coworkBg();}
+
+function showEgg(text){const el=document.getElementById('eggbubble'); if(!el)return;
+  el.textContent=text; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2800);}
+function triggerEgg(idx){const e=(ROOM.eggs||[])[idx]; if(!e)return; showEgg(e.text);
+  if(e.quirk&&!S.quirks.has(e.quirk)){S.quirks.add(e.quirk); const q=QUIRKS[e.quirk]; if(q&&q.feed)applyFeed(q.feed); toast('✦ a quirk emerges'); refreshKit(); const rhin=document.getElementById('rhin'); if(rhin)rhin.innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile)); }}
+function positionHaggis(){
+  const el=document.getElementById('rhag'); if(!el)return;
+  el.style.left=ROOM.x+'%'; el.style.top=ROOM.y+'%';
+  el.style.transform=`translate(-50%,-70%) scaleX(${ROOM.face})`;
+}
+function updateNear(){
+  const st=ROOM.stations||[];
+  let near=-1,best=1e9;
+  st.forEach((b,i)=>{ if(!ROOM.isActive(i))return;
+    const d=Math.hypot(b.x-ROOM.x,b.y-ROOM.y); if(d<14&&d<best){best=d;near=i;} });
+  ROOM.near=near;
+  st.forEach((b,i)=>{const c=document.getElementById('chest'+i); if(c)c.classList.toggle('near',i===near);});
+  const h=document.getElementById('nearhint');
+  if(h){ if(near>=0){const vb=(ROOM.cfg&&ROOM.cfg.verbs&&ROOM.cfg.verbs[near])||st[near].verb||'use';h.textContent='Space · '+vb;h.classList.add('show');} else h.classList.remove('show'); }
+}
+function roomTick(){
+  if(!ROOM.active)return;
+  let dx=0,dy=0;const k=ROOM.keys;
+  if(k.up)dy--; if(k.down)dy++; if(k.left)dx--; if(k.right)dx++;
+  const rhin=document.getElementById('rhin');
+  if((dx||dy)&&!S._modal){const l=Math.hypot(dx,dy)||1,sp=0.72;
+    ROOM.x=clamp(ROOM.x+dx/l*sp,8,90); ROOM.y=clamp(ROOM.y+dy/l*1.0*sp,26,86);
+    if(dx<0)ROOM.face=-1; else if(dx>0)ROOM.face=1;
+    if(rhin)rhin.classList.add('walk'); positionHaggis(); updateNear();
+    let inEgg=-1;
+    (ROOM.eggs||[]).forEach((e,idx)=>{ if(Math.abs(e.x-ROOM.x)<=(e.w/2+3)&&Math.abs(e.y-ROOM.y)<=(e.h/2+4))inEgg=idx; });
+    if(inEgg>=0&&inEgg!==ROOM._eggIn){ROOM._eggIn=inEgg;triggerEgg(inEgg);} else if(inEgg<0)ROOM._eggIn=-1;
+  }else if(rhin)rhin.classList.remove('walk');
+  ROOM.raf=requestAnimationFrame(roomTick);
+}
+const KEYMAP={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',W:'up',S:'down',A:'left',D:'right'};
+function setupRoomControls(){
+  if(!ROOM.onKeyDown){
+    ROOM.onKeyDown=e=>{ if(!ROOM.active)return;
+      if(KEYMAP[e.key]){ROOM.keys[KEYMAP[e.key]]=1;e.preventDefault();}
+      if((e.key===' '||e.key==='Enter')&&!S._modal){ if(ROOM.near>=0)ROOM.onOpen(ROOM.near); e.preventDefault(); } };
+    ROOM.onKeyUp=e=>{ if(KEYMAP[e.key]){ROOM.keys[KEYMAP[e.key]]=0;} };
+    window.addEventListener('keydown',ROOM.onKeyDown);
+    window.addEventListener('keyup',ROOM.onKeyUp);
+  }
+  app().querySelectorAll('.dpad button').forEach(btn=>{
+    const dir=btn.dataset.d;
+    if(dir==='open'){btn.onclick=()=>{ if(ROOM.near>=0)ROOM.onOpen(ROOM.near); else toast('Walk up to the glowing spot'); };return;}
+    const set=v=>{ROOM.keys[dir]=v;};
+    btn.addEventListener('pointerdown',e=>{e.preventDefault();set(1);});
+    ['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,()=>set(0)));
+  });
+  (ROOM.stations||[]).forEach((b,i)=>{const c=document.getElementById('chest'+i); if(c)c.onclick=()=>{ if(ROOM.isActive(i))ROOM.onOpen(i); };});
+  app().querySelectorAll('.egg').forEach(el=>el.onclick=()=>triggerEgg(+el.dataset.egg));
+  cancelAnimationFrame(ROOM.raf); ROOM.raf=requestAnimationFrame(roomTick);
+}
+function openBox(i){
+  if(ROOM.opened.has(i)||S._modal)return;
+  S._modal=true; ROOM.keys={};
+  const Q=STAGE_A[i];
+  const back=document.createElement('div'); back.className='modal-back'; back.id='modalback';
+  back.innerHTML=`<div class="modal card">
+     <div class="box-tag">${BOXPOS[i].title}</div>
+     <p class="prompt">${Q.prompt}</p>
+     ${Q.objective?`<div class="objective"><span class="t">🎯 Objective</span><span>${Q.objective}</span></div>`:''}
+     ${Q.scene?`<p class="scene-txt">${Q.scene}</p>`:''}
+     <div class="opts">${Q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${o.t}</button>`).join('')}</div></div>`;
+  document.body.appendChild(back);
+  back.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pickFromBox(i,+b.dataset.k));
+}
+function pickFromBox(i,k){
+  const opt=STAGE_A[i].opts[k];
+  applyFeed(opt.feed);
+  if(opt.item){S.items.push(opt.item);S.itemNames.add(opt.item.name);}
+  ROOM.opened.add(i); S._modal=false;
+  const back=document.getElementById('modalback'); if(back)back.remove();
+  const rhin=document.getElementById('rhin'); if(rhin)rhin.innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile));
+  const c=document.getElementById('chest'+i); if(c){c.innerHTML=objectSVG(BOXPOS[i].kind,true);c.classList.add('opened');c.classList.remove('near','hint');}
+  const se=STATION_EGGS[BOXPOS[i].kind];
+  if(se){ROOM.eggs.push({x:BOXPOS[i].x,y:BOXPOS[i].y,w:12,h:14,text:se.text,quirk:se.quirk}); const eidx=ROOM.eggs.length-1; if(c)c.onclick=()=>triggerEgg(eidx);}
+  const pc=opt.item?(TR[opt.item.trait]?TR[opt.item.trait].color:(opt.item.trait==='judgement'?JUDGE:'#b2863a')):null;
+  const poster=document.getElementById('poster'); if(poster&&pc)poster.setAttribute('fill',pc);
+  const prog=document.getElementById('prog'); if(prog)prog.textContent=ROOM.opened.size+' / 4 done';
+  if(opt.item)equipBanner(opt.item.name); else toast('Fed');
+  refreshKit(); updateNear();
+  if(ROOM.opened.size>=4)showExit();
+}
+function showExit(){
+  const row=document.getElementById('exitrow'); if(!row||row.querySelector('button'))return;
+  row.innerHTML=`<div class="center"><button class="btn brass" id="leave">All set — head out for your first day →</button></div>`;
+  document.getElementById('leave').onclick=()=>{ ROOM.active=false;ROOM.cur=null; cancelAnimationFrame(ROOM.raf); S._evolve={from:0,next:'introB'}; S.form=1; S.view='evolve'; render(); };
+}
+function roomView(){
+  ensureRoom('A',()=>{ROOM.x=50;ROOM.y=58;ROOM.opened=new Set();ROOM.eggs=eggsBedroom();ROOM._eggIn=-1;});
+  ROOM.stations=BOXPOS; ROOM.isActive=i=>!ROOM.opened.has(i); ROOM.onOpen=openBox; ROOM.cfg=null;
+  const opened=ROOM.opened;
+  app().innerHTML=`
+  <div class="chapline">Chapter I · Cultivation</div>
+  <p class="lede" style="margin:2px 0 10px">This is you: a fresher on the eve of your first day. Explore your room and get set up before you head out.</p>
+  <div class="room-objective"><span>🎯 <b>Goal:</b> poke around — sort your shelf, laptop, habits and bag (and anything else that catches your eye).</span><span class="prog" id="prog">${opened.size} / 4 done</span></div>
+  <div id="kitwrap">${kitStripHTML()}</div>
+  <div class="room-wrap"><div class="room" id="room">
+    ${roomBg()}
+    ${(ROOM.eggs||[]).map((e,idx)=>`<div class="egg" data-egg="${idx}" style="left:${e.x}%;top:${e.y}%;width:${e.w}%;height:${e.h}%"></div>`).join('')}
+    ${BOXPOS.map((b,i)=>`<div class="rchest ${opened.has(i)?'opened':'hint'}" id="chest${i}" style="left:${b.x}%;top:${b.y}%">${objectSVG(b.kind,opened.has(i))}</div>`).join('')}
+    <div class="rhaggis" id="rhag"><div class="rhin" id="rhin">${buildCreature(S.profile,S.form,S.items,temperament(S.profile))}</div></div>
+    <div class="nearhint" id="nearhint">Press SPACE to open</div>
+    <div class="eggbubble" id="eggbubble"></div>
+  </div></div>
+  <div class="controls">
+    <div class="dpad">
+      <button class="u" data-d="up">▲</button><button class="l" data-d="left">◀</button>
+      <button class="o" data-d="open">OPEN</button><button class="r" data-d="right">▶</button><button class="d" data-d="down">▼</button>
+    </div>
+    <div class="chint">Move with <b>arrow keys / WASD</b>, press <b>Space</b> next to something to use it — or just <b>tap it</b>. Each choice shapes who your haggis becomes.</div>
+  </div>
+  <div id="exitrow"></div>`;
+  positionHaggis(); updateNear(); setupRoomControls();
+  if(opened.size>=4)showExit();
+}
+
+/* ---- sequential beat rooms: walk numbered spots in order, each opens a beat ---- */
+function refreshStations(){
+  const props=ROOM.cfg&&ROOM.cfg.props||[];
+  (ROOM.stations||[]).forEach((b,i)=>{const el=document.getElementById('chest'+i);if(!el)return;
+    const st=i<ROOM.beatIdx?'done':i===ROOM.beatIdx?'active':'future';
+    el.innerHTML=propSVG(props[i],st);
+    el.classList.toggle('opened',st==='done'); el.classList.toggle('future',st==='future');
+    el.classList.toggle('mactive',st==='active'); el.classList.toggle('hint',st==='active');});
+}
+function renderBeatRoom(cfg){
+  ensureRoom(cfg.chap,()=>{ROOM.beatIdx=0;ROOM.x=9;ROOM.y=71;ROOM.eggs=cfg.eggs||[];ROOM._eggIn=-1;});
+  ROOM.cfg=cfg; ROOM.beats=cfg.beats; ROOM.onComplete=cfg.onComplete; ROOM.eggs=cfg.eggs||[];
+  ROOM.stations=STATIONS.slice(0,cfg.beats.length); ROOM.isActive=i=>i===ROOM.beatIdx; ROOM.onOpen=openBeatStation;
+  const total=cfg.beats.length, props=cfg.props||[];
+  app().innerHTML=`
+   <div class="chapline">${cfg.chap}</div>
+   ${cfg.caseTitle?`<p class="lede" style="margin:2px 0 8px"><b>${cfg.caseTitle}</b></p>`:''}
+   <div class="room-objective"><span>🎯 <b>Goal:</b> ${cfg.goal}</span><span class="prog" id="prog">${ROOM.beatIdx} / ${total} done</span></div>
+   <div id="kitwrap">${kitStripHTML()}</div>
+   <div class="room-wrap"><div class="room" id="room">
+     ${cfg.bg}
+     ${(ROOM.eggs||[]).map((e,idx)=>`<div class="egg" data-egg="${idx}" style="left:${e.x}%;top:${e.y}%;width:${e.w}%;height:${e.h}%"></div>`).join('')}
+     ${ROOM.stations.map((b,i)=>{const st=i<ROOM.beatIdx?'done':i===ROOM.beatIdx?'active':'future';return `<div class="rchest ${st==='done'?'opened':''} ${st==='future'?'future':''} ${st==='active'?'mactive hint':''}" id="chest${i}" style="left:${b.x}%;top:${b.y}%">${propSVG(props[i],st)}</div>`;}).join('')}
+     <div class="rhaggis" id="rhag"><div class="rhin" id="rhin">${buildCreature(S.profile,S.form,S.items,temperament(S.profile))}</div></div>
+     <div class="nearhint" id="nearhint">Space</div>
+     <div class="eggbubble" id="eggbubble"></div>
+   </div></div>
+   <div class="controls">
+     <div class="dpad">
+       <button class="u" data-d="up">▲</button><button class="l" data-d="left">◀</button>
+       <button class="o" data-d="open">OPEN</button><button class="r" data-d="right">▶</button><button class="d" data-d="down">▼</button>
+     </div>
+     <div class="chint">Move with <b>arrow keys / WASD</b>, walk to the glowing <b>!</b> and press <b>Space</b> — or <b>tap it</b>. The steps run in order (poke other things for fun).</div>
+   </div>`;
+  positionHaggis(); updateNear(); setupRoomControls();
+}
+function tellingRoomView(){
+  renderBeatRoom({chap:"Chapter II · The Telling", isTelling:true,
+    goal:"rehearse turning raw data into a story the client can act on — one step at a time.",
+    verbs:['gather','check the data','read the pattern','present'],
+    props:STATION_PROPS.telling, eggs:eggsForRoom('telling'),
+    bg:studyBg(), beats:STAGE_B,
+    onComplete:()=>{S._evolve={from:1,next:'introC'};S.form=2;S.view='evolve';render();}});
+}
+function fieldRoomView(){
+  const c=CASES[S.caseId];
+  renderBeatRoom({chap:"Chapter III · The Field", caseTitle:c.no+' — '+c.title,
+    goal:"work the case like a research desk: scope it, gather, analyse, advise.",
+    verbs:['scope it','gather','analyse','advise'],
+    props:STATION_PROPS[S.caseId], eggs:eggsForRoom(S.caseId),
+    bg:caseBg(S.caseId), beats:c.beats,
+    onComplete:()=>{ S.casesDone.add(S.caseId);
+      if(S.repeat){S.view='reveal';} else {S._evolve={from:2,next:'reveal'};S.form=3;S.view='evolve';}
+      render(); }});
+}
+function beatToolOpt(beat){return beat.opts.find(o=>o.lit&&o.lit.need!=='storycraft')||null;}
+function toolTrayHTML(beat){
+  const to=beatToolOpt(beat), need=to?to.lit.need:null;
+  if(!need||!S.itemNames.has(need))return '';                 // only when you hold the fitting tool
+  const chips=S.items.map(it=>{
+    const col=TR[it.trait]?TR[it.trait].color:(it.trait==='judgement'?JUDGE:'#b2863a');
+    const live=(it.name===need);
+    return `<button class="toolchip ${live?'tc-live':'tc-dim'}" ${live?'':'disabled'} title="${powerOf(it.name)}"><span class="tcdot" style="background:${col}"></span>${it.name}${live?' — use':''}</button>`;
+  }).join('');
+  return `<div class="tooltray"><span class="ttlabel">Your kit — one of these fits here</span><div class="ttchips">${chips}</div><div class="ttreveal" id="ttreveal"></div></div>`;
+}
+function kitStripHTML(){
+  const temper=temperament(S.profile);
+  const tcol=temper==='sound'?'#2e6b3f':temper==='volatile'?'#9a4625':'#7a6a36';
+  const hearts=['·','♡','♥','♥♥','♥♥♥','♥♥♥'][clamp(Math.round(S.profile.judgement/2),0,5)]||'·';
+  const kit=S.items.length?`<span class="ttlabel">Kit</span>`+S.items.map(it=>{const c=TR[it.trait]?TR[it.trait].color:(it.trait==='judgement'?JUDGE:'#b2863a');return `<span class="kititem" title="${powerOf(it.name)}"><span class="tcdot" style="background:${c}"></span>${it.name}</span>`;}).join(''):'';
+  const temp=`<span class="kititem" title="Temperament — how its judgement keeps pace with its power"><span style="color:${JUDGE}">${hearts}</span> <b style="color:${tcol}">${temper}</b></span>`;
+  return `<div class="kitstrip">${kit}${temp}</div>`;
+}
+function refreshKit(){const w=document.getElementById('kitwrap'); if(w)w.innerHTML=kitStripHTML();}
+function openBeatStation(i){
+  if(S._modal||i!==ROOM.beatIdx)return;
+  S._modal=true; ROOM.keys={}; ROOM._toolUsed=false;
+  const beat=ROOM.beats[i],total=ROOM.beats.length;
+  const back=document.createElement('div'); back.className='modal-back'; back.id='modalback';
+  back.innerHTML=`<div class="modal card">
+     <div class="box-tag">${ROOM.cfg.caseTitle?ROOM.cfg.caseTitle+' · ':''}step ${i+1} of ${total}</div>
+     <p class="prompt">${termify(beat.prompt)}</p>
+     ${beat.objective?`<div class="objective"><span class="t">🎯 Objective</span><span>${termify(beat.objective)}</span></div>`:''}
+     ${beat.scene?`<p class="scene-txt">${termify(beat.scene)}</p>`:''}
+     ${beat.chart||''}
+     ${toolTrayHTML(beat)}
+     <div class="opts">${beat.opts.map((o,k)=>o.poster
+       ?`<button class="opt poster-opt" data-k="${k}"><span class="pthumb">${POSTERS[o.poster]}</span><span class="ptext">${o.t}</span></button>`
+       :`<button class="opt" data-k="${k}">${o.t}</button>`).join('')}</div></div>`;
+  document.body.appendChild(back);
+  const to=beatToolOpt(beat);
+  back.querySelectorAll('.toolchip.tc-live').forEach(b=>b.onclick=()=>useToolAtBeat(to.lit));
+  back.querySelectorAll('.opt').forEach(b=>b.onclick=()=>chooseBeatStation(i,+b.dataset.k));
+}
+function useToolAtBeat(lit){
+  if(ROOM._toolUsed)return; ROOM._toolUsed=true;
+  applyFeed(lit.bonus||{});
+  const rev=document.getElementById('ttreveal'); if(rev)rev.innerHTML=`<div class="insight">✦ ${termify(lit.msg)}</div>`;
+  const chip=document.querySelector('.toolchip.tc-live');
+  if(chip){chip.classList.add('tc-fired');chip.disabled=true;chip.innerHTML=chip.innerHTML.replace(' — use',' ✓');
+    const k=Object.keys(lit.bonus||{})[0];
+    if(k){const rc=document.createElement('div');rc.className='rewardchip';rc.textContent='+'+(TR[k]?TR[k].lab:(k==='judgement'?'Judgement':k));rc.style.setProperty('--rc',TR[k]?TR[k].color:JUDGE);chip.appendChild(rc);setTimeout(()=>rc.remove(),1200);}}
+  const rhin=document.getElementById('rhin'); if(rhin){rhin.classList.remove('walk');rhin.innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile));}
+  refreshKit();
+}
+function chooseBeatStation(i,k){
+  const beat=ROOM.beats[i],opt=beat.opts[k];
+  applyFeed(opt.feed||{});
+  if(ROOM.cfg.isTelling&&opt.integrated)S.storycraft++;
+  let litMsg='';
+  if(opt.lit&&opt.lit.need==='storycraft'&&S.storycraft>=2){applyFeed(opt.lit.bonus||{});litMsg=opt.lit.msg;}
+  if(opt.anomaly)S.anomalies.add(opt.anomaly);
+  const last=i+1>=ROOM.beats.length;
+  const card=document.querySelector('#modalback .modal');
+  if(card)card.innerHTML=`<div class="box-tag">Field note</div>
+     <div class="note"><p style="margin:0">${termify(opt.note||'')}</p>${litMsg?`<p class="lit">✦ ${termify(litMsg)}</p>`:''}</div>
+     <div class="center"><button class="btn" id="contbeat">${last?'Finish the chapter →':'Continue →'}</button></div>`;
+  const cb=document.getElementById('contbeat'); if(cb)cb.onclick=()=>advanceBeatStation(i);
+}
+function advanceBeatStation(i){
+  S._modal=false;
+  const back=document.getElementById('modalback'); if(back)back.remove();
+  ROOM.beatIdx=i+1;
+  const rhin=document.getElementById('rhin'); if(rhin)rhin.innerHTML=buildCreature(S.profile,S.form,S.items,temperament(S.profile));
+  refreshStations(); refreshKit();
+  const prog=document.getElementById('prog'); if(prog)prog.textContent=ROOM.beatIdx+' / '+ROOM.beats.length+' done';
+  if(ROOM.beatIdx>=ROOM.beats.length){ ROOM.active=false;ROOM.cur=null; cancelAnimationFrame(ROOM.raf); ROOM.onComplete(); }
+  else updateNear();
+}
+
 function caseAssignView(){
   const assigned=assignCase(S.profile);
   if(!S.caseId)S.caseId=assigned;
   const litFor=c=>c.litItems.filter(n=>S.itemNames.has(n));
-  if(!S.showAllCases){
+  const remaining=CASE_IDS.filter(id=>!S.casesDone.has(id));
+  if(!S.showAllCases&&!S.repeat){
     const c=CASES[assigned],lit=litFor(c);
     app().innerHTML=`
     <div class="chapline">The Posting</div>
@@ -947,19 +1571,21 @@ function caseAssignView(){
       <div class="center"><button class="btn brass" id="take">Take this case →</button>
         <button class="btn ghost" id="other">Try a different case</button></div>
     </div>`;
-    document.getElementById('take').onclick=()=>{S.caseId=assigned;S.i=0;S.view='caseBeat';render();};
+    document.getElementById('take').onclick=()=>{S.caseId=assigned;S.i=0;S.view='fieldRoom';render();};
     document.getElementById('other').onclick=()=>{S.showAllCases=true;render();};
   }else{
     const card=id=>{const c=CASES[id],lit=litFor(c);
       return `<button class="opt" data-id="${id}"><b>${c.no} — ${c.title}</b>
         <span style="display:block;color:var(--ink2);margin-top:3px">${c.blurb}</span>
         <span class="k">leads with ${c.lead.map(traitLab).join(' + ')}${lit.length?` · your ${lit.join(' & ')} will help`:''}</span></button>`;};
+    const ids=S.repeat?remaining:CASE_IDS;
     app().innerHTML=`
     <div class="chapline">The Posting</div>
-    <h1 style="text-align:center;font-size:clamp(24px,4.4vw,32px);margin:0 0 6px">Choose your case</h1>
-    <p class="lede">Any specimen can take any case — some just fit better. Send yours where you like.</p>
-    <div class="card" style="max-width:620px;margin:12px auto 0"><div class="opts">${CASE_IDS.map(card).join('')}</div></div>`;
-    app().querySelectorAll('.opt').forEach(btn=>btn.onclick=()=>{S.caseId=btn.dataset.id;S.i=0;S.showAllCases=false;S.view='caseBeat';render();});
+    <h1 style="text-align:center;font-size:clamp(24px,4.4vw,32px);margin:0 0 6px">${S.repeat?'Another posting':'Choose your case'}</h1>
+    <p class="lede">${S.repeat?'Your beast is who it is now — this is the same creature meeting a new problem. Where to next?':'Any specimen can take any case — some just fit better. Send yours where you like.'}</p>
+    ${S.repeat?`<div class="plate intro-plate"><span class="pin"></span><div class="creature"><div>${buildCreature(S.profile,S.form,S.items,temperament(S.profile))}</div></div></div>`:''}
+    <div class="card" style="max-width:620px;margin:12px auto 0"><div class="opts">${ids.map(card).join('')}</div></div>`;
+    app().querySelectorAll('.opt').forEach(btn=>btn.onclick=()=>{S.caseId=btn.dataset.id;S.i=0;S.showAllCases=false;S.view='fieldRoom';render();});
   }
 }
 
@@ -1021,6 +1647,30 @@ function caseNoteView(){
   };
 }
 
+function equipBanner(name){
+  const el=document.getElementById('equipbanner'); if(!el)return;
+  el.innerHTML=`<div class="en">⚒ Equipped · ${name}</div><div class="ep">${powerOf(name)}</div>`;
+  el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2900);
+}
+function evolveView(){
+  const from=(S._evolve&&S._evolve.from)||0, to=S.form, next=(S._evolve&&S._evolve.next)||'reveal';
+  const names=['Wild Haggis','a Fledgling','a Maturing specimen','a catalogued field beast'];
+  app().innerHTML=`
+   <div class="chapline">Metamorphosis</div>
+   <div class="evolve-stage"><div class="evo-burst" id="burst"></div>
+     <div class="evo-haggis" id="evo">${buildCreature(S.profile,from,S.items,temperament(S.profile))}</div></div>
+   <h2 class="evo-title" id="evotitle" style="opacity:0">Your haggis evolved!</h2>
+   <p class="lede" id="evosub" style="opacity:0;text-align:center">It grew into <b>${names[to]||'a new form'}</b>.</p>
+   <div class="center" id="evocont" style="opacity:0"><button class="btn brass" id="go">Continue →</button></div>`;
+  const burst=document.getElementById('burst'),evo=document.getElementById('evo');
+  for(let s=0;s<12;s++){const sp=document.createElement('span');sp.className='spark';const a=s/12*6.283,r=70+Math.random()*44;
+    sp.style.setProperty('--dx',(Math.cos(a)*r).toFixed(0)+'px');sp.style.setProperty('--dy',(Math.sin(a)*r).toFixed(0)+'px');burst.appendChild(sp);}
+  setTimeout(()=>evo.classList.add('evo-shake'),250);
+  setTimeout(()=>{burst.classList.add('go');evo.classList.add('evo-flash');},1500);
+  setTimeout(()=>{evo.innerHTML=buildCreature(S.profile,to,S.items,temperament(S.profile));evo.classList.remove('evo-shake','evo-flash');evo.classList.add('evo-pop');},1860);
+  setTimeout(()=>{['evotitle','evosub','evocont'].forEach(id=>document.getElementById(id).style.opacity=1);},2400);
+  document.getElementById('go').onclick=()=>{S._evolve=null;S.view=next;render();};
+}
 function revealView(){
   const arch=archetypeKey(S.profile),b=BEASTS[arch],temper=temperament(S.profile);
   const tclass=temper==='sound'?'t-sound':temper==='volatile'?'t-volatile':'t-mixed';
@@ -1041,7 +1691,7 @@ function revealView(){
         <div class="spec-name">${b.name}</div>
         <div class="spec-bin">${b.bin}</div>
         <div class="spec-hab">${b.hab}</div>
-        ${S.caseId?`<div class="spec-hab" style="margin-top:5px"><b>Field posting:</b> ${CASES[S.caseId].no} — ${CASES[S.caseId].title}</div>`:''}
+        ${S.casesDone.size?`<div class="spec-hab" style="margin-top:5px"><b>Field record:</b> ${[...S.casesDone].map(id=>CASES[id].no).join(' · ')}${S.casesDone.size>1?` (${S.casesDone.size} cases worked)`:''}</div>`:''}
         <span class="spec-temper ${tclass}">${tlabel}</span>
       </div>
     </div>
@@ -1060,14 +1710,21 @@ function revealView(){
       ${S.anomalies.size
         ? `<h3>Field anomaly</h3>${[...S.anomalies].map(a=>ANOMALIES[a]?`<div class="anomaly"><div class="h">Observer\u2019s note</div><b>${ANOMALIES[a].title}</b><p style="margin:5px 0 0;color:var(--ink2)">${ANOMALIES[a].note}</p></div>`:'').join('')}`
         : `<p class="whisper">Observer\u2019s note: other specimens have been seen doing stranger things in this field. This one played it safe \u2014 there were other ways through.</p>`}
+      ${S.quirks.size?`<h3>Also observed</h3>${[...S.quirks].map(q=>QUIRKS[q]?`<div class="anomaly" style="border-left-color:var(--explore)"><b>${QUIRKS[q].tag}</b><p style="margin:5px 0 0;color:var(--ink2)">${QUIRKS[q].note}</p></div>`:'').join('')}`:''}
     </div>
   </div>
   <p class="closing">No specimen is the right one. This is the one you grew — and the field needs all of them, the strange and fallible ones most of all.</p>
-  <div class="center"><button class="btn brass" id="again">Cultivate another →</button></div>`;
+  <div class="center">
+    ${CASE_IDS.some(id=>!S.casesDone.has(id))?`<button class="btn" id="anothercase">Take this beast on another case →</button>`:''}
+    <button class="btn brass" id="again">Start fresh →</button>
+  </div>`;
+  const ac=document.getElementById('anothercase');
+  if(ac)ac.onclick=()=>{ S.repeat=true; S.caseId=null; S.showAllCases=false; ROOM.active=false; ROOM.cur=null; cancelAnimationFrame(ROOM.raf); S.view='caseAssign'; render(); };
   document.getElementById('again').onclick=()=>{
     Object.assign(S,{view:'intro',stage:'A',i:0,pending:null,
       profile:{build:0,rigour:0,story:0,ground:0,explore:0,judgement:0},
-      items:[],itemNames:new Set(),storycraft:0,form:0,caseId:null,showAllCases:false,glossary:{},anomalies:new Set()});
+      items:[],itemNames:new Set(),storycraft:0,form:0,caseId:null,showAllCases:false,glossary:{},anomalies:new Set(),quirks:new Set(),casesDone:new Set(),repeat:false,_anim:false,_modal:false});
+    ROOM.active=false; ROOM.cur=null; cancelAnimationFrame(ROOM.raf);
     render();
   };
 }
@@ -1085,13 +1742,11 @@ function render(){
     case 'introA': chapterIntro('A'); break;
     case 'introB': chapterIntro('B'); break;
     case 'introC': chapterIntro('C'); break;
-    case 'A': questionView(STAGE_A,'A'); break;
-    case 'B': questionView(STAGE_B,'B'); break;
-    case 'C': questionView(STAGE_C,'C'); break;
-    case 'noteB': noteView('B'); break;
+    case 'A': roomView(); break;
+    case 'B': tellingRoomView(); break;
     case 'caseAssign': caseAssignView(); break;
-    case 'caseBeat': caseBeatView(); break;
-    case 'caseNote': caseNoteView(); break;
+    case 'fieldRoom': fieldRoomView(); break;
+    case 'evolve': evolveView(); break;
     case 'reveal': revealView(); break;
     default: viewIntro();
   }
